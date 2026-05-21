@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: docgen-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: doc_automation
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - docgen-network
+    restart: unless-stopped
+
+  # Main Application (Backend + Frontend + Nginx)
+  app:
+    build: .
+    container_name: docgen-app
+    ports:
+      - "80:80"
+      - "8000:8000"
+    volumes:
+      - ./templates:/app/templates
+      - ./generated_docs:/app/generated_docs
+      - ./logs:/app/logs
+    environment:
+      - DATABASE_URL=postgresql+psycopg2://postgres:admin@postgres:5432/doc_automation
+      - USE_DATABASE=True
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - docgen-network
+    restart: unless-stopped
+
+networks:
+  docgen-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
