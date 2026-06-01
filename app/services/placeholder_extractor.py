@@ -14,11 +14,18 @@ class PlaceholderExtractor:
             doc = Document(file_path)
             placeholders = set()
             
+            # Pattern to match {{placeholder}} with optional spaces
+            pattern = r'\{\{\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\}\}'
+            
             # Extract from paragraphs
             for paragraph in doc.paragraphs:
                 text = paragraph.text
-                found = PlaceholderValidator.extract_placeholders_from_text(text)
+                # Use direct regex instead of validator for better capture
+                found = re.findall(pattern, text)
                 placeholders.update(found)
+                # Also try validator method as fallback
+                found2 = PlaceholderValidator.extract_placeholders_from_text(text)
+                placeholders.update(found2)
             
             # Extract from tables
             for table in doc.tables:
@@ -26,22 +33,30 @@ class PlaceholderExtractor:
                     for cell in row.cells:
                         for paragraph in cell.paragraphs:
                             text = paragraph.text
-                            found = PlaceholderValidator.extract_placeholders_from_text(text)
+                            found = re.findall(pattern, text)
                             placeholders.update(found)
+                            found2 = PlaceholderValidator.extract_placeholders_from_text(text)
+                            placeholders.update(found2)
             
             # Extract from headers and footers
             for section in doc.sections:
                 # Header
                 if section.header:
                     for paragraph in section.header.paragraphs:
-                        found = PlaceholderValidator.extract_placeholders_from_text(paragraph.text)
+                        text = paragraph.text
+                        found = re.findall(pattern, text)
                         placeholders.update(found)
+                        found2 = PlaceholderValidator.extract_placeholders_from_text(text)
+                        placeholders.update(found2)
                 
                 # Footer
                 if section.footer:
                     for paragraph in section.footer.paragraphs:
-                        found = PlaceholderValidator.extract_placeholders_from_text(paragraph.text)
+                        text = paragraph.text
+                        found = re.findall(pattern, text)
                         placeholders.update(found)
+                        found2 = PlaceholderValidator.extract_placeholders_from_text(text)
+                        placeholders.update(found2)
             
             app_logger.info(f"Extracted {len(placeholders)} placeholders: {placeholders}")
             return placeholders

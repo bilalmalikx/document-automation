@@ -1,7 +1,10 @@
-from typing import List, Optional
+from typing import List
 from pydantic_settings import BaseSettings
 from pydantic import Field
 import json
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class Settings(BaseSettings):
     # App
@@ -10,21 +13,18 @@ class Settings(BaseSettings):
     debug: bool = Field(default=True, env="DEBUG")
     api_v1_prefix: str = Field(default="/api/v1", env="API_V1_PREFIX")
     
-    # Groq API (OpenAI Compatible)
-    openai_api_key: str = Field(..., env="OPENAI_API_KEY")  # Required now
-    openai_base_url: str = Field(
-        default="https://api.groq.com/openai/v1", 
-        env="OPENAI_BASE_URL"
-    )
-    openai_model: str = Field(
-        default="llama-3.3-70b-versatile", 
-        env="OPENAI_MODEL"
-    )
+    # Groq API
+    openai_api_key: str = Field(default="", env="OPENAI_API_KEY")
+    openai_base_url: str = Field(default="https://api.groq.com/openai/v1", env="OPENAI_BASE_URL")
+    openai_model: str = Field(default="llama-3.3-70b-versatile", env="OPENAI_MODEL")
     openai_temperature: float = Field(default=0.0, env="OPENAI_TEMPERATURE")
     
     # Database
-    database_url: Optional[str] = Field(default=None, env="DATABASE_URL")
-    use_database: bool = Field(default=False, env="USE_DATABASE")
+    use_database: bool = Field(default=True, env="USE_DATABASE")
+    database_url: str = Field(
+        default="postgresql+psycopg2://postgres:admin@localhost:5432/doc_automation",
+        env="DATABASE_URL"
+    )
     
     # File Storage
     templates_dir: str = Field(default="./templates", env="TEMPLATES_DIR")
@@ -33,25 +33,17 @@ class Settings(BaseSettings):
     
     # Security
     allowed_extensions: str = Field(default=".docx", env="ALLOWED_EXTENSIONS")
-    cors_origins: str = Field(
-        default='["http://localhost:3000", "http://localhost:8000"]', 
-        env="CORS_ORIGINS"
-    )
+    cors_origins: str = Field(default='["http://localhost:4200", "http://localhost:80", "http://frontend:80"]', env="CORS_ORIGINS")
     
     # Logging
     log_level: str = Field(default="INFO", env="LOG_LEVEL")
     log_file: str = Field(default="./logs/app.log", env="LOG_FILE")
     
-    @property
-    def cors_origins_list(self) -> List[str]:
-        return json.loads(self.cors_origins)
-    
-    @property
-    def allowed_extensions_list(self) -> List[str]:
-        return [ext.strip() for ext in self.allowed_extensions.split(",")]
-    
     class Config:
         env_file = ".env"
+        env_file_encoding = "utf-8"
         case_sensitive = False
+        extra = "ignore"  # ✅ Allows extra fields in .env without error
 
 settings = Settings()
+print(f"✅ Config loaded")

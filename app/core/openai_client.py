@@ -54,9 +54,7 @@ Return JSON with ALL placeholders above:"""
                 temperature=self.temperature
             )
             
-            # Extract and parse JSON
             content = response.choices[0].message.content
-            # Clean content - remove markdown code blocks if present
             content = content.strip()
             if content.startswith('```json'):
                 content = content[7:]

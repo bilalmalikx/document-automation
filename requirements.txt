@@ -1,19 +1,34 @@
+# Core Framework
 fastapi
 uvicorn[standard]
-python-docx
-docxtpl
-openai
 pydantic
 pydantic-settings
 python-multipart
 python-dotenv
+
+# Document Automation System (DOCX)
+python-docx
+docxtpl
+openai
+jinja2
+aiofiles
+tenacity
+
+# Database
 sqlalchemy
 asyncpg
 psycopg2-binary
 alembic
 loguru
-jinja2
-aiofiles
-tenacity
-openai
-alembic
+
+# PDF QA System (LangGraph + RAG)
+chromadb
+pypdf
+ollama
+numpy
+langchain
+langchain-community
+langchain-text-splitters
+langgraph
+onnxruntime
+sentence-transformers

@@ -1,15 +1,13 @@
 from fastapi import APIRouter, HTTPException, status, Depends
-from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.responses import Response, StreamingResponse
 from pydantic import BaseModel
 from typing import List
 from app.api.v1.schemas.generate import GenerateRequest
 from app.services.template_manager import template_manager
 from app.services.ai_mapper import AIMapperService
 from app.services.docx_renderer import DOCXRenderer
-from app.utils.file_utils import FileManager
 from app.core.exceptions import AIValidationError, RenderError, TemplateNotFoundError
 from app.utils.logging_config import app_logger
-import uuid
 import zipfile
 import io
 
@@ -41,23 +39,20 @@ async def generate_document(request: GenerateRequest):
         
         app_logger.info(f"AI mapped {len(ai_mapped_data)} values")
         
-        # 3. Render DOCX (NO AI HERE)
+        # 3. Render DOCX
         rendered_content = DOCXRenderer.render_template(
             template_path=template_path,
             context=ai_mapped_data
         )
         
-        # 4. Save and return
-        output_path = FileManager.save_generated_document(
+        # 4. Return file directly (no disk save - prevents corruption)
+        return Response(
             content=rendered_content,
-            template_id=request.template_id
-        )
-        
-        # 5. Return file
-        return FileResponse(
-            path=output_path,
             media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            filename=f"generated_{request.template_id[:8]}.docx"
+            headers={
+                "Content-Disposition": f"attachment; filename=generated_{request.template_id[:8]}.docx",
+                "Content-Length": str(len(rendered_content))
+            }
         )
         
     except TemplateNotFoundError as e:
@@ -102,7 +97,7 @@ async def preview_mapping(request: GenerateRequest):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
 
-# NEW: Multi-document generation endpoint
+# Multi-document generation endpoint
 @router.post("/generate-multiple")
 async def generate_multiple_documents(request: GenerateMultipleRequest):
     """
