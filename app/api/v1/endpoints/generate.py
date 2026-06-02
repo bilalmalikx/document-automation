@@ -1,22 +1,28 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from fastapi.responses import Response, StreamingResponse
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
+from sqlalchemy.orm import Session
 from app.api.v1.schemas.generate import GenerateRequest
 from app.services.template_manager import template_manager
 from app.services.ai_mapper import AIMapperService
 from app.services.docx_renderer import DOCXRenderer
 from app.core.exceptions import AIValidationError, RenderError, TemplateNotFoundError
 from app.utils.logging_config import app_logger
+from app.database import get_db
+from app.config import settings
 import zipfile
 import io
-from app.config import settings
 
 router = APIRouter(prefix="/generate", tags=["Document Generation"])
 
 # Request schema for multi-document generation
 class GenerateMultipleRequest(BaseModel):
     template_ids: List[str]
+    instruction: str
+
+# Request schema for template set generation
+class GenerateSetRequest(BaseModel):
     instruction: str
 
 
@@ -26,13 +32,11 @@ async def generate_document(request: GenerateRequest):
     try:
         app_logger.info(f"Generating document for template: {request.template_id}")
         
-        # 1. Get template
         template_placeholders = template_manager.get_template_placeholders(request.template_id)
         template_path = template_manager.get_template_path(request.template_id)
         
         app_logger.info(f"Template found. Placeholders: {template_placeholders}")
         
-        # 2. Map instruction to JSON using AI
         ai_mapped_data = await AIMapperService.map_instruction(
             instruction=request.instruction,
             allowed_placeholders=template_placeholders
@@ -40,13 +44,11 @@ async def generate_document(request: GenerateRequest):
         
         app_logger.info(f"AI mapped {len(ai_mapped_data)} values")
         
-        # 3. Render DOCX
         rendered_content = DOCXRenderer.render_template(
             template_path=template_path,
             context=ai_mapped_data
         )
         
-        # 4. Return file directly (no disk save - prevents corruption)
         return Response(
             content=rendered_content,
             media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -78,7 +80,6 @@ async def preview_mapping(request: GenerateRequest):
         
         template_placeholders = template_manager.get_template_placeholders(request.template_id)
         
-        # Only map, don't render
         ai_mapped_data = await AIMapperService.map_instruction(
             instruction=request.instruction,
             allowed_placeholders=template_placeholders
@@ -98,13 +99,10 @@ async def preview_mapping(request: GenerateRequest):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
 
-# Multi-document generation endpoint
 @router.post("/generate-multiple")
 async def generate_multiple_documents(request: GenerateMultipleRequest):
-    """
-    Generate multiple documents at once with the same AI instruction.
-    Returns a ZIP file containing all generated documents.
-    """
+    """Generate multiple documents at once with the same AI instruction.
+    Returns a ZIP file containing all generated documents."""
     try:
         app_logger.info(f"Bulk generating {len(request.template_ids)} documents")
         
@@ -114,7 +112,6 @@ async def generate_multiple_documents(request: GenerateMultipleRequest):
         if not request.instruction.strip():
             raise HTTPException(status_code=400, detail="Instruction cannot be empty")
         
-        # Create ZIP file in memory
         zip_buffer = io.BytesIO()
         generated_count = 0
         errors = []
@@ -124,29 +121,24 @@ async def generate_multiple_documents(request: GenerateMultipleRequest):
                 try:
                     app_logger.info(f"Processing template: {template_id}")
                     
-                    # Get template
                     template_placeholders = template_manager.get_template_placeholders(template_id)
                     template_path = template_manager.get_template_path(template_id)
                     template = template_manager.get_template(template_id)
                     
-                    # Map instruction to JSON using AI
                     ai_mapped_data = await AIMapperService.map_instruction(
                         instruction=request.instruction,
                         allowed_placeholders=template_placeholders
                     )
                     
-                    # Render DOCX
                     rendered_content = DOCXRenderer.render_template(
                         template_path=template_path,
                         context=ai_mapped_data
                     )
                     
-                    # Generate filename
                     original_name = template.get('filename', template_id)
                     base_name = original_name.replace('.docx', '') if original_name.endswith('.docx') else original_name
                     filename = f"{base_name}_generated.docx"
                     
-                    # Add to ZIP
                     zip_file.writestr(filename, rendered_content)
                     generated_count += 1
                     
@@ -159,7 +151,6 @@ async def generate_multiple_documents(request: GenerateMultipleRequest):
         
         zip_buffer.seek(0)
         
-        # Prepare response message
         if generated_count == 0:
             raise HTTPException(status_code=500, detail=f"No documents generated. Errors: {', '.join(errors)}")
         
@@ -184,14 +175,16 @@ async def generate_multiple_documents(request: GenerateMultipleRequest):
     except Exception as e:
         app_logger.error(f"Bulk generation error: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Bulk generation failed: {str(e)}")
-    
-# Add at the end of generate.py
 
-@router.post("/generate-set/{set_id}")
+# ============================================
+# TEMPLATE SET GENERATION - FIXED WITH response_model=None
+# ============================================
+
+@router.post("/set/{set_id}", response_model=None)  # ✅ Add this
 async def generate_template_set(
     set_id: str,
-    instruction: str,
-    db: Session = Depends(get_db) if settings.use_database else None
+    request: GenerateSetRequest,
+    db: Session = Depends(get_db)
 ):
     """
     Generate all templates in a template set using shared instruction
@@ -218,7 +211,7 @@ async def generate_template_set(
         
         # Get AI mapped values for shared fields
         ai_mapped_data = await AIMapperService.map_instruction(
-            instruction=instruction,
+            instruction=request.instruction,
             allowed_placeholders=shared_placeholders
         )
         

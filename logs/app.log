@@ -7707,3 +7707,350 @@
 2026-06-02 11:01:47 | INFO     | app.database | 📊 Database: localhost:5432
 2026-06-02 11:02:29 | INFO     | app.database | ✅ PostgreSQL engine created
 2026-06-02 11:02:29 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-03 01:10:53 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-03 01:10:53 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-03 01:11:13 | INFO     | app.main | Starting Doc Automation API in development mode
+2026-06-03 01:11:13 | INFO     | app.main | Initializing Document Automation services...
+2026-06-03 01:11:13 | INFO     | app.main | Document Automation directories created
+2026-06-03 01:11:13 | INFO     | app.main | ==================================================
+2026-06-03 01:11:13 | INFO     | app.main | Starting PDF QA System with LangGraph
+2026-06-03 01:11:13 | INFO     | app.main | ==================================================
+2026-06-03 01:11:13,472 - sentence_transformers.base.model - INFO - No device provided, using mps
+2026-06-03 01:11:13,850 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:11:13,916 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-06-03 01:11:14,226 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:11:14,313 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-06-03 01:11:14,316 - sentence_transformers.base.model - INFO - Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-06-03 01:11:14,593 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:11:14,653 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-06-03 01:11:14,925 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:11:15,006 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/README.md "HTTP/1.1 200 OK"
+2026-06-03 01:11:15,292 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:11:15,355 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-06-03 01:11:15,628 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:11:15,696 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/sentence_bert_config.json "HTTP/1.1 200 OK"
+2026-06-03 01:11:15,971 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+2026-06-03 01:11:16,411 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:11:16,475 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-03 01:11:16,788 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-06-03 01:11:17,128 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-03 01:11:17,414 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-03 01:11:17,742 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-03 01:11:18,151 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:11:18,222 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-06-03 01:11:18,503 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:11:18,575 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-03 01:11:18,850 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:11:18,967 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-03 01:11:19,256 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:11:19,326 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-06-03 01:11:19,619 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-06-03 01:11:19,945 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-06-03 01:11:20,262 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:11:20,347 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+2026-06-03 01:11:20,633 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2 "HTTP/1.1 200 OK"
+2026-06-03 01:11:21 | INFO     | app.main | Loaded existing vector store
+2026-06-03 01:11:21 | INFO     | app.main | 📖 API docs: http://localhost:8000/docs
+2026-06-03 01:11:21 | INFO     | app.main | 📁 Document Automation API: /api/v1
+2026-06-03 01:11:21 | INFO     | app.main | ==================================================
+2026-06-03 01:11:27,915 - app.middleware.logging - INFO - Request: GET / from 127.0.0.1
+2026-06-03 01:11:27,916 - app.middleware.logging - INFO - Response: GET / - Status: 200 - Time: 0.001s
+2026-06-03 01:11:30,013 - app.middleware.logging - INFO - Request: GET /docs from 127.0.0.1
+2026-06-03 01:11:30,015 - app.middleware.logging - INFO - Response: GET /docs - Status: 200 - Time: 0.002s
+2026-06-03 01:11:32,058 - app.middleware.logging - INFO - Request: GET /openapi.json from 127.0.0.1
+2026-06-03 01:11:32,075 - app.middleware.logging - ERROR - Error in GET /openapi.json: `TypeAdapter[typing.Annotated[ForwardRef('Session', owner=<function generate_template_set at 0x127353ab0>), FieldInfo(annotation=NoneType, required=False, default=None, alias='db', alias_priority=2, json_schema_extra={})]]` is not fully defined; you should define `typing.Annotated[ForwardRef('Session', owner=<function generate_template_set at 0x127353ab0>), FieldInfo(annotation=NoneType, required=False, default=None, alias='db', alias_priority=2, json_schema_extra={})]` and all referenced types, then call `.rebuild()` on the instance.
+
+For further information visit https://errors.pydantic.dev/2.13/u/class-not-fully-defined
+2026-06-03 01:11:32,081 - app.middleware.logging - ERROR - Traceback (most recent call last):
+  File "/Users/bilalmalik/Desktop/Agentic-AI-Productions level projects/ doc-automation-backend/app/middleware/logging.py", line 34, in log_requests_middleware
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bilalmalik/Desktop/Agentic-AI-Productions level projects/ doc-automation-backend/venv/lib/python3.14/site-packages/starlette/middleware/base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "/Users/bilalmalik/Desktop/Agentic-AI-Productions level projects/ doc-automation-backend/venv/lib/python3.14/site-packages/starlette/middleware/base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/Users/bilalmalik/Desktop/Agentic-AI-Productions level projects/ doc-automation-backend/venv/lib/python3.14/site-packages/starlette/middleware/cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/bilalmalik/Desktop/Agentic-AI-Productions level projects/ doc-automation-backend/venv/lib/python3.14/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/bilalmalik/Desktop/Agentic-AI-Productions level projects/ doc-automation-backend/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/bilalmalik/Desktop/Agentic-AI-Productions level projects/ doc-automation-backend/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/bilalmalik/Desktop/Agentic-AI-Productions level projects/ doc-automation-backend/venv/lib/python3.14/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/bilalmalik/Desktop/Agentic-AI-Productions level projects/ doc-automation-backend/venv/lib/python3.14/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/bilalmalik/Desktop/Agentic-AI-Productions level projects/ doc-automation-backend/venv/lib/python3.14/site-packages/starlette/routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "/Users/bilalmalik/Desktop/Agentic-AI-Productions level projects/ doc-automation-backend/venv/lib/python3.14/site-packages/starlette/routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "/Users/bilalmalik/Desktop/Agentic-AI-Productions level projects/ doc-automation-backend/venv/lib/python3.14/site-packages/starlette/routing.py", line 64, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/bilalmalik/Desktop/Agentic-AI-Productions level projects/ doc-automation-backend/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/bilalmalik/Desktop/Agentic-AI-Productions level projects/ doc-automation-backend/venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/bilalmalik/Desktop/Agentic-AI-Productions level projects/ doc-automation-backend/venv/lib/python3.14/site-packages/starlette/routing.py", line 61, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/bilalmalik/Desktop/Agentic-AI-Productions level projects/ doc-automation-backend/venv/lib/python3.14/site-packages/fastapi/applications.py", line 1106, in openapi
+    schema = self.openapi()
+  File "/Users/bilalmalik/Desktop/Agentic-AI-Productions level projects/ doc-automation-backend/venv/lib/python3.14/site-packages/fastapi/applications.py", line 1083, in openapi
+    self.openapi_schema = get_openapi(
+                          ~~~~~~~~~~~^
+        title=self.title,
+        ^^^^^^^^^^^^^^^^^
+    ...<12 lines>...
+        external_docs=self.openapi_external_docs,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bilalmalik/Desktop/Agentic-AI-Productions level projects/ doc-automation-backend/venv/lib/python3.14/site-packages/fastapi/openapi/utils.py", line 552, in get_openapi
+    field_mapping, definitions = get_definitions(
+                                 ~~~~~~~~~~~~~~~^
+        fields=all_fields,
+        ^^^^^^^^^^^^^^^^^^
+        model_name_map=model_name_map,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        separate_input_output_schemas=separate_input_output_schemas,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bilalmalik/Desktop/Agentic-AI-Productions level projects/ doc-automation-backend/venv/lib/python3.14/site-packages/fastapi/_compat/v2.py", line 336, in get_definitions
+    field_mapping, definitions = schema_generator.generate_definitions(inputs=inputs)
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/bilalmalik/Desktop/Agentic-AI-Productions level projects/ doc-automation-backend/venv/lib/python3.14/site-packages/pydantic/json_schema.py", line 386, in generate_definitions
+    self.generate_inner(schema)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/Users/bilalmalik/Desktop/Agentic-AI-Productions level projects/ doc-automation-backend/venv/lib/python3.14/site-packages/pydantic/json_schema.py", line 466, in generate_inner
+    if 'ref' in schema:
+       ^^^^^^^^^^^^^^^
+  File "<frozen _collections_abc>", line 801, in __contains__
+  File "/Users/bilalmalik/Desktop/Agentic-AI-Productions level projects/ doc-automation-backend/venv/lib/python3.14/site-packages/pydantic/_internal/_mock_val_ser.py", line 41, in __getitem__
+    return self._get_built().__getitem__(key)
+           ~~~~~~~~~~~~~~~^^
+  File "/Users/bilalmalik/Desktop/Agentic-AI-Productions level projects/ doc-automation-backend/venv/lib/python3.14/site-packages/pydantic/_internal/_mock_val_ser.py", line 58, in _get_built
+    raise PydanticUserError(self._error_message, code=self._code)
+pydantic.errors.PydanticUserError: `TypeAdapter[typing.Annotated[ForwardRef('Session', owner=<function generate_template_set at 0x127353ab0>), FieldInfo(annotation=NoneType, required=False, default=None, alias='db', alias_priority=2, json_schema_extra={})]]` is not fully defined; you should define `typing.Annotated[ForwardRef('Session', owner=<function generate_template_set at 0x127353ab0>), FieldInfo(annotation=NoneType, required=False, default=None, alias='db', alias_priority=2, json_schema_extra={})]` and all referenced types, then call `.rebuild()` on the instance.
+
+For further information visit https://errors.pydantic.dev/2.13/u/class-not-fully-defined
+
+2026-06-03 01:12:30,533 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-03 01:12:30,534 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.001s
+2026-06-03 01:12:55 | INFO     | app.main | Shutting down application...
+2026-06-03 01:12:55 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-03 01:12:55 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-03 01:13:53 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-03 01:13:53 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-03 01:14:30 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-03 01:14:30 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-03 01:14:40 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-03 01:14:40 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-03 01:14:43 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-03 01:14:43 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-03 01:15:17 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-03 01:15:17 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-03 01:15:36 | INFO     | app.main | Starting Doc Automation API in development mode
+2026-06-03 01:15:36 | INFO     | app.main | Initializing Document Automation services...
+2026-06-03 01:15:36 | INFO     | app.main | Document Automation directories created
+2026-06-03 01:15:36 | INFO     | app.main | ==================================================
+2026-06-03 01:15:36 | INFO     | app.main | Starting PDF QA System with LangGraph
+2026-06-03 01:15:36 | INFO     | app.main | ==================================================
+2026-06-03 01:15:36,530 - sentence_transformers.base.model - INFO - No device provided, using mps
+2026-06-03 01:15:36,901 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:15:36,965 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-06-03 01:15:37,245 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:15:37,319 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-06-03 01:15:37,321 - sentence_transformers.base.model - INFO - Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-06-03 01:15:37,626 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:15:37,725 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-06-03 01:15:38,022 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:15:38,106 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/README.md "HTTP/1.1 200 OK"
+2026-06-03 01:15:38,400 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:15:38,464 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-06-03 01:15:38,963 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:15:39,064 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/sentence_bert_config.json "HTTP/1.1 200 OK"
+2026-06-03 01:15:39,371 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+2026-06-03 01:15:39,682 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:15:39,798 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-03 01:15:40,118 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-06-03 01:15:40,394 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-03 01:15:40,668 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-03 01:15:40,998 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-03 01:15:41,317 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:15:41,426 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-06-03 01:15:41,710 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:15:41,791 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-03 01:15:42,085 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:15:42,159 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-03 01:15:42,443 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:15:42,549 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-06-03 01:15:42,833 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-06-03 01:15:43,154 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-06-03 01:15:43,494 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:15:43,560 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+2026-06-03 01:15:43,895 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2 "HTTP/1.1 200 OK"
+2026-06-03 01:15:44 | INFO     | app.main | Loaded existing vector store
+2026-06-03 01:15:44 | INFO     | app.main | 📖 API docs: http://localhost:8000/docs
+2026-06-03 01:15:44 | INFO     | app.main | 📁 Document Automation API: /api/v1
+2026-06-03 01:15:44 | INFO     | app.main | ==================================================
+2026-06-03 01:15:50,600 - app.middleware.logging - INFO - Request: GET /docs from 127.0.0.1
+2026-06-03 01:15:50,600 - app.middleware.logging - INFO - Response: GET /docs - Status: 200 - Time: 0.001s
+2026-06-03 01:15:50,677 - app.middleware.logging - INFO - Request: GET /openapi.json from 127.0.0.1
+2026-06-03 01:15:50,700 - app.middleware.logging - INFO - Response: GET /openapi.json - Status: 200 - Time: 0.023s
+2026-06-03 01:21:01,447 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-03 01:21:01,449 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.002s
+2026-06-03 01:39:38,682 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-03 01:39:38,687 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.005s
+2026-06-03 01:39:42,014 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-03 01:39:42,016 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.001s
+2026-06-03 01:39:44,514 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-03 01:39:44,515 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.001s
+2026-06-03 01:39:47,261 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-03 01:39:47,262 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.002s
+2026-06-03 01:40:05,204 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/ from 127.0.0.1
+2026-06-03 01:40:05,315 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2026-06-03 01:40:05,315 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2026-06-03 01:40:05,316 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2026-06-03 01:40:05,316 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2026-06-03 01:40:05,316 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2026-06-03 01:40:05,316 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2026-06-03 01:40:05,316 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-03 01:40:05,318 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.is_deleted = false ORDER BY template_sets.created_at DESC 
+ LIMIT %(param_1)s OFFSET %(param_2)s
+2026-06-03 01:40:05,318 - sqlalchemy.engine.Engine - INFO - [generated in 0.00014s] {'param_1': 100, 'param_2': 0}
+2026-06-03 01:40:05 | ERROR    | app.api.v1.endpoints.template_sets | Failed to get template sets: (psycopg2.errors.UndefinedTable) relation "template_sets" does not exist
+LINE 2: FROM template_sets 
+             ^
+
+[SQL: SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.is_deleted = false ORDER BY template_sets.created_at DESC 
+ LIMIT %(param_1)s OFFSET %(param_2)s]
+[parameters: {'param_1': 100, 'param_2': 0}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-06-03 01:40:05,326 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-03 01:40:05 | ERROR    | app.database | Database error: 500: (psycopg2.errors.UndefinedTable) relation "template_sets" does not exist
+LINE 2: FROM template_sets 
+             ^
+
+[SQL: SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.is_deleted = false ORDER BY template_sets.created_at DESC 
+ LIMIT %(param_1)s OFFSET %(param_2)s]
+[parameters: {'param_1': 100, 'param_2': 0}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-06-03 01:40:05,326 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/ - Status: 500 - Time: 0.122s
+2026-06-03 01:40:32,579 - app.middleware.logging - INFO - Request: OPTIONS /api/v1/template-sets/ from 127.0.0.1
+2026-06-03 01:40:32,580 - app.middleware.logging - INFO - Response: OPTIONS /api/v1/template-sets/ - Status: 200 - Time: 0.002s
+2026-06-03 01:40:32,582 - app.middleware.logging - INFO - Request: POST /api/v1/template-sets/ from 127.0.0.1
+2026-06-03 01:40:32,585 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-03 01:40:32,586 - sqlalchemy.engine.Engine - INFO - INSERT INTO template_sets (id, name, description, updated_at, is_deleted) VALUES (%(id)s, %(name)s, %(description)s, %(updated_at)s, %(is_deleted)s) RETURNING template_sets.created_at
+2026-06-03 01:40:32,586 - sqlalchemy.engine.Engine - INFO - [generated in 0.00019s] {'id': '9b1bfaac-b9a3-4957-b788-4ae068debfe6', 'name': 'Company incorporation', 'description': 'for just test', 'updated_at': None, 'is_deleted': False}
+2026-06-03 01:40:32,587 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-03 01:40:32 | ERROR    | app.api.v1.endpoints.template_sets | Failed to create template set: (psycopg2.errors.UndefinedTable) relation "template_sets" does not exist
+LINE 1: INSERT INTO template_sets (id, name, description, updated_at...
+                    ^
+
+[SQL: INSERT INTO template_sets (id, name, description, updated_at, is_deleted) VALUES (%(id)s, %(name)s, %(description)s, %(updated_at)s, %(is_deleted)s) RETURNING template_sets.created_at]
+[parameters: {'id': '9b1bfaac-b9a3-4957-b788-4ae068debfe6', 'name': 'Company incorporation', 'description': 'for just test', 'updated_at': None, 'is_deleted': False}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-06-03 01:40:32 | ERROR    | app.database | Database error: 500: (psycopg2.errors.UndefinedTable) relation "template_sets" does not exist
+LINE 1: INSERT INTO template_sets (id, name, description, updated_at...
+                    ^
+
+[SQL: INSERT INTO template_sets (id, name, description, updated_at, is_deleted) VALUES (%(id)s, %(name)s, %(description)s, %(updated_at)s, %(is_deleted)s) RETURNING template_sets.created_at]
+[parameters: {'id': '9b1bfaac-b9a3-4957-b788-4ae068debfe6', 'name': 'Company incorporation', 'description': 'for just test', 'updated_at': None, 'is_deleted': False}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-06-03 01:40:32,588 - app.middleware.logging - INFO - Response: POST /api/v1/template-sets/ - Status: 500 - Time: 0.006s
+2026-06-03 01:40:49,967 - app.middleware.logging - INFO - Request: POST /api/v1/template-sets/ from 127.0.0.1
+2026-06-03 01:40:49,971 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-03 01:40:49,972 - sqlalchemy.engine.Engine - INFO - INSERT INTO template_sets (id, name, description, updated_at, is_deleted) VALUES (%(id)s, %(name)s, %(description)s, %(updated_at)s, %(is_deleted)s) RETURNING template_sets.created_at
+2026-06-03 01:40:49,972 - sqlalchemy.engine.Engine - INFO - [cached since 17.39s ago] {'id': '76344874-1ab1-4e88-aca5-2bb7c0c6f1f3', 'name': 'Compnay crop', 'description': 'for just test', 'updated_at': None, 'is_deleted': False}
+2026-06-03 01:40:49,973 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-03 01:40:49 | ERROR    | app.api.v1.endpoints.template_sets | Failed to create template set: (psycopg2.errors.UndefinedTable) relation "template_sets" does not exist
+LINE 1: INSERT INTO template_sets (id, name, description, updated_at...
+                    ^
+
+[SQL: INSERT INTO template_sets (id, name, description, updated_at, is_deleted) VALUES (%(id)s, %(name)s, %(description)s, %(updated_at)s, %(is_deleted)s) RETURNING template_sets.created_at]
+[parameters: {'id': '76344874-1ab1-4e88-aca5-2bb7c0c6f1f3', 'name': 'Compnay crop', 'description': 'for just test', 'updated_at': None, 'is_deleted': False}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-06-03 01:40:49 | ERROR    | app.database | Database error: 500: (psycopg2.errors.UndefinedTable) relation "template_sets" does not exist
+LINE 1: INSERT INTO template_sets (id, name, description, updated_at...
+                    ^
+
+[SQL: INSERT INTO template_sets (id, name, description, updated_at, is_deleted) VALUES (%(id)s, %(name)s, %(description)s, %(updated_at)s, %(is_deleted)s) RETURNING template_sets.created_at]
+[parameters: {'id': '76344874-1ab1-4e88-aca5-2bb7c0c6f1f3', 'name': 'Compnay crop', 'description': 'for just test', 'updated_at': None, 'is_deleted': False}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-06-03 01:40:49,974 - app.middleware.logging - INFO - Response: POST /api/v1/template-sets/ - Status: 500 - Time: 0.007s
+2026-06-03 01:42:18 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-03 01:42:18 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-03 01:42:18 | INFO     | app.main | Shutting down application...
+2026-06-03 01:42:18 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-03 01:42:18 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-03 01:42:25 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-03 01:42:25 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-03 01:42:39 | INFO     | app.main | Starting Doc Automation API in development mode
+2026-06-03 01:42:39 | INFO     | app.main | Initializing Document Automation services...
+2026-06-03 01:42:39 | INFO     | app.main | Document Automation directories created
+2026-06-03 01:42:39 | INFO     | app.main | ==================================================
+2026-06-03 01:42:39 | INFO     | app.main | Starting PDF QA System with LangGraph
+2026-06-03 01:42:39 | INFO     | app.main | ==================================================
+2026-06-03 01:42:39,069 - sentence_transformers.base.model - INFO - No device provided, using mps
+2026-06-03 01:42:39,494 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:42:39,621 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-06-03 01:42:39,994 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:42:40,389 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-06-03 01:42:40,391 - sentence_transformers.base.model - INFO - Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-06-03 01:42:41,293 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:42:41,366 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-06-03 01:42:41,669 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:42:41,777 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/README.md "HTTP/1.1 200 OK"
+2026-06-03 01:42:42,066 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:42:42,167 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-06-03 01:42:42,464 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:42:42,560 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/sentence_bert_config.json "HTTP/1.1 200 OK"
+2026-06-03 01:42:42,842 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+2026-06-03 01:42:43,131 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:42:43,207 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-03 01:42:43,510 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-06-03 01:42:43,866 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-03 01:42:44,164 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-03 01:42:44,488 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-03 01:42:44,814 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:42:44,880 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-06-03 01:42:45,146 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:42:45,210 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-03 01:42:45,497 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:42:45,580 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-03 01:42:45,883 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:42:45,963 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-06-03 01:42:46,247 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-06-03 01:42:46,548 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-06-03 01:42:47,053 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-03 01:42:47,121 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+2026-06-03 01:42:47,409 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2 "HTTP/1.1 200 OK"
+2026-06-03 01:42:48 | INFO     | app.main | Loaded existing vector store
+2026-06-03 01:42:48 | INFO     | app.main | 📖 API docs: http://localhost:8000/docs
+2026-06-03 01:42:48 | INFO     | app.main | 📁 Document Automation API: /api/v1
+2026-06-03 01:42:48 | INFO     | app.main | ==================================================
+2026-06-03 01:43:48,093 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-03 01:43:48,094 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.001s
+2026-06-03 01:43:48,452 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-03 01:43:48,453 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.001s
+2026-06-03 01:43:48,769 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-03 01:43:48,771 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.002s
+2026-06-03 01:43:50,035 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-03 01:43:50,036 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.002s
+2026-06-03 01:43:50,577 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-03 01:43:50,578 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.001s
+2026-06-03 01:43:51,469 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-03 01:43:51,470 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.002s
+2026-06-03 01:44:05,171 - app.middleware.logging - INFO - Request: POST /api/v1/templates/upload from 127.0.0.1
+2026-06-03 01:44:05 | ERROR    | app.utils.file_utils | Failed to save template: 'Settings' object has no attribute 'allowed_extensions_list'
+2026-06-03 01:44:05,176 - app.middleware.logging - INFO - Response: POST /api/v1/templates/upload - Status: 400 - Time: 0.005s
+2026-06-03 01:44:22,339 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-03 01:44:22,340 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.001s
