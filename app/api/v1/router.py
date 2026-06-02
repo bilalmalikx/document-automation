@@ -1,11 +1,12 @@
 from fastapi import APIRouter
-from app.api.v1.endpoints import templates, generate
+from app.api.v1.endpoints import templates, generate, template_sets
 
 router = APIRouter()
 
 # Include all endpoint routers
 router.include_router(templates.router)
 router.include_router(generate.router)
+router.include_router(template_sets.router)
 
 @router.get("/health")
 async def health_check():

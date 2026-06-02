@@ -7460,3 +7460,250 @@
 2026-05-31 06:58:52,453 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.004s
 2026-05-31 06:58:53,406 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
 2026-05-31 06:58:53,407 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.001s
+2026-06-01 15:34:12 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-01 15:34:12 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-01 15:37:37 | INFO     | app.main | Starting Doc Automation API in development mode
+2026-06-01 15:37:37 | INFO     | app.main | Initializing Document Automation services...
+2026-06-01 15:37:37 | INFO     | app.main | Document Automation directories created
+2026-06-01 15:37:37 | INFO     | app.main | ==================================================
+2026-06-01 15:37:37 | INFO     | app.main | Starting PDF QA System with LangGraph
+2026-06-01 15:37:37 | INFO     | app.main | ==================================================
+2026-06-01 15:37:37,569 - sentence_transformers.base.model - INFO - No device provided, using mps
+2026-06-01 15:38:37,577 - sentence_transformers.base.model - INFO - Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-06-01 15:41:37,606 - huggingface_hub.utils._http - WARNING - '[Errno 8] nodename nor servname provided, or not known' thrown while requesting HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/adapter_config.json
+2026-06-01 15:41:37,607 - huggingface_hub.utils._http - WARNING - Retrying in 1s [Retry 1/5].
+2026-06-01 15:42:15 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-01 15:42:15 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-01 16:08:12 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-01 16:08:12 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-01 16:08:31 | INFO     | app.main | Starting Doc Automation API in development mode
+2026-06-01 16:08:31 | INFO     | app.main | Initializing Document Automation services...
+2026-06-01 16:08:31 | INFO     | app.main | Document Automation directories created
+2026-06-01 16:08:31 | INFO     | app.main | ==================================================
+2026-06-01 16:08:31 | INFO     | app.main | Starting PDF QA System with LangGraph
+2026-06-01 16:08:31 | INFO     | app.main | ==================================================
+2026-06-01 16:08:31,019 - sentence_transformers.base.model - INFO - No device provided, using mps
+2026-06-01 16:08:31,314 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 16:08:31,389 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-06-01 16:08:31,682 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 16:08:31,777 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-06-01 16:08:31,779 - sentence_transformers.base.model - INFO - Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-06-01 16:08:32,091 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 16:08:32,167 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-06-01 16:08:32,452 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 16:08:32,533 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/README.md "HTTP/1.1 200 OK"
+2026-06-01 16:08:32,861 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 16:08:32,932 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-06-01 16:08:33,231 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 16:08:33,318 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/sentence_bert_config.json "HTTP/1.1 200 OK"
+2026-06-01 16:08:33,761 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+2026-06-01 16:08:34,063 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 16:08:34,142 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-01 16:08:34,457 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-06-01 16:08:34,750 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-01 16:08:35,044 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-01 16:08:35,352 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-01 16:08:35,697 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 16:08:35,789 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-06-01 16:08:36,076 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 16:08:36,286 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-01 16:08:36,586 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 16:08:36,668 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-01 16:08:36,947 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 16:08:37,028 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-06-01 16:08:37,332 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-06-01 16:08:37,628 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-06-01 16:08:37,974 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 16:08:38,053 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+2026-06-01 16:08:38,350 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2 "HTTP/1.1 200 OK"
+2026-06-01 16:08:39 | INFO     | app.main | Loaded existing vector store
+2026-06-01 16:08:39 | INFO     | app.main | 📖 API docs: http://localhost:8000/docs
+2026-06-01 16:08:39 | INFO     | app.main | 📁 Document Automation API: /api/v1
+2026-06-01 16:08:39 | INFO     | app.main | ==================================================
+2026-06-01 16:08:53 | INFO     | app.main | Shutting down application...
+2026-06-01 18:22:45 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-01 18:22:45 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-01 18:23:21 | INFO     | app.main | Starting Doc Automation API in development mode
+2026-06-01 18:23:21 | INFO     | app.main | Initializing Document Automation services...
+2026-06-01 18:23:21 | INFO     | app.main | Document Automation directories created
+2026-06-01 18:23:21 | INFO     | app.main | ==================================================
+2026-06-01 18:23:21 | INFO     | app.main | Starting PDF QA System with LangGraph
+2026-06-01 18:23:21 | INFO     | app.main | ==================================================
+2026-06-01 18:23:21,436 - sentence_transformers.base.model - INFO - No device provided, using mps
+2026-06-01 18:23:21,745 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 18:23:21,847 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-06-01 18:23:22,144 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 18:23:22,254 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-06-01 18:23:22,256 - sentence_transformers.base.model - INFO - Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-06-01 18:23:22,544 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 18:23:22,737 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-06-01 18:23:23,100 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 18:23:23,198 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/README.md "HTTP/1.1 200 OK"
+2026-06-01 18:23:23,534 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 18:23:23,618 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-06-01 18:23:23,915 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 18:23:24,016 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/sentence_bert_config.json "HTTP/1.1 200 OK"
+2026-06-01 18:23:24,359 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+2026-06-01 18:23:24,724 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 18:23:24,807 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-01 18:23:25,157 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-06-01 18:23:25,481 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-01 18:23:25,789 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-01 18:23:26,113 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-01 18:23:26,595 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 18:23:26,698 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-06-01 18:23:26,998 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 18:23:27,078 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-01 18:23:27,374 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 18:23:27,461 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-01 18:23:27,789 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 18:23:27,893 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-06-01 18:23:28,224 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-06-01 18:23:28,535 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-06-01 18:23:29,052 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 18:23:29,135 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+2026-06-01 18:23:29,428 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2 "HTTP/1.1 200 OK"
+2026-06-01 18:23:30 | INFO     | app.main | Loaded existing vector store
+2026-06-01 18:23:30 | INFO     | app.main | 📖 API docs: http://localhost:8000/docs
+2026-06-01 18:23:30 | INFO     | app.main | 📁 Document Automation API: /api/v1
+2026-06-01 18:23:30 | INFO     | app.main | ==================================================
+2026-06-01 18:23:30 | INFO     | app.main | Shutting down application...
+2026-06-01 18:23:35 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-01 18:23:35 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-01 18:23:56 | INFO     | app.main | Starting Doc Automation API in development mode
+2026-06-01 18:23:56 | INFO     | app.main | Initializing Document Automation services...
+2026-06-01 18:23:56 | INFO     | app.main | Document Automation directories created
+2026-06-01 18:23:56 | INFO     | app.main | ==================================================
+2026-06-01 18:23:56 | INFO     | app.main | Starting PDF QA System with LangGraph
+2026-06-01 18:23:56 | INFO     | app.main | ==================================================
+2026-06-01 18:23:56,463 - sentence_transformers.base.model - INFO - No device provided, using mps
+2026-06-01 18:23:56,774 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 18:23:56,860 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-06-01 18:23:57,159 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 18:23:57,238 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-06-01 18:23:57,239 - sentence_transformers.base.model - INFO - Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-06-01 18:23:57,537 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 18:23:57,626 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-06-01 18:23:57,920 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 18:23:58,029 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/README.md "HTTP/1.1 200 OK"
+2026-06-01 18:23:58,356 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 18:23:58,453 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-06-01 18:23:58,760 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 18:23:58,971 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/sentence_bert_config.json "HTTP/1.1 200 OK"
+2026-06-01 18:23:59,303 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+2026-06-01 18:23:59,772 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 18:23:59,874 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-01 18:24:00,243 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-06-01 18:24:00,573 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-01 18:24:00,880 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-01 18:24:01,245 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-01 18:24:01,646 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 18:24:01,736 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-06-01 18:24:02,049 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 18:24:02,136 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-01 18:24:02,460 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 18:24:02,573 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-01 18:24:02,884 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 18:24:02,981 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-06-01 18:24:03,276 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-06-01 18:24:03,591 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-06-01 18:24:03,995 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-01 18:24:04,081 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+2026-06-01 18:24:04,410 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2 "HTTP/1.1 200 OK"
+2026-06-01 18:24:05 | INFO     | app.main | Loaded existing vector store
+2026-06-01 18:24:05 | INFO     | app.main | 📖 API docs: http://localhost:8000/docs
+2026-06-01 18:24:05 | INFO     | app.main | 📁 Document Automation API: /api/v1
+2026-06-01 18:24:05 | INFO     | app.main | ==================================================
+2026-06-01 18:24:40,792 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-01 18:24:40,794 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.002s
+2026-06-01 18:24:41,566 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-01 18:24:41,567 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.001s
+2026-06-01 18:24:45,979 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-01 18:24:45,980 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.001s
+2026-06-01 18:25:03,944 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-01 18:25:03,945 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.001s
+2026-06-01 18:25:04,972 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-01 18:25:04,972 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.001s
+2026-06-01 18:25:05,703 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-01 18:25:05,704 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.001s
+2026-06-01 18:25:06,396 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-01 18:25:06,397 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.001s
+2026-06-01 18:26:10,355 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-01 18:26:10,356 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.001s
+2026-06-01 18:28:43,171 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-01 18:28:43,172 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.001s
+2026-06-01 18:55:59,982 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-01 18:55:59,995 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.013s
+2026-06-01 21:21:17,568 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-01 21:21:17,569 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.001s
+2026-06-02 10:53:57 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-02 10:53:57 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-02 10:58:24 | INFO     | app.main | Starting Doc Automation API in development mode
+2026-06-02 10:58:24 | INFO     | app.main | Initializing Document Automation services...
+2026-06-02 10:58:24 | INFO     | app.main | Document Automation directories created
+2026-06-02 10:58:24 | INFO     | app.main | ==================================================
+2026-06-02 10:58:24 | INFO     | app.main | Starting PDF QA System with LangGraph
+2026-06-02 10:58:24 | INFO     | app.main | ==================================================
+2026-06-02 10:58:24,324 - sentence_transformers.base.model - INFO - No device provided, using mps
+2026-06-02 10:58:24,961 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-02 10:58:25,071 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-06-02 10:58:25,446 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-02 10:58:25,519 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-06-02 10:58:25,520 - sentence_transformers.base.model - INFO - Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-06-02 10:58:25,821 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-02 10:58:26,252 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-06-02 10:58:26,824 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-06-02 10:58:28,334 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/README.md "HTTP/1.1 200 OK"
+2026-06-02 10:58:29,142 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-02 10:58:29,566 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-06-02 10:58:30,001 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-02 10:58:30,098 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/sentence_bert_config.json "HTTP/1.1 200 OK"
+2026-06-02 10:58:30,377 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+2026-06-02 10:58:30,698 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-02 10:58:31,027 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-02 10:58:31,457 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-06-02 10:58:31,948 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-02 10:58:32,499 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-02 10:58:32,990 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-02 10:58:33,480 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-02 10:58:33,727 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-06-02 10:58:34,632 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-02 10:58:34,810 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-02 10:58:35,203 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-02 10:58:37,500 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-02 10:58:39,500 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-02 10:58:39,579 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-06-02 10:58:40,366 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-06-02 10:58:40,900 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-06-02 10:58:41,812 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-02 10:58:42,895 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+2026-06-02 10:58:57,537 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2 "HTTP/1.1 200 OK"
+2026-06-02 10:58:58 | INFO     | app.main | Loaded existing vector store
+2026-06-02 10:58:58 | INFO     | app.main | 📖 API docs: http://localhost:8000/docs
+2026-06-02 10:58:58 | INFO     | app.main | 📁 Document Automation API: /api/v1
+2026-06-02 10:58:58 | INFO     | app.main | ==================================================
+2026-06-02 10:58:58 | INFO     | app.main | Shutting down application...
+2026-06-02 10:58:58 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-02 10:58:58 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-02 10:58:59 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-02 10:58:59 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-02 10:59:16 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-02 10:59:16 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-02 11:00:51 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-02 11:00:51 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-02 11:00:52 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-02 11:00:52 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-02 11:00:56 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-02 11:00:56 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-02 11:00:59 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-02 11:00:59 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-02 11:01:07 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-02 11:01:07 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-02 11:01:09 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-02 11:01:09 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-02 11:01:42 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-02 11:01:42 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-02 11:01:47 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-02 11:01:47 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-02 11:02:29 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-02 11:02:29 | INFO     | app.database | 📊 Database: localhost:5432

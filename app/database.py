@@ -36,15 +36,24 @@ def get_db():
         db.close()
 
 def init_db():
-    """Initialize database connection"""
     try:
+        # Import all models to create tables
+        from app.models.template import TemplateModel
+        from app.models.template_set import TemplateSet
+        from app.models.template_set_member import TemplateSetMember
+        from app.models.shared_field import SharedField
+        
+        Base.metadata.create_all(bind=engine)
+        app_logger.info("✅ Database tables created successfully")
+        
+        # Verify connection
         with engine.connect() as conn:
             result = conn.execute(text("SELECT version()"))
             version = result.fetchone()[0]
-            app_logger.info(f"🐘 PostgreSQL: {version.split(',')[0]}")
-        app_logger.info("✅ Database connection successful")
+            app_logger.info(f"🐘 PostgreSQL version: {version.split(',')[0]}")
+            
     except Exception as e:
-        app_logger.error(f"❌ Database connection failed: {str(e)}")
+        app_logger.error(f"❌ Database initialization failed: {str(e)}")
         raise
 
 def create_tables():

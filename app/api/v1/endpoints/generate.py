@@ -10,6 +10,7 @@ from app.core.exceptions import AIValidationError, RenderError, TemplateNotFound
 from app.utils.logging_config import app_logger
 import zipfile
 import io
+from app.config import settings
 
 router = APIRouter(prefix="/generate", tags=["Document Generation"])
 
@@ -183,3 +184,89 @@ async def generate_multiple_documents(request: GenerateMultipleRequest):
     except Exception as e:
         app_logger.error(f"Bulk generation error: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Bulk generation failed: {str(e)}")
+    
+# Add at the end of generate.py
+
+@router.post("/generate-set/{set_id}")
+async def generate_template_set(
+    set_id: str,
+    instruction: str,
+    db: Session = Depends(get_db) if settings.use_database else None
+):
+    """
+    Generate all templates in a template set using shared instruction
+    Returns ZIP file containing all generated documents
+    """
+    try:
+        from app.services.template_set_service import TemplateSetService
+        
+        app_logger.info(f"Generating template set: {set_id}")
+        
+        # Get template set details
+        set_details = TemplateSetService.get_set_with_details(db, set_id)
+        if not set_details:
+            raise HTTPException(status_code=404, detail="Template set not found")
+        
+        templates = set_details.get("templates", [])
+        shared_fields = set_details.get("shared_fields", [])
+        
+        if not templates:
+            raise HTTPException(status_code=400, detail="No templates in this set")
+        
+        # Build shared field context from AI
+        shared_placeholders = [f["field_name"] for f in shared_fields]
+        
+        # Get AI mapped values for shared fields
+        ai_mapped_data = await AIMapperService.map_instruction(
+            instruction=instruction,
+            allowed_placeholders=shared_placeholders
+        )
+        
+        # Create ZIP file
+        zip_buffer = io.BytesIO()
+        generated_count = 0
+        
+        with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+            for template_data in templates:
+                template_id = template_data["id"]
+                template_filename = template_data["filename"]
+                
+                # Get template
+                template_placeholders = template_manager.get_template_placeholders(template_id)
+                template_path = template_manager.get_template_path(template_id)
+                
+                # Merge shared field values with template placeholders
+                render_context = {}
+                for ph in template_placeholders:
+                    if ph in ai_mapped_data and ai_mapped_data[ph]:
+                        render_context[ph] = ai_mapped_data[ph]
+                
+                # Render document
+                rendered_content = DOCXRenderer.render_template(
+                    template_path=template_path,
+                    context=render_context
+                )
+                
+                # Add to ZIP
+                base_name = template_filename.replace('.docx', '')
+                filename = f"{base_name}_generated.docx"
+                zip_file.writestr(filename, rendered_content)
+                generated_count += 1
+        
+        zip_buffer.seek(0)
+        
+        return StreamingResponse(
+            zip_buffer,
+            media_type="application/zip",
+            headers={
+                "Content-Disposition": f"attachment; filename=template_set_{set_id[:8]}.zip",
+                "X-Generated-Count": str(generated_count),
+                "X-Total-Count": str(len(templates))
+            }
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        app_logger.error(f"Template set generation error: {str(e)}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Set generation failed: {str(e)}")
