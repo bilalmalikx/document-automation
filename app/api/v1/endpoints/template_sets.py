@@ -6,7 +6,6 @@ from app.database import get_db
 from app.services.template_set_service import TemplateSetService
 from app.utils.logging_config import app_logger
 
-
 router = APIRouter(prefix="/template-sets", tags=["Template Sets"])
 
 # ============================================
@@ -31,13 +30,6 @@ class CreateSharedFieldRequest(BaseModel):
     field_type: str = "text"
     field_order: int = 0
     is_required: bool = False
-    default_value: Optional[str] = None
-
-class UpdateSharedFieldRequest(BaseModel):
-    field_label: Optional[str] = None
-    field_type: Optional[str] = None
-    field_order: Optional[int] = None
-    is_required: Optional[bool] = None
     default_value: Optional[str] = None
 
 # ============================================
@@ -147,6 +139,22 @@ async def add_template_to_set(
 ):
     """Add a template to the set"""
     try:
+        # ✅ CRITICAL: Validate set_id
+        if not set_id or set_id == "undefined" or set_id == "null":
+            app_logger.error(f"Invalid set_id: {set_id}")
+            raise HTTPException(status_code=400, detail="Invalid template set ID")
+        
+        # First check if template exists in database
+        from app.models.template import TemplateModel
+        template = db.query(TemplateModel).filter(
+            TemplateModel.id == request.template_id,
+            TemplateModel.is_deleted == False
+        ).first()
+        
+        if not template:
+            app_logger.error(f"Template not found: {request.template_id}")
+            raise HTTPException(status_code=404, detail=f"Template {request.template_id} not found")
+        
         result = TemplateSetService.add_template_to_set(
             db=db,
             set_id=set_id,
@@ -154,6 +162,8 @@ async def add_template_to_set(
             order_index=request.order_index
         )
         return {"success": True, "message": "Template added to set"}
+    except HTTPException:
+        raise
     except Exception as e:
         app_logger.error(f"Failed to add template to set: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -222,13 +232,12 @@ async def get_shared_fields(
 @router.put("/fields/{field_id}")
 async def update_shared_field(
     field_id: str,
-    request: UpdateSharedFieldRequest,
+    request: dict,
     db: Session = Depends(get_db)
 ):
     """Update a shared field"""
     try:
-        update_data = {k: v for k, v in request.dict().items() if v is not None}
-        field = TemplateSetService.update_shared_field(db, field_id, **update_data)
+        field = TemplateSetService.update_shared_field(db, field_id, **request)
         if not field:
             raise HTTPException(status_code=404, detail="Shared field not found")
         return field.to_dict()

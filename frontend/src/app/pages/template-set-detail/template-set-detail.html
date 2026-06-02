@@ -1,1 +1,183 @@
-<p>template-set-detail works!</p>
+<div class="detail-page">
+  <!-- Header -->
+  <div class="detail-header">
+    <button class="back-btn" (click)="goBack()">
+      ← Back to Template Sets
+    </button>
+    <div class="header-actions">
+      <button class="btn btn-primary" (click)="generateAll()" [disabled]="!templateSet?.templates?.length">
+        📦 Generate All Documents
+      </button>
+    </div>
+  </div>
+
+  @if (isLoading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading template set...</p>
+    </div>
+  } @else if (templateSet) {
+    <!-- Title Section -->
+    <div class="title-section">
+      <div>
+        <h1 class="title">{{ templateSet.name }}</h1>
+        <p class="subtitle">{{ templateSet.description || 'One process containing multiple templates that share the same field dictionary.' }}</p>
+      </div>
+      <div class="stats-row">
+        <div class="stat-item">
+          <span class="stat-value">{{ templateSet.templates.length }}</span>
+          <span class="stat-label">Templates</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ templateSet.shared_fields.length }}</span>
+          <span class="stat-label">Shared Fields</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ mappedPercentage }}%</span>
+          <span class="stat-label">Mapping Health</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Two Column Layout -->
+    <div class="two-col">
+      <!-- Left: Templates in this Process -->
+      <div class="card">
+        <div class="card-header">
+          <h3>📋 Templates in this Process</h3>
+        </div>
+        
+        <!-- Upload New Template Section -->
+        <div class="upload-section">
+          <div class="upload-area" (click)="fileInput.click()">
+            <input type="file" #fileInput id="template-file-input" accept=".docx" style="display:none" (change)="onFileSelected($event)" />
+            <div class="upload-icon">📄</div>
+            <div class="upload-title">Click to upload DOCX template</div>
+            <div class="upload-sub">or drag and drop</div>
+          </div>
+          
+          @if (selectedFile) {
+            <div class="upload-details">
+              <div class="file-info">
+                <span>📄 {{ selectedFile.name }}</span>
+                <span class="file-size">{{ (selectedFile.size / 1024).toFixed(1) }} KB</span>
+              </div>
+              <div class="template-name-input">
+                <input type="text" placeholder="Template name" [(ngModel)]="templateName" class="form-control-sm" />
+              </div>
+              @if (isUploading) {
+                <div class="progress-bar">
+                  <div class="progress-fill" [style.width.%]="uploadProgress"></div>
+                  <span class="progress-text">{{ uploadProgress }}%</span>
+                </div>
+              }
+              <button class="btn btn-sm btn-primary upload-btn" (click)="uploadTemplateToSet()" [disabled]="isUploading || !templateName">
+                @if (isUploading) { Uploading... } @else { Upload to Set }
+              </button>
+            </div>
+          }
+        </div>
+
+        <!-- Templates List -->
+        <div class="templates-list">
+          @for (template of templateSet.templates; track template.id) {
+            <div class="template-item">
+              <div class="template-info">
+                <span class="template-icon">📄</span>
+                <div>
+                  <div class="template-name">{{ template.filename }}</div>
+                  <div class="template-placeholders">{{ template.placeholder_count }} placeholders</div>
+                </div>
+              </div>
+              <button class="remove-btn" (click)="removeTemplate(template.id)">🗑️</button>
+            </div>
+          }
+          @if (templateSet.templates.length === 0) {
+            <div class="empty-list">
+              <div class="empty-icon">📁</div>
+              <p>No templates in this set yet</p>
+              <p class="empty-hint">Upload a DOCX template above to get started</p>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Right: Shared Field Dictionary -->
+      <div class="card">
+        <div class="card-header">
+          <h3>📖 Shared Field Dictionary</h3>
+          <button class="btn btn-sm btn-primary" (click)="showAddFieldModal = true">
+            + Add Field
+          </button>
+        </div>
+        
+        <div class="fields-list">
+          @for (field of templateSet.shared_fields; track field.id) {
+            <div class="field-item">
+              <div class="field-info">
+                <span class="field-name">{{ field.field_label }}</span>
+                <span class="field-type-badge">{{ field.field_type }}</span>
+                @if (field.is_required) {
+                  <span class="required-badge">Required</span>
+                }
+              </div>
+              <div class="field-meta">
+                <span class="field-placeholder">{{ field.field_name }}</span>
+                <button class="delete-field" (click)="deleteSharedField(field.id)">🗑️</button>
+              </div>
+            </div>
+          }
+          @if (templateSet.shared_fields.length === 0) {
+            <div class="empty-list">
+              <div class="empty-icon">🔖</div>
+              <p>No shared fields added yet</p>
+              <button class="btn btn-sm btn-primary" (click)="showAddFieldModal = true">Add First Field</button>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>
+
+<!-- Add Field Modal -->
+@if (showAddFieldModal) {
+  <div class="modal-overlay" (click)="showAddFieldModal = false">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Add Shared Field</h3>
+        <button class="modal-close" (click)="showAddFieldModal = false">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Field Name <span class="required">*</span></label>
+          <input type="text" class="form-control" [(ngModel)]="newField.field_name" placeholder="e.g., company_name" />
+        </div>
+        <div class="form-group">
+          <label>Field Label <span class="required">*</span></label>
+          <input type="text" class="form-control" [(ngModel)]="newField.field_label" placeholder="e.g., Company Name" />
+        </div>
+        <div class="form-group">
+          <label>Field Type</label>
+          <select class="form-control" [(ngModel)]="newField.field_type">
+            <option value="text">Text</option>
+            <option value="date">Date</option>
+            <option value="number">Number</option>
+            <option value="email">Email</option>
+            <option value="textarea">Long Text</option>
+          </select>
+        </div>
+        <div class="form-group checkbox">
+          <label>
+            <input type="checkbox" [(ngModel)]="newField.is_required" />
+            Required field
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="showAddFieldModal = false">Cancel</button>
+        <button class="btn btn-primary" (click)="addSharedField()">Add Field</button>
+      </div>
+    </div>
+  </div>
+}

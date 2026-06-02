@@ -6,7 +6,7 @@ export interface TemplateSet {
   updated_at?: string;
 }
 
-export interface TemplateSetDetail extends TemplateSet {
+export interface TemplateSetDetails extends TemplateSet {
   templates: TemplateSetTemplate[];
   shared_fields: SharedField[];
   total_templates: number;

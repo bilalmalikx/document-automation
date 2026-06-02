@@ -18,10 +18,17 @@ export class TemplateSets implements OnInit {
   private toast = inject(ToastService);
 
   templateSets: TemplateSet[] = [];
+  filteredSets: TemplateSet[] = [];
   isLoading = true;
   showCreateModal = false;
   newSetName = '';
   newSetDescription = '';
+  searchQuery = '';
+
+  // Stats
+  totalTemplates = 0;
+  totalSharedFields = 0;
+  totalGeneratedCases = 0;
 
   ngOnInit(): void {
     this.loadTemplateSets();
@@ -32,6 +39,8 @@ export class TemplateSets implements OnInit {
     this.templateSetService.getTemplateSets().subscribe({
       next: (res) => {
         this.templateSets = res.template_sets;
+        this.filteredSets = [...this.templateSets];
+        this.calculateStats();
         this.isLoading = false;
       },
       error: (err) => {
@@ -40,6 +49,25 @@ export class TemplateSets implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  calculateStats(): void {
+    // In real implementation, these would come from API
+    this.totalTemplates = this.templateSets.length * 8; // Placeholder
+    this.totalSharedFields = this.templateSets.length * 35; // Placeholder
+    this.totalGeneratedCases = this.templateSets.length * 234; // Placeholder
+  }
+
+  filterSets(): void {
+    if (!this.searchQuery.trim()) {
+      this.filteredSets = [...this.templateSets];
+    } else {
+      const query = this.searchQuery.toLowerCase();
+      this.filteredSets = this.templateSets.filter(set => 
+        set.name.toLowerCase().includes(query) ||
+        (set.description && set.description.toLowerCase().includes(query))
+      );
+    }
   }
 
   openCreateModal(): void {

@@ -39,11 +39,21 @@ class Settings(BaseSettings):
     log_level: str = Field(default="INFO", env="LOG_LEVEL")
     log_file: str = Field(default="./logs/app.log", env="LOG_FILE")
     
+    @property
+    def cors_origins_list(self) -> List[str]:
+        return json.loads(self.cors_origins)
+    
+    @property
+    def allowed_extensions_list(self) -> List[str]:
+        """✅ FIXED: Convert comma-separated string to list"""
+        return [ext.strip() for ext in self.allowed_extensions.split(",")]
+    
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
         case_sensitive = False
-        extra = "ignore"  # ✅ Allows extra fields in .env without error
+        extra = "ignore"
 
 settings = Settings()
-print(f"✅ Config loaded")
+print(f"✅ Config loaded - Database: {settings.database_url.split('@')[-1] if '@' in settings.database_url else settings.database_url}")
+print(f"✅ Allowed extensions: {settings.allowed_extensions_list}")

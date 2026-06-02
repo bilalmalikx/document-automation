@@ -35,6 +35,8 @@ class TemplateManager:
         placeholders = PlaceholderExtractor.extract_from_docx(Path(file_path))
         PlaceholderExtractor.validate_placeholders(placeholders)
         
+        app_logger.info(f"📝 Extracted {len(placeholders)} placeholders: {placeholders}")
+        
         # Prepare template data
         template_data = {
             "id": template_id,
@@ -47,7 +49,7 @@ class TemplateManager:
             "updated_at": datetime.utcnow().isoformat()
         }
         
-        # Save to database if available
+        # ✅ CRITICAL: Save to PostgreSQL database
         if settings.use_database and db:
             try:
                 db_template = TemplateModel(
@@ -61,37 +63,59 @@ class TemplateManager:
                 db.add(db_template)
                 db.commit()
                 db.refresh(db_template)
-                app_logger.info(f"Template saved to database: {template_id}")
-            except Exception as e:
-                app_logger.error(f"Database save failed: {str(e)}")
-                db.rollback()
-                # Fallback to in-memory
+                app_logger.info(f"✅✅✅ Template saved to DATABASE: {template_id}")
+                
+                # Also save to memory for fallback
                 self.templates_store[template_id] = template_data
+                
+            except Exception as e:
+                app_logger.error(f"❌ Database save failed: {str(e)}")
+                db.rollback()
+                self.templates_store[template_id] = template_data
+                app_logger.info(f"⚠️ Template saved to MEMORY only: {template_id}")
         else:
-            # Save to in-memory store
+            # Fallback to memory
             self.templates_store[template_id] = template_data
-            app_logger.info(f"Template saved to memory: {template_id}")
+            if settings.use_database:
+                app_logger.error(f"❌ No database session provided! Template saved to MEMORY only: {template_id}")
+            else:
+                app_logger.info(f"📝 Template saved to MEMORY: {template_id}")
         
         return template_data
     
     def get_template(self, template_id: str, db: Session = None) -> Dict:
         """Get template metadata from DB or memory"""
         # Try database first
-        if settings.use_database and db:
-            try:
-                db_template = db.query(TemplateModel).filter(
-                    TemplateModel.id == template_id,
-                    TemplateModel.is_deleted == False
-                ).first()
-                
-                if db_template:
-                    app_logger.info(f"Template retrieved from database: {template_id}")
-                    return db_template.to_dict()
-            except Exception as e:
-                app_logger.error(f"Database read failed: {str(e)}")
+        if settings.use_database:
+            db_session = db
+            own_session = False
+            
+            if not db_session:
+                try:
+                    db_session = SessionLocal()
+                    own_session = True
+                except Exception as e:
+                    app_logger.error(f"Could not create session: {str(e)}")
+            
+            if db_session:
+                try:
+                    db_template = db_session.query(TemplateModel).filter(
+                        TemplateModel.id == template_id,
+                        TemplateModel.is_deleted == False
+                    ).first()
+                    
+                    if db_template:
+                        app_logger.info(f"✅ Template found in DATABASE: {template_id}")
+                        return db_template.to_dict()
+                except Exception as e:
+                    app_logger.error(f"Database read failed: {str(e)}")
+                finally:
+                    if own_session and db_session:
+                        db_session.close()
         
         # Fallback to in-memory
         if template_id in self.templates_store:
+            app_logger.info(f"📝 Template found in MEMORY: {template_id}")
             return self.templates_store[template_id]
         
         raise TemplateNotFoundError(f"Template {template_id} not found")
@@ -111,60 +135,102 @@ class TemplateManager:
         templates = []
         
         # Try database first
-        if settings.use_database and db:
-            try:
-                db_templates = db.query(TemplateModel).filter(
-                    TemplateModel.is_deleted == False
-                ).order_by(TemplateModel.created_at.desc()).offset(skip).limit(limit).all()
-                
-                if db_templates:
-                    templates = [t.to_dict() for t in db_templates]
-                    app_logger.info(f"Retrieved {len(templates)} templates from database")
-                    return templates
-            except Exception as e:
-                app_logger.error(f"Database list failed: {str(e)}")
+        if settings.use_database:
+            db_session = db
+            own_session = False
+            
+            if not db_session:
+                try:
+                    db_session = SessionLocal()
+                    own_session = True
+                except:
+                    pass
+            
+            if db_session:
+                try:
+                    db_templates = db_session.query(TemplateModel).filter(
+                        TemplateModel.is_deleted == False
+                    ).order_by(TemplateModel.created_at.desc()).offset(skip).limit(limit).all()
+                    
+                    if db_templates:
+                        templates = [t.to_dict() for t in db_templates]
+                        app_logger.info(f"📊 Retrieved {len(templates)} templates from DATABASE")
+                        return templates
+                except Exception as e:
+                    app_logger.error(f"Database list failed: {str(e)}")
+                finally:
+                    if own_session and db_session:
+                        db_session.close()
         
         # Fallback to in-memory
         templates = list(self.templates_store.values())
+        app_logger.info(f"📊 Retrieved {len(templates)} templates from MEMORY")
         return templates[skip:skip+limit]
     
     def delete_template(self, template_id: str, db: Session = None) -> bool:
         """Soft delete template from DB"""
-        # Try database first
-        if settings.use_database and db:
-            try:
-                db_template = db.query(TemplateModel).filter(
-                    TemplateModel.id == template_id
-                ).first()
-                
-                if db_template:
-                    db_template.is_deleted = True
-                    db.commit()
-                    app_logger.info(f"Template soft deleted from database: {template_id}")
-                    return True
-            except Exception as e:
-                app_logger.error(f"Database delete failed: {str(e)}")
+        if settings.use_database:
+            db_session = db
+            own_session = False
+            
+            if not db_session:
+                try:
+                    db_session = SessionLocal()
+                    own_session = True
+                except:
+                    pass
+            
+            if db_session:
+                try:
+                    db_template = db_session.query(TemplateModel).filter(
+                        TemplateModel.id == template_id
+                    ).first()
+                    
+                    if db_template:
+                        db_template.is_deleted = True
+                        db_session.commit()
+                        app_logger.info(f"🗑️ Template deleted from DATABASE: {template_id}")
+                        return True
+                except Exception as e:
+                    app_logger.error(f"Database delete failed: {str(e)}")
+                finally:
+                    if own_session and db_session:
+                        db_session.close()
         
         # Fallback to in-memory
         if template_id in self.templates_store:
             del self.templates_store[template_id]
+            app_logger.info(f"🗑️ Template deleted from MEMORY: {template_id}")
             return True
         
         return False
     
     def search_by_placeholder(self, placeholder_name: str, db: Session = None) -> List[Dict]:
         """Search templates containing specific placeholder"""
-        if settings.use_database and db:
-            try:
-                # PostgreSQL JSON search
-                db_templates = db.query(TemplateModel).filter(
-                    TemplateModel.placeholders.contains([placeholder_name]),
-                    TemplateModel.is_deleted == False
-                ).all()
-                
-                return [t.to_dict() for t in db_templates]
-            except Exception as e:
-                app_logger.error(f"Placeholder search failed: {str(e)}")
+        if settings.use_database:
+            db_session = db
+            own_session = False
+            
+            if not db_session:
+                try:
+                    db_session = SessionLocal()
+                    own_session = True
+                except:
+                    pass
+            
+            if db_session:
+                try:
+                    db_templates = db_session.query(TemplateModel).filter(
+                        TemplateModel.placeholders.contains([placeholder_name]),
+                        TemplateModel.is_deleted == False
+                    ).all()
+                    
+                    return [t.to_dict() for t in db_templates]
+                except Exception as e:
+                    app_logger.error(f"Placeholder search failed: {str(e)}")
+                finally:
+                    if own_session and db_session:
+                        db_session.close()
         
         # Memory search
         results = []
@@ -175,32 +241,3 @@ class TemplateManager:
 
 # Singleton
 template_manager = TemplateManager()
-
-# Add this method to debug template retrieval
-def debug_template(self, template_id: str, db: Session = None):
-    """Debug method to check template existence"""
-    if settings.use_database and db:
-        try:
-            from app.models.template import TemplateModel
-            db_template = db.query(TemplateModel).filter(
-                TemplateModel.id == template_id,
-                TemplateModel.is_deleted == False
-            ).first()
-            
-            if db_template:
-                app_logger.info(f"✅ Found template in DB: {db_template.id}")
-                return True
-            else:
-                app_logger.warning(f"❌ Template {template_id} NOT in DB")
-                # Check if exists but deleted
-                deleted = db.query(TemplateModel).filter(
-                    TemplateModel.id == template_id,
-                    TemplateModel.is_deleted == True
-                ).first()
-                if deleted:
-                    app_logger.warning(f"Template exists but is_deleted=True")
-                return False
-        except Exception as e:
-            app_logger.error(f"Debug error: {str(e)}")
-            return False
-    return False

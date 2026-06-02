@@ -1,63 +1,132 @@
-<div class="page-header">
-  <div>
-    <h1 class="page-title">Template Sets</h1>
-    <p class="page-subtitle">Manage business processes containing multiple related templates</p>
-  </div>
-  <div class="page-header-actions">
+<div class="template-sets-dashboard">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div>
+      <h1 class="dashboard-title">Template Sets</h1>
+      <p class="dashboard-subtitle">Manage business processes that contain multiple related templates and one shared field dictionary</p>
+    </div>
     <button class="btn btn-primary" (click)="openCreateModal()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="12" y1="5" x2="12" y2="19"/>
         <line x1="5" y1="12" x2="19" y2="12"/>
       </svg>
       New Template Set
     </button>
   </div>
-</div>
 
-@if (isLoading) {
-  <div class="flex-center" style="padding: 60px">
-    <div class="spinner"></div>
-    <span style="margin-left: 12px">Loading template sets...</span>
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">📁</div>
+      <div class="stat-value">{{ templateSets.length }}</div>
+      <div class="stat-label">Template Sets</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📄</div>
+      <div class="stat-value">{{ totalTemplates }}</div>
+      <div class="stat-label">Total Templates</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🔖</div>
+      <div class="stat-value">{{ totalSharedFields }}</div>
+      <div class="stat-label">Reusable Fields</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📊</div>
+      <div class="stat-value">{{ totalGeneratedCases }}</div>
+      <div class="stat-label">Generated Cases</div>
+    </div>
   </div>
-} @else if (templateSets.length === 0) {
-  <div class="empty-state">
-    <div class="empty-icon">📦</div>
-    <div class="empty-title">No template sets yet</div>
-    <p class="empty-desc">Create your first template set to group related templates</p>
-    <button class="btn btn-primary mt-4" (click)="openCreateModal()">Create Template Set</button>
-  </div>
-} @else {
-  <div class="template-sets-grid">
-    @for (set of templateSets; track set.id) {
-      <app-template-set-card 
-        [templateSet]="set" 
-        (deleteEvent)="deleteTemplateSet(set.id, set.name)"
+
+  <!-- Search and Filters -->
+  <div class="search-bar">
+    <div class="search-input-wrapper">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input 
+        type="text" 
+        placeholder="Search template set..." 
+        [(ngModel)]="searchQuery"
+        (input)="filterSets()"
+        class="search-input"
       />
-    }
+    </div>
   </div>
-}
+
+  <!-- Template Sets Grid -->
+  @if (isLoading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading template sets...</p>
+    </div>
+  } @else if (filteredSets.length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon">📦</div>
+      <div class="empty-title">No template sets found</div>
+      <p class="empty-desc">Create your first template set to group related templates</p>
+      <button class="btn btn-primary" (click)="openCreateModal()">Create Template Set</button>
+    </div>
+  } @else {
+    <div class="template-sets-grid">
+      @for (set of filteredSets; track set.id) {
+        <div class="template-set-card" [routerLink]="['/template-sets', set.id]">
+          <div class="card-header">
+            <div class="card-icon">📁</div>
+            <div class="card-info">
+              <div class="card-title">{{ set.name }}</div>
+              <div class="card-desc">{{ set.description || 'No description' }}</div>
+            </div>
+            <button class="card-delete" (click)="$event.stopPropagation(); deleteTemplateSet(set.id, set.name)">
+              🗑️
+            </button>
+          </div>
+          <div class="card-stats">
+            <div class="stat">
+              <span class="stat-number">8</span>
+              <span class="stat-label-sm">templates</span>
+            </div>
+            <div class="stat">
+              <span class="stat-number">35</span>
+              <span class="stat-label-sm">shared fields</span>
+            </div>
+            <div class="stat">
+              <span class="stat-number">234</span>
+              <span class="stat-label-sm">generated</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="status-badge active">Active</span>
+            <span class="action-link">Open Set →</span>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
 
 <!-- Create Modal -->
 @if (showCreateModal) {
-  <div class="modal-backdrop" (click)="closeCreateModal()">
+  <div class="modal-overlay" (click)="closeCreateModal()">
     <div class="modal" (click)="$event.stopPropagation()">
       <div class="modal-header">
-        <div class="modal-title">Create Template Set</div>
+        <h2>Create Template Set</h2>
         <button class="modal-close" (click)="closeCreateModal()">✕</button>
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label class="form-label">Set Name <span class="req">*</span></label>
+          <label>Set Name <span class="required">*</span></label>
           <input type="text" class="form-control" [(ngModel)]="newSetName" placeholder="e.g., Company Incorporation" />
         </div>
         <div class="form-group">
-          <label class="form-label">Description</label>
+          <label>Description</label>
           <textarea class="form-control" rows="3" [(ngModel)]="newSetDescription" placeholder="Describe what this template set does..."></textarea>
         </div>
       </div>
-      <div class="modal-actions">
-        <button class="btn btn-ghost" (click)="closeCreateModal()">Cancel</button>
-        <button class="btn btn-primary" (click)="createTemplateSet()">Create</button>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeCreateModal()">Cancel</button>
+        <button class="btn btn-primary" (click)="createTemplateSet()">Create Set</button>
       </div>
     </div>
   </div>
