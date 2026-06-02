@@ -1,0 +1,290 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Generate Document</h1>
+    <p class="page-subtitle">Select template, fill values - document preview updates automatically</p>
+  </div>
+</div>
+
+<div class="wizard-steps">
+  <div class="wizard-step" [class.active]="step === 1" [class.done]="step > 1" (click)="goToStep1()">
+    <div class="wizard-step-num">{{ step > 1 ? '✓' : '1' }}</div>
+    <span>Select Template</span>
+  </div>
+  <div class="wizard-step" [class.active]="step === 2" (click)="templateService.hasSelection() && goToStep2()">
+    <div class="wizard-step-num">2</div>
+    <span>Generate Document</span>
+  </div>
+</div>
+
+<!-- Step 1: Select Template -->
+@if (step === 1) {
+  <div class="card">
+    <div class="section-title">
+      Choose Template(s)
+      @if (templateService.getSelectedCount() > 0) {
+        <span class="selection-badge">{{ templateService.getSelectedCount() }} selected</span>
+      }
+    </div>
+    <div class="template-select-grid">
+      @for (t of templateService.templates(); track t.id) {
+        <div class="tsg-item" [class.selected]="templateService.isSelected(t.id)" (click)="toggleTemplateSelection(t)">
+          <div class="tsg-icon">📄</div>
+          <div class="tsg-name">{{ t.filename }}</div>
+          <div class="tsg-info">{{ t.placeholder_count }} placeholders</div>
+          @if (templateService.isSelected(t.id)) {
+            <div class="check-mark">✓</div>
+          }
+        </div>
+      }
+      @if (templateService.templates().length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon">📄</div>
+          <div class="empty-title">No templates found</div>
+          <button class="btn btn-primary" routerLink="/templates">Upload Template</button>
+        </div>
+      }
+    </div>
+    
+    @if (templateService.getSelectedCount() > 0) {
+      <div class="selected-info">
+        <span class="selected-count">📋 {{ templateService.getSelectedCount() }} template(s) selected</span>
+        <button class="btn btn-sm btn-outline" (click)="clearTemplateSelection()">Clear All</button>
+      </div>
+    }
+    
+    <div class="step-actions">
+      <button class="btn btn-primary" [disabled]="!templateService.hasSelection()" (click)="goToStep2()">Next →</button>
+    </div>
+  </div>
+}
+
+<!-- Step 2: Generate -->
+@if (step === 2 && templateService.hasSelection()) {
+  
+  <!-- SINGLE TEMPLATE SELECTED -->
+  @if (!templateService.isMultipleSelected()) {
+    @let selectedTemplate = templateService.getFirstSelected();
+    
+    <div class="single-template-layout">
+      <div class="left-column">
+        <!-- Manual Edit Form -->
+        <div class="card">
+          <div class="section-title">
+            ✏️ Edit Placeholder Values
+            <span class="badge-live">Auto Preview</span>
+          </div>
+          <p class="form-hint">Type values below - preview updates automatically</p>
+          
+          <div class="fields-grid">
+            @for (p of selectedTemplate?.placeholders || []; track p) {
+              <div class="field-item">
+                <label class="field-label">{{ getPlaceholderLabel(p) }}</label>
+                <input 
+                  type="text" 
+                  class="field-input" 
+                  [placeholder]="'Enter ' + getPlaceholderLabel(p)"
+                  [value]="manualValues[p] || ''"
+                  (input)="updateManualValue(p, $event)"
+                />
+              </div>
+            }
+          </div>
+          
+          @if (hasManualValues()) {
+            <div class="form-footer">
+              <span class="status-badge">✅ {{ getFilledManualValuesCount() }} of {{ getManualValuesCount() }} values filled</span>
+            </div>
+          }
+        </div>
+        
+        <!-- AI Instruction -->
+        <div class="card">
+          <div class="flex-between">
+            <div class="section-title">🤖 AI Instruction</div>
+          </div>
+          <textarea class="form-control" rows="3" [(ngModel)]="instruction" 
+            placeholder="Example: 'Company is Acme Corp, director is John Smith, date is 2025-01-15'"></textarea>
+          <div class="instruction-footer">
+            <span class="token-counter">~{{ tokenCount }} tokens</span>
+            <button class="btn btn-primary" (click)="extractValuesWithAI()" [disabled]="isPreviewing">
+              @if (isPreviewing) { <span class="spinner"></span> Loading... } 
+              @else { 🤖 AI Extract Values }
+            </button>
+          </div>
+          <p class="hint-text">AI will auto-fill the manual form above</p>
+        </div>
+      </div>
+
+      <div class="right-column">
+        <div class="card">
+          <div class="section-title">👁️ Current Values</div>
+          @if (!hasPreviewData && !hasManualValues()) {
+            <div class="empty-state-small">
+              <p>Type values in the form to see them here</p>
+            </div>
+          } @else {
+            <div class="values-table-container">
+              <table class="values-table">
+                <thead>
+                  <tr><th>Field</th><th>Value</th></tr>
+                </thead>
+                <tbody>
+                  @if (hasPreviewData) {
+                    @for (item of previewEntries; track item.key) {
+                      <tr [class.empty-value]="!item.value">
+                        <td class="key-cell">{{ getPlaceholderLabel(item.key) }}</td>
+                        <td class="value-cell">{{ item.value || '—' }}</td>
+                      </tr>
+                    }
+                  } @else {
+                    @for (item of getManualValuesEntries(); track item.key) {
+                      <tr [class.empty-value]="!item.value">
+                        <td class="key-cell">{{ getPlaceholderLabel(item.key) }}</td>
+                        <td class="value-cell">{{ item.value || '—' }}</td>
+                      </tr>
+                    }
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        </div>
+
+        <div class="card">
+          <div class="section-title">🚀 Download Document</div>
+          <button class="btn btn-success btn-full" (click)="downloadDocument()" [disabled]="isGeneratingForDownload">
+            @if (isGeneratingForDownload) { <span class="spinner"></span> Generating... } 
+            @else { ⬇️ Download Document }
+          </button>
+          <p class="note-text">Document preview shows below automatically</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="live-preview-section">
+      <div class="preview-header">
+        <div class="preview-title">
+          <span class="preview-icon">📄</span>
+          Live Document Preview
+        </div>
+        <div class="preview-buttons">
+          @if (showDocumentPreview && currentPreviewBlob) {
+            <button class="btn btn-sm btn-success" (click)="downloadFromPreview()">⬇️ Download</button>
+          }
+        </div>
+      </div>
+      <div class="preview-body">
+        @if (previewError) {
+          <div class="preview-error">
+            <span>⚠️</span>
+            <p>{{ previewError }}</p>
+          </div>
+        }
+        @if (!showDocumentPreview && !isRenderingPreview && !previewError) {
+          <div class="preview-placeholder">
+            <div class="placeholder-icon">📄</div>
+            <p>Enter values above to see live document preview</p>
+          </div>
+        }
+        <div #docxPreviewContainer class="docx-preview-container"></div>
+      </div>
+    </div>
+  }
+  
+  <!-- MULTIPLE TEMPLATES SELECTED - ONE COMBINED SECTION -->
+  @if (templateService.isMultipleSelected()) {
+    <div class="bulk-mode-container">
+      <div class="bulk-header">
+        <div class="bulk-icon">📦</div>
+        <div class="bulk-info">
+          <h3>Bulk Generation Mode</h3>
+          <p>You have selected <strong>{{ templateService.getSelectedCount() }}</strong> templates.</p>
+        </div>
+        <button class="btn btn-sm btn-outline" (click)="goToStep1()">← Change Selection</button>
+      </div>
+      
+      <div class="card">
+        <div class="section-title">🤖 AI Instruction</div>
+        <textarea class="form-control" rows="3" [(ngModel)]="instruction" 
+          placeholder="Example: 'Company is Acme Corp, director is John Smith, date is 2025-01-15'"></textarea>
+        <div class="instruction-footer">
+          <span class="token-counter">~{{ tokenCount }} tokens</span>
+          <button class="btn btn-primary" (click)="previewMultipleTemplates()" [disabled]="isPreviewingMultiple">
+            @if (isPreviewingMultiple) { <span class="spinner"></span> Previewing... } 
+            @else { 🔍 Preview All Templates }
+          </button>
+        </div>
+      </div>
+      
+      <!-- ONE COMBINED SECTION - ALL PLACEHOLDERS TOGETHER -->
+      <div class="card combined-section">
+        <div class="section-title">
+          ✏️ Edit Placeholder Values (Applies to all templates)
+          <span class="combined-badge">{{ getAllCombinedPlaceholders().length }} total placeholders</span>
+        </div>
+        <p class="form-hint">Values entered here apply to ALL selected templates</p>
+        
+        <div class="combined-fields-grid">
+          @for (p of getAllCombinedPlaceholders(); track p) {
+            <div class="combined-field">
+              <label class="combined-field-label">{{ getPlaceholderLabel(p) }}</label>
+              <input 
+                type="text" 
+                class="combined-field-input" 
+                [placeholder]="'Enter ' + getPlaceholderLabel(p)"
+                [value]="getCombinedValue(p)"
+                (input)="updateCombinedValue(p, $event)"
+              />
+            </div>
+          }
+        </div>
+      </div>
+      
+      <!-- SELECTED TEMPLATES LIST -->
+      <div class="selected-templates-summary">
+        <div class="summary-header">
+          <span>📋 Selected Templates</span>
+          <span class="summary-count">{{ templateService.getSelectedCount() }} templates</span>
+        </div>
+        <div class="summary-list">
+          @for (template of templateService.selectedTemplates(); track template.id) {
+            <div class="summary-item">
+              <span>📄</span>
+              <span>{{ template.filename }}</span>
+              <span class="summary-badge">{{ template.placeholder_count }} placeholders</span>
+            </div>
+          }
+        </div>
+      </div>
+      
+      <!-- ALL DOCUMENTS PREVIEWS -->
+      <div class="all-previews-section">
+        <div class="preview-header">
+          <div class="preview-title">
+            <span class="preview-icon">📄</span>
+            Live Document Previews
+          </div>
+          <div class="preview-buttons">
+            <button class="btn btn-sm btn-success" (click)="bulkGenerateAndPreview()" [disabled]="isGeneratingBulk">
+              @if (isGeneratingBulk) { <span class="spinner"></span> Generating ZIP... } 
+              @else { ⬇️ Download All (ZIP) }
+            </button>
+          </div>
+        </div>
+        <div class="all-previews-scroll">
+          <div id="all-previews-container" class="all-previews-horizontal"></div>
+        </div>
+      </div>
+      
+      <!-- Generate All Button -->
+      <div class="card bulk-generate-card">
+        <div class="section-title">🚀 Generate All Documents</div>
+        <button class="btn btn-primary btn-full" (click)="bulkGenerateAndPreview()" [disabled]="isGeneratingBulk">
+          @if (isGeneratingBulk) { <span class="spinner"></span> Generating... } 
+          @else { 📦 Generate All (ZIP Download) }
+        </button>
+        <p class="note-text">All documents will be downloaded as a single ZIP file</p>
+      </div>
+    </div>
+  }
+}

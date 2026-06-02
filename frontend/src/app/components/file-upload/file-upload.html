@@ -1,0 +1,37 @@
+<div class="upload-section">
+  <div class="section-label">01 — Upload Document</div>
+  
+  <div class="drop-zone" appDragDrop (fileDropped)="onFileDropped.emit($event)">
+    <span class="upload-icon">📂</span>
+    <h3>Drop your PDF here</h3>
+    <p>Drag &amp; drop or browse to select a PDF file (max 50MB)</p>
+    <button class="browse-btn" (click)="fileInput.click()">
+      <span>Browse Files</span>
+      <span>↗</span>
+    </button>
+    <input #fileInput type="file" accept=".pdf" (change)="onFileSelected.emit($event)" style="display: none">
+  </div>
+
+  <!-- Upload Progress -->
+  <div class="upload-progress" [class.visible]="isUploading">
+    <div class="progress-card">
+      <div class="progress-icon">📄</div>
+      <div class="progress-info">
+        <div class="progress-name">Uploading PDF...</div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" [style.width.%]="uploadProgress"></div>
+        </div>
+        <div class="progress-meta">
+          <span>{{ uploadProgress < 30 ? 'Uploading…' : uploadProgress < 70 ? 'Processing…' : 'Building vectors…' }}</span>
+          <span>{{ uploadProgress }}%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upload Error -->
+  <div class="error-toast" [class.visible]="uploadError">
+    <span>⚠</span>
+    <span>{{ uploadError }}</span>
+  </div>
+</div>

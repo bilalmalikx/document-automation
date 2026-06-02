@@ -1,0 +1,33 @@
+<div class="hero">
+  <div class="hero-orb1"></div><div class="hero-orb2"></div><div class="hero-orb3"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">⚡ Document Automation Studio</div>
+    <h1 class="hero-title">Automate your <span>document workflow</span><br/>with AI precision</h1>
+    <p class="hero-desc">Upload DOCX templates, let AI extract values from natural language instructions, and generate professional documents in seconds.</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" routerLink="/generate">Quick Generate</button>
+      <button class="btn btn-ghost" routerLink="/templates">Manage Templates</button>
+    </div>
+  </div>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card"><div class="stat-icon">📄</div><div class="stat-value">{{ templateService.templates().length }}</div><div class="stat-label">Total Templates</div></div>
+  <div class="stat-card"><div class="stat-icon">⚡</div><div class="stat-value">0</div><div class="stat-label">Documents Generated</div></div>
+  <div class="stat-card"><div class="stat-icon">🔖</div><div class="stat-value">{{ totalPlaceholders }}</div><div class="stat-label">Total Placeholders</div></div>
+  <div class="stat-card"><div class="stat-icon">🚀</div><div class="stat-value">~0.5s</div><div class="stat-label">Avg. Generation Time</div></div>
+</div>
+
+<div class="recent-section">
+  <div class="flex-between">
+    <div class="section-title">Recent Templates</div>
+    <button class="btn btn-ghost btn-sm" routerLink="/templates">View all →</button>
+  </div>
+  <app-template-list 
+    [templates]="templateService.templates().slice(0,5)" 
+    viewMode="list" 
+    searchQuery=""
+    (deleteTemplate)="templateService.deleteTemplate($event)"
+    (viewPlaceholders)="router.navigate(['/templates', $event])"
+  />
+</div>

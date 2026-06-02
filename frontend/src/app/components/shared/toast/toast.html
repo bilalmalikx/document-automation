@@ -1,0 +1,21 @@
+<div class="toast-container">
+  @for (toast of toastService.toasts(); track toast.id) {
+    <div class="toast toast-{{ toast.type }}" [class.in]="true">
+      <div class="toast-icon">
+        @if (toast.type === 'success') {
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        }
+        @if (toast.type === 'error') {
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+        }
+        @if (toast.type === 'info') {
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        }
+      </div>
+      <div class="toast-body">
+        <div class="toast-title">{{ toast.title }}</div>
+        <div class="toast-msg">{{ toast.message }}</div>
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,49 @@
+@if (isLoading) {
+  <div class="flex-center" style="padding: 60px">
+    <div class="spinner spinner-lg"></div>
+  </div>
+} @else if (!template) {
+  <div class="empty-state">
+    <div class="empty-icon">❓</div>
+    <div class="empty-title">Template not found</div>
+    <button class="btn btn-ghost" routerLink="/templates">← Back to Templates</button>
+  </div>
+} @else {
+  <div class="detail-header">
+    <div class="detail-icon">📄</div>
+    <div>
+      <div class="detail-title">{{ template.filename }}</div>
+      <div class="detail-sub">Uploaded {{ formatDate(template.created_at) }}</div>
+      <div class="detail-badges">
+        <span class="badge badge-blue">{{ template.placeholder_count }} placeholders</span>
+        <span class="badge badge-green">DOCX</span>
+      </div>
+    </div>
+    <div class="detail-actions">
+      <button class="btn btn-danger" (click)="deleteTemplate()">Delete</button>
+      <button class="btn btn-primary" (click)="goGenerate()">Generate Document →</button>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="section-title">📋 Placeholders ({{ placeholders.length }})</div>
+      <p class="ph-hint">Click any placeholder to copy</p>
+      <div class="ph-badges">
+        @for (p of placeholders; track p; let i = $index) {
+          <span class="ph-badge" [class.ph-badge-0]="i%5===0" [class.ph-badge-1]="i%5===1" [class.ph-badge-2]="i%5===2" [class.ph-badge-3]="i%5===3" [class.ph-badge-4]="i%5===4" (click)="copyText('{{'+p+'}}')">
+            {{ '{' }}{{ '{' }}{{ p }}{{ '}' }}{{ '}' }}
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          </span>
+        }
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">⚡ Quick Test</div>
+      <p class="ph-hint">Enter an instruction to test document generation</p>
+      <textarea class="form-control" rows="4" [(ngModel)]="testInstruction" placeholder="e.g., Contract for Alice, Engineer at TechCorp, starting June 1st 2025"></textarea>
+      <button class="btn btn-primary w-full" style="margin-top: 12px" (click)="quickTest()">Test Generate →</button>
+    </div>
+  </div>
+}

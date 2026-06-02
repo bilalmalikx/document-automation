@@ -1,0 +1,93 @@
+.detail-header {
+  background: var(--bg-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: 22px;
+  padding: 24px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.detail-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--brand-dim), rgba(139,92,246,.15));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  border: 1px solid var(--border-dim);
+}
+.detail-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -.3px;
+}
+.detail-sub {
+  color: var(--tx-secondary);
+  font-size: .875rem;
+  margin-top: 4px;
+}
+.detail-badges {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.detail-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.ph-hint {
+  font-size: .8rem;
+  color: var(--tx-muted);
+  margin-bottom: 12px;
+}
+.ph-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.ph-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .78rem;
+  padding: 5px 12px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.ph-badge:hover {
+  opacity: .8;
+  transform: scale(0.97);
+}
+.ph-badge-0 { background: var(--brand-dim); color: var(--brand-light); border: 1px solid rgba(96,165,250,.2); }
+.ph-badge-1 { background: rgba(139,92,246,.12); color: var(--violet); border: 1px solid rgba(139,92,246,.2); }
+.ph-badge-2 { background: rgba(245,158,11,.1); color: var(--amber); border: 1px solid rgba(245,158,11,.2); }
+.ph-badge-3 { background: rgba(16,185,129,.1); color: var(--green); border: 1px solid rgba(16,185,129,.2); }
+.ph-badge-4 { background: rgba(6,182,212,.1); color: var(--cyan); border: 1px solid rgba(6,182,212,.2); }
+.w-full { width: 100%; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.spinner-lg { width: 36px; height: 36px; border-width: 3px; }
+
+@media (max-width: 768px) {
+  .two-col { grid-template-columns: 1fr; }
+  .detail-actions { margin-left: 0; }
+}

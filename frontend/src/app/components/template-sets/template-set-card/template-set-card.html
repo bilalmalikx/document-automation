@@ -1,0 +1,18 @@
+<div class="template-set-card">
+  <div class="card-header">
+    <div class="card-icon">📁</div>
+    <div class="card-info">
+      <div class="card-title">{{ templateSet.name }}</div>
+      <div class="card-date">{{ templateSet.created_at | date:'MMM d, yyyy' }}</div>
+    </div>
+    <button class="card-delete" (click)="deleteEvent.emit(templateSet.id)" title="Delete">
+      🗑️
+    </button>
+  </div>
+  <div class="card-body">
+    <p class="card-description">{{ templateSet.description || 'No description' }}</p>
+  </div>
+  <div class="card-footer">
+    <a [routerLink]="['/template-sets', templateSet.id]" class="btn btn-sm btn-primary">Open Set →</a>
+  </div>
+</div>

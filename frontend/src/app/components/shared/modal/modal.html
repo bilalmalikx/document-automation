@@ -1,0 +1,17 @@
+<div class="modal-backdrop" [class.open]="isOpen" (click)="onClose()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title">{{ title }}</div>
+      <button class="modal-close" (click)="onClose()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <ng-content></ng-content>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" (click)="onClose()">Cancel</button>
+      <button class="btn btn-primary" (click)="onConfirm()">Confirm</button>
+    </div>
+  </div>
+</div>

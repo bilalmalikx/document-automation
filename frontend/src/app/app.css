@@ -1,0 +1,28 @@
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 260px;
+  transition: margin-left 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+  }
+}
+
+.page-content {
+  padding: 24px;
+  overflow-y: auto;
+  min-height: calc(100vh - 60px);
+}
+
+@media (max-width: 768px) {
+  .page-content {
+    padding: 16px;
+  }
+}

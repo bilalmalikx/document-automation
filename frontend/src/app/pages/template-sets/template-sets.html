@@ -1,0 +1,64 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Template Sets</h1>
+    <p class="page-subtitle">Manage business processes containing multiple related templates</p>
+  </div>
+  <div class="page-header-actions">
+    <button class="btn btn-primary" (click)="openCreateModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      New Template Set
+    </button>
+  </div>
+</div>
+
+@if (isLoading) {
+  <div class="flex-center" style="padding: 60px">
+    <div class="spinner"></div>
+    <span style="margin-left: 12px">Loading template sets...</span>
+  </div>
+} @else if (templateSets.length === 0) {
+  <div class="empty-state">
+    <div class="empty-icon">📦</div>
+    <div class="empty-title">No template sets yet</div>
+    <p class="empty-desc">Create your first template set to group related templates</p>
+    <button class="btn btn-primary mt-4" (click)="openCreateModal()">Create Template Set</button>
+  </div>
+} @else {
+  <div class="template-sets-grid">
+    @for (set of templateSets; track set.id) {
+      <app-template-set-card 
+        [templateSet]="set" 
+        (deleteEvent)="deleteTemplateSet(set.id, set.name)"
+      />
+    }
+  </div>
+}
+
+<!-- Create Modal -->
+@if (showCreateModal) {
+  <div class="modal-backdrop" (click)="closeCreateModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title">Create Template Set</div>
+        <button class="modal-close" (click)="closeCreateModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Set Name <span class="req">*</span></label>
+          <input type="text" class="form-control" [(ngModel)]="newSetName" placeholder="e.g., Company Incorporation" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" rows="3" [(ngModel)]="newSetDescription" placeholder="Describe what this template set does..."></textarea>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" (click)="closeCreateModal()">Cancel</button>
+        <button class="btn btn-primary" (click)="createTemplateSet()">Create</button>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,42 @@
+<div class="qa-section">
+  <div class="section-label">02 — Ask a Question</div>
+  
+  <div class="qa-box">
+    <div class="qa-input-row">
+      <div class="qa-input-wrap">
+        <textarea #questionInput
+          [ngModel]="questionText"
+          (ngModelChange)="questionTextChange.emit($event)"
+          (input)="onInput.emit($event)"
+          (keydown)="onKeydown.emit($event)"
+          [placeholder]="placeholder"
+          rows="2"
+          [disabled]="isLoading"></textarea>
+      </div>
+      <button class="ask-btn" (click)="onAsk.emit()" [disabled]="isLoading || !questionText.trim()">
+        <span *ngIf="!isLoading">➤</span>
+        <span *ngIf="isLoading" class="spinner">⟳</span>
+      </button>
+    </div>
+    
+    <div class="qa-hints">
+      <span *ngFor="let hint of hints" class="hint-pill" (click)="onHintClick.emit(hint)">
+        {{ hint }}
+      </span>
+    </div>
+  </div>
+
+  <!-- QA Error -->
+  <div class="error-toast" [class.visible]="qaError">
+    <span>⚠</span>
+    <span>{{ qaError }}</span>
+  </div>
+
+  <!-- Typing Indicator -->
+  <div class="typing-indicator" [class.visible]="isLoading">
+    <div class="dots">
+      <span></span><span></span><span></span>
+    </div>
+    <span>AI is reading your document…</span>
+  </div>
+</div>

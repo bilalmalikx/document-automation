@@ -1,0 +1,37 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Templates</h1>
+    <p class="page-subtitle">Manage your DOCX templates and view their placeholders</p>
+  </div>
+</div>
+
+<app-template-upload (uploaded)="onUploadComplete()" />
+
+<div class="templates-panel card">
+  <div class="templates-toolbar">
+    <div class="search-input-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Search templates..." (input)="onSearch($any($event.target).value)" />
+    </div>
+    <div class="view-toggle">
+      <button [class.active]="viewMode === 'grid'" (click)="setViewMode('grid')" title="Grid view">⊞</button>
+      <button [class.active]="viewMode === 'list'" (click)="setViewMode('list')" title="List view">☰</button>
+    </div>
+  </div>
+
+  <app-template-list 
+    [templates]="templateService.templates()"
+    [viewMode]="viewMode"
+    [searchQuery]="searchQuery"
+    (deleteTemplate)="confirmDelete($event)"
+    (viewPlaceholders)="{}"
+  />
+</div>
+
+<app-modal 
+  title="Delete Template" 
+  [isOpen]="deleteModalOpen" 
+  (close)="deleteModalOpen = false"
+  (confirm)="deleteConfirmed()">
+  <p>Are you sure you want to delete this template? This action cannot be undone.</p>
+</app-modal>

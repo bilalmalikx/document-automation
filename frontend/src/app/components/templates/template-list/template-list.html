@@ -1,0 +1,52 @@
+@if (filteredTemplates.length === 0) {
+  <div class="empty-state">
+    <div class="empty-icon">📄</div>
+    <div class="empty-title">No templates found</div>
+    <p class="empty-desc">Upload your first DOCX template to get started.</p>
+  </div>
+} @else {
+  @if (viewMode() === 'grid') {
+    <div class="templates-grid">
+      @for (t of filteredTemplates; track t.id) {
+        <div class="template-card" (click)="onTemplateClick(t.id)">
+          <div class="tc-header">
+            <div class="tc-icon">📄</div>
+            <div>
+              <div class="tc-name">{{ t.filename }}</div>
+              <div class="tc-date">{{ formatDate(t.created_at) }}</div>
+            </div>
+          </div>
+          <div class="tc-meta">
+            <span class="badge badge-blue">{{ t.placeholder_count }} placeholders</span>
+            <span class="badge badge-gray">DOCX</span>
+          </div>
+          <div class="tc-actions">
+            <button class="btn btn-ghost btn-sm" (click)="onViewPlaceholders(t.id, $event)">📋 Placeholders</button>
+            <button class="btn btn-danger btn-sm" (click)="onDelete(t.id, $event)">🗑️ Delete</button>
+            <button class="btn btn-primary btn-sm" (click)="onGenerate(t.id, $event)">⚡ Generate →</button>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="templates-list">
+      @for (t of filteredTemplates; track t.id) {
+        <div class="template-row" (click)="onTemplateClick(t.id)">
+          <div class="tr-icon">📄</div>
+          <div class="tr-info">
+            <div class="tr-name">{{ t.filename }}</div>
+            <div class="tr-meta">
+              <span>{{ t.placeholder_count }} placeholders</span>
+              <span>{{ formatDate(t.created_at) }}</span>
+            </div>
+          </div>
+          <div class="tr-actions">
+            <button class="btn btn-ghost btn-sm" (click)="onViewPlaceholders(t.id, $event)">Placeholders</button>
+            <button class="btn btn-danger btn-sm" (click)="onDelete(t.id, $event)">Delete</button>
+            <button class="btn btn-primary btn-sm" (click)="onGenerate(t.id, $event)">Generate →</button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+}

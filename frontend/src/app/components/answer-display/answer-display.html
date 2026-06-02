@@ -1,0 +1,43 @@
+<div class="answer-container">
+  <!-- Latest Answer -->
+  <div class="answer-card" *ngIf="currentAnswer">
+    <div class="answer-header">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 16v-4M12 8h.01"/>
+      </svg>
+      <span class="answer-label">AI Answer</span>
+      <div class="conf-badge">{{ currentAnswer.confidencePercent }}% confident</div>
+    </div>
+    <div class="answer-body" [innerHTML]="currentAnswer.content | safeHtml"></div>
+    <div class="answer-sources" *ngIf="currentAnswer.hasSources">
+      <div class="sources-label">Source Excerpts</div>
+      <div *ngFor="let source of currentAnswer.sources; let i = index" class="source-item">
+        <span [innerHTML]="source | safeHtml"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- History -->
+  <div class="history-section" *ngIf="history.length > 0">
+    <div class="divider"></div>
+    <div class="section-label">Conversation History</div>
+    
+    <div *ngFor="let turn of history; trackBy: trackByQuestion" class="history-turn">
+      <div class="turn-question">
+        <div class="turn-q-bubble">
+          {{ turn.question.question }}
+        </div>
+      </div>
+      <div class="history-answer-card">
+        <div class="answer-body" [innerHTML]="turn.answer.content | safeHtml"></div>
+        <div class="answer-sources-compact" *ngIf="turn.answer.hasSources">
+          <div class="sources-label-small">Sources</div>
+          <div *ngFor="let source of turn.answer.sources; let i = index" class="source-item-small">
+            <span [innerHTML]="getShortText(source) | safeHtml"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

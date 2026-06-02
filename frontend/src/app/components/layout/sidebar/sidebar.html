@@ -1,0 +1,62 @@
+<!-- Mobile menu button -->
+<button class="mobile-menu-btn" (click)="toggleMobileMenu()">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <line x1="3" y1="6" x2="21" y2="6"/>
+    <line x1="3" y1="12" x2="21" y2="12"/>
+    <line x1="3" y1="18" x2="21" y2="18"/>
+  </svg>
+</button>
+
+<aside class="sidebar" [class.mobile-open]="isMobileMenuOpen">
+  <div class="sidebar-header">
+    <div class="logo">⚒</div>
+    <div class="brand">Doc<em>Forge</em></div>
+  </div>
+  
+  <nav class="sidebar-nav">
+    <span class="section-label">Main</span>
+    
+    <a routerLink="/dashboard" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7"/>
+        <rect x="14" y="3" width="7" height="7"/>
+        <rect x="14" y="14" width="7" height="7"/>
+        <rect x="3" y="14" width="7" height="7"/>
+      </svg>
+      <span class="nav-label">Dashboard</span>
+    </a>
+    
+    <a routerLink="/templates" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+      </svg>
+      <span class="nav-label">Templates</span>
+      <span class="nav-badge">{{ templateService.templates().length }}</span>
+    </a>
+    
+    <a routerLink="/generate" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+      </svg>
+      <span class="nav-label">Generate Doc</span>
+    </a>
+<a routerLink="/rag" routerLinkActive="active" class="nav-item" (click)="closeMobileMenu()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M4 4h16v16H4z"/>
+    <circle cx="12" cy="12" r="3"/>
+    <path d="M21 12h-4M7 12H3M12 3v4M12 17v4"/>
+  </svg>
+  <span class="nav-label">RAG</span>
+</a>
+    
+    <span class="section-label" style="margin-top: 16px">Theme</span>
+    
+    <button class="nav-item" (click)="toggleTheme()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+      <span class="nav-label">{{ isDark ? 'Light Mode' : 'Dark Mode' }}</span>
+    </button>
+  </nav>
+</aside>
