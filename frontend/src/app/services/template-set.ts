@@ -36,9 +36,9 @@ export class TemplateSetService {
     return this.api.delete(`/template-sets/${id}`);
   }
 
-  addTemplateToSet(setId: string, data: AddTemplateToSetRequest): Observable<{ success: boolean; message: string }> {
-    return this.api.post(`/template-sets/${setId}/templates`, data);
-  }
+addTemplateToSet(setId: string, data: { template_id: string; order_index?: number }): Observable<any> {
+  return this.api.post(`/template-sets/${setId}/templates`, data);
+}
 
   removeTemplateFromSet(setId: string, templateId: string): Observable<{ success: boolean; message: string }> {
     return this.api.delete(`/template-sets/${setId}/templates/${templateId}`);
