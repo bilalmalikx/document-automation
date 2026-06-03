@@ -16,7 +16,6 @@ import { ApiService } from './api';
 export class TemplateSetService {
   private api = inject(ApiService);
 
-  // Template Set CRUD
   getTemplateSets(): Observable<{ template_sets: TemplateSet[]; total: number }> {
     return this.api.get('/template-sets/');
   }
@@ -37,7 +36,6 @@ export class TemplateSetService {
     return this.api.delete(`/template-sets/${id}`);
   }
 
-  // Template Set Members
   addTemplateToSet(setId: string, data: AddTemplateToSetRequest): Observable<{ success: boolean; message: string }> {
     return this.api.post(`/template-sets/${setId}/templates`, data);
   }
@@ -46,7 +44,6 @@ export class TemplateSetService {
     return this.api.delete(`/template-sets/${setId}/templates/${templateId}`);
   }
 
-  // Shared Fields
   getSharedFields(setId: string): Observable<{ shared_fields: SharedField[]; count: number }> {
     return this.api.get(`/template-sets/${setId}/fields`);
   }
@@ -63,7 +60,6 @@ export class TemplateSetService {
     return this.api.delete(`/template-sets/fields/${fieldId}`);
   }
 
-  // Generate
   generateTemplateSet(setId: string, instruction: string): Observable<Blob> {
     return this.api.postBlob(`/generate/set/${setId}`, { instruction });
   }

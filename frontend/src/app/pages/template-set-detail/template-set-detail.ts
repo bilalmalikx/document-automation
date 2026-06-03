@@ -28,7 +28,6 @@ export class TemplateSetDetail implements OnInit {
   showAddFieldModal = false;
   newField: Partial<SharedField> = { field_name: '', field_label: '', field_type: 'text', is_required: false };
   
-  // File upload
   selectedFile: File | null = null;
   templateName = '';
 
@@ -41,8 +40,11 @@ export class TemplateSetDetail implements OnInit {
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
+    if (id && id !== 'undefined' && id !== 'null') {
       this.loadTemplateSet(id);
+    } else {
+      this.toast.show('error', 'Error', 'Invalid template set ID');
+      this.router.navigate(['/template-sets']);
     }
   }
 
@@ -61,17 +63,26 @@ export class TemplateSetDetail implements OnInit {
     });
   }
 
+  // ✅ Refresh templates list
+  refreshTemplates(): void {
+    if (this.templateSet) {
+      this.loadTemplateSet(this.templateSet.id);
+    }
+  }
+
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];
-      // Auto-populate template name from filename
       this.templateName = this.selectedFile.name.replace('.docx', '');
     }
   }
 
   async uploadTemplateToSet(): Promise<void> {
-    if (!this.templateSet) return;
+    if (!this.templateSet) {
+      this.toast.show('error', 'Error', 'No template set selected');
+      return;
+    }
     if (!this.selectedFile) {
       this.toast.show('error', 'Error', 'Please select a file');
       return;
@@ -84,7 +95,6 @@ export class TemplateSetDetail implements OnInit {
     this.isUploading = true;
     this.uploadProgress = 0;
     
-    // Simulate progress
     const interval = setInterval(() => {
       if (this.uploadProgress < 90) {
         this.uploadProgress += 10;
@@ -92,7 +102,7 @@ export class TemplateSetDetail implements OnInit {
     }, 200);
 
     try {
-      // First upload template normally
+      // Upload template first
       const uploadedTemplate = await this.templateService.uploadTemplate(this.templateName, this.selectedFile);
       
       // Then add to set
@@ -103,24 +113,26 @@ export class TemplateSetDetail implements OnInit {
       clearInterval(interval);
       this.uploadProgress = 100;
       
-      this.toast.show('success', 'Uploaded', 'Template added to set successfully');
+      this.toast.show('success', 'Uploaded!', `${this.templateName} uploaded successfully`);
       
-      // Reset form
+      // ✅ Reset form
       this.selectedFile = null;
       this.templateName = '';
       this.uploadProgress = 0;
       
-      // Reload template set
+      // ✅ Refresh the template set to show new template
       this.loadTemplateSet(this.templateSet.id);
       
       // Clear file input
       const fileInput = document.getElementById('template-file-input') as HTMLInputElement;
       if (fileInput) fileInput.value = '';
       
-    } catch (err) {
+    } catch (err: any) {
       clearInterval(interval);
       console.error(err);
-      this.toast.show('error', 'Error', 'Failed to upload template');
+      // ✅ Better error message
+      const errorMsg = err?.message || err?.error?.detail || 'Failed to upload template';
+      this.toast.show('error', 'Upload Failed', errorMsg);
     } finally {
       setTimeout(() => {
         this.isUploading = false;
