@@ -3,24 +3,26 @@ export interface TemplateSet {
   name: string;
   description?: string;
   created_at: string;
-  updated_at?: string;
+  updated_at?: string | null;
 }
 
-export interface TemplateSetDetails extends TemplateSet {
+export interface TemplateSetDetail extends TemplateSet {
   templates: TemplateSetTemplate[];
   shared_fields: SharedField[];
   total_templates: number;
   total_shared_fields: number;
-  unique_placeholders: string[];
+  unique_placeholders?: string[];
 }
 
 export interface TemplateSetTemplate {
   id: string;
+  template_id?: string;
   filename: string;
-  original_filename: string;
-  placeholders: string[];
+  original_filename?: string;
+  name?: string;
+  placeholders?: string[];
   placeholder_count: number;
-  created_at: string;
+  created_at?: string;
 }
 
 export interface SharedField {
@@ -29,10 +31,10 @@ export interface SharedField {
   field_name: string;
   field_label: string;
   field_type: 'text' | 'date' | 'number' | 'email' | 'textarea';
-  field_order: number;
+  field_order?: number;
   is_required: boolean;
   default_value?: string;
-  created_at: string;
+  created_at?: string;
 }
 
 export interface CreateTemplateSetRequest {

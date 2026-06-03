@@ -1,16 +1,15 @@
-import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TemplateSetService } from '../../services/template-set';
 import { ToastService } from '../../services/toast';
 import { TemplateSet } from '../../models/template-set.model';
-import { TemplateSetCard } from '../../components/template-sets/template-set-card/template-set-card';
 
 @Component({
   selector: 'app-template-sets',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, TemplateSetCard],
+  imports: [CommonModule, RouterModule, FormsModule], // Removed TemplateSetCard
   templateUrl: './template-sets.html',
   styleUrl: './template-sets.css',
 })
@@ -18,7 +17,6 @@ export class TemplateSets implements OnInit {
   private templateSetService = inject(TemplateSetService);
   private toast = inject(ToastService);
   private router = inject(Router);
-  private cdr = inject(ChangeDetectorRef);
 
   templateSets: TemplateSet[] = [];
   filteredSets: TemplateSet[] = [];
@@ -38,22 +36,17 @@ export class TemplateSets implements OnInit {
 
   loadTemplateSets(): void {
     this.isLoading = true;
-    this.cdr.detectChanges();
-    
     this.templateSetService.getTemplateSets().subscribe({
       next: (res) => {
-        console.log('Template sets loaded:', res);
         this.templateSets = res.template_sets;
         this.filteredSets = [...this.templateSets];
         this.calculateStats();
         this.isLoading = false;
-        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error(err);
         this.toast.show('error', 'Error', 'Failed to load template sets');
         this.isLoading = false;
-        this.cdr.detectChanges();
       }
     });
   }
@@ -74,15 +67,14 @@ export class TemplateSets implements OnInit {
         (set.description && set.description.toLowerCase().includes(query))
       );
     }
-    this.cdr.detectChanges();
   }
 
   openTemplateSet(id: string): void {
-    console.log('Opening template set with ID:', id);
-    if (id && id !== 'undefined' && id !== 'null') {
+    console.log('Opening set with ID:', id);
+    if (id) {
       this.router.navigate(['/template-sets', id]);
     } else {
-      this.toast.show('error', 'Error', 'Invalid template set ID');
+      this.toast.show('error', 'Error', 'Invalid template set');
     }
   }
 
@@ -90,12 +82,10 @@ export class TemplateSets implements OnInit {
     this.newSetName = '';
     this.newSetDescription = '';
     this.showCreateModal = true;
-    this.cdr.detectChanges();
   }
 
   closeCreateModal(): void {
     this.showCreateModal = false;
-    this.cdr.detectChanges();
   }
 
   createTemplateSet(): void {

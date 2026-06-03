@@ -1,94 +1,84 @@
-<div class="detail-page">
-  <!-- Header with Back Button -->
-  <div class="detail-header">
-    <button class="back-btn" (click)="goBack()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <polyline points="15 18 9 12 15 6"/>
-      </svg>
-      Back to Template Sets
-    </button>
-    <button class="btn btn-primary" (click)="generateAll()" [disabled]="!templateSet?.templates?.length">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-      </svg>
-      Generate All Documents
-    </button>
-  </div>
-
+<div class="template-set-detail">
   <!-- Loading State -->
   @if (isLoading) {
-    <div class="loading-state">
-      <div class="spinner"></div>
-      <p>Loading template set...</p>
-      <p class="loading-hint">This may take a moment</p>
+    <div class="loading-container">
+      <div class="loading-spinner"></div>
+      <p>Loading...</p>
     </div>
   }
 
-  <!-- Error State -->
-  @else if (errorMessage) {
-    <div class="error-state">
-      <div class="error-icon">⚠️</div>
-      <p>{{ errorMessage }}</p>
-      <button class="btn btn-primary" (click)="goBack()">Go Back</button>
-    </div>
-  }
-
-  <!-- Content - When Data is Loaded -->
+  <!-- Main Content -->
   @else if (templateSet) {
-    <!-- Title & Stats Section -->
-    <div class="title-section">
-      <div class="title-header">
-        <h1 class="title">{{ templateSet.name }}</h1>
-        <div class="title-badge">{{ templateSet.templates.length }} Templates</div>
+    <!-- Header Section -->
+    <div class="detail-header">
+      <div class="header-top">
+        <button class="back-button" (click)="goBack()">
+          ← Back to Template Sets
+        </button>
+        <button class="generate-button" (click)="generateAll()" [disabled]="!templateSet.templates.length">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+          Generate Doc
+        </button>
       </div>
-      <p class="subtitle">{{ templateSet.description || 'One process containing multiple templates that share the same field dictionary.' }}</p>
-      
-      <div class="stats-row">
-        <div class="stat-item">
-          <span class="stat-value">{{ templateSet.templates.length }}</span>
-          <span class="stat-label">Templates</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-value">{{ templateSet.shared_fields.length }}</span>
-          <span class="stat-label">Shared Fields</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-value">{{ mappedPercentage }}%</span>
-          <span class="stat-label">Mapping Health</span>
+
+      <div class="header-info">
+        <h1 class="set-title">{{ templateSet.name }}</h1>
+        <p class="set-description">{{ templateSet.description || 'One process containing multiple templates that share the same field dictionary.' }}</p>
+        
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-number">{{ templateSet.templates.length }}</div>
+            <div class="stat-label">Templates</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">{{ templateSet.shared_fields.length }}</div>
+            <div class="stat-label">Shared Fields</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">{{ mappedPercentage }}%</div>
+            <div class="stat-label">Mapping Health</div>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- Two Column Layout -->
-    <div class="two-col">
-      
-      <!-- LEFT COLUMN: Templates Section -->
-      <div class="card">
+    <div class="content-grid">
+      <!-- Left Column: Templates -->
+      <div class="content-card">
         <div class="card-header">
-          <h3>📋 Templates in this Process</h3>
-          <button class="btn-icon" (click)="fileInput.click()" title="Upload Template">
+          <div class="card-title">
+            <span class="title-icon">📋</span>
+            <h3>Templates</h3>
+          </div>
+          <button class="upload-trigger" (click)="fileInput.click()">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-              <polyline points="17 8 12 3 7 8"/>
-              <line x1="12" y1="3" x2="12" y2="15"/>
+              <path d="M12 5v14M5 12h14"/>
             </svg>
           </button>
         </div>
 
         <!-- Upload Area -->
         <div class="upload-area" (click)="fileInput.click()">
-          <input type="file" #fileInput id="template-file-input" accept=".docx" style="display:none" (change)="onFileSelected($event)" />
-          <div class="upload-icon">📄</div>
-          <div class="upload-title">Click to upload DOCX template</div>
-          <div class="upload-sub">or drag and drop</div>
+          <input type="file" #fileInput accept=".docx" style="display:none" (change)="onFileSelected($event)" />
+          <div class="upload-content">
+            <div class="upload-icon">📄</div>
+            <div class="upload-text">Upload DOCX Template</div>
+            <div class="upload-hint">Click or drag and drop</div>
+          </div>
         </div>
 
-        <!-- Upload Form (shows when file selected) -->
+        <!-- Upload Form -->
         @if (selectedFile) {
-          <div class="upload-form">
-            <div class="file-info">
-              <span class="file-name">📄 {{ selectedFile.name }}</span>
-              <span class="file-size">{{ (selectedFile.size / 1024).toFixed(1) }} KB</span>
+          <div class="upload-panel">
+            <div class="file-details">
+              <span class="file-badge">📄</span>
+              <div class="file-info">
+                <div class="file-name">{{ selectedFile.name }}</div>
+                <div class="file-size">{{ (selectedFile.size / 1024).toFixed(1) }} KB</div>
+              </div>
             </div>
             <input 
               type="text" 
@@ -97,12 +87,14 @@
               placeholder="Template name"
             />
             @if (isUploading) {
-              <div class="progress-bar">
-                <div class="progress-fill" [style.width.%]="uploadProgress"></div>
+              <div class="upload-progress">
+                <div class="progress-bar">
+                  <div class="progress-fill" [style.width.%]="uploadProgress"></div>
+                </div>
                 <span class="progress-text">{{ uploadProgress }}%</span>
               </div>
             }
-            <button class="btn btn-primary btn-sm upload-btn" (click)="uploadTemplateToSet()" [disabled]="isUploading || !templateName">
+            <button class="upload-submit" (click)="uploadTemplateToSet()" [disabled]="isUploading || !templateName">
               @if (isUploading) { Uploading... } @else { Upload to Set }
             </button>
           </div>
@@ -114,34 +106,29 @@
             <div class="template-item">
               <div class="template-info">
                 <span class="template-icon">📄</span>
-                <div>
-                  <div class="template-name">{{ template.filename }}</div>
-                  <div class="template-placeholders">{{ template.placeholder_count }} placeholders mapped</div>
+                <div class="template-details">
+                  <div class="template-filename">{{ template.filename || template.name }}</div>
+                  <div class="template-placeholders">{{ template.placeholder_count || 0 }} placeholders</div>
                 </div>
               </div>
-              <button class="remove-btn" (click)="removeTemplate(template.id)" title="Remove">
+              <button class="delete-template" (click)="removeTemplate(template.id)">
                 🗑️
               </button>
-            </div>
-          }
-          @if (templateSet.templates.length === 0) {
-            <div class="empty-list">
-              <div class="empty-icon">📁</div>
-              <p>No templates in this set yet</p>
-              <p class="empty-hint">Upload a DOCX template above to get started</p>
             </div>
           }
         </div>
       </div>
 
-      <!-- RIGHT COLUMN: Shared Field Dictionary -->
-      <div class="card">
+      <!-- Right Column: Shared Fields -->
+      <div class="content-card">
         <div class="card-header">
-          <h3>📖 Shared Field Dictionary</h3>
-          <button class="btn-icon" (click)="showAddFieldModal = true" title="Add Field">
+          <div class="card-title">
+            <span class="title-icon">📖</span>
+            <h3>Shared Field Dictionary</h3>
+          </div>
+          <button class="add-field-btn" (click)="showAddFieldModal = true">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="12" y1="5" x2="12" y2="19"/>
-              <line x1="5" y1="12" x2="19" y2="12"/>
+              <path d="M12 5v14M5 12h14"/>
             </svg>
           </button>
         </div>
@@ -150,26 +137,31 @@
         <div class="fields-list">
           @for (field of templateSet.shared_fields; track field.id) {
             <div class="field-item">
-              <div class="field-info">
-                <span class="field-name">{{ field.field_label }}</span>
-                <span class="field-type-badge">{{ field.field_type }}</span>
-                @if (field.is_required) {
-                  <span class="required-badge">Required</span>
-                }
+              <div class="field-content">
+                <div class="field-header">
+                  <span class="field-label">{{ field.field_label }}</span>
+                  <div class="field-badges">
+                    <span class="field-type">{{ field.field_type }}</span>
+                    @if (field.is_required) {
+                      <span class="field-required">Required</span>
+                    }
+                  </div>
+                </div>
+                <div class="field-placeholder">
+                  <code>{{ '{{' + field.field_name + '}}' }}</code>
+                </div>
               </div>
-              <div class="field-meta">
-                <span class="field-placeholder">{{ field.field_name }}</span>
-                <button class="delete-field" (click)="deleteSharedField(field.id)" title="Delete">
-                  🗑️
-                </button>
-              </div>
+              <button class="delete-field" (click)="deleteSharedField(field.id)">
+                🗑️
+              </button>
             </div>
           }
+          
           @if (templateSet.shared_fields.length === 0) {
-            <div class="empty-list">
+            <div class="empty-fields">
               <div class="empty-icon">🔖</div>
-              <p>No shared fields added yet</p>
-              <button class="btn btn-sm btn-primary" (click)="showAddFieldModal = true">Add First Field</button>
+              <p>No shared fields yet</p>
+              <button class="add-field-link" (click)="showAddFieldModal = true">Add your first field</button>
             </div>
           }
         </div>
@@ -178,44 +170,59 @@
   }
 </div>
 
-<!-- Add Shared Field Modal -->
+<!-- Add Field Modal -->
 @if (showAddFieldModal) {
-  <div class="modal-overlay" (click)="showAddFieldModal = false">
-    <div class="modal" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h3>Add Shared Field</h3>
-        <button class="modal-close" (click)="showAddFieldModal = false">✕</button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label>Field Name <span class="required">*</span></label>
-          <input type="text" class="form-control" [(ngModel)]="newField.field_name" placeholder="e.g., company_name" />
-          <p class="field-hint">The unique identifier used in templates (e.g., {{'{{company_name}}'}})</p>
+  <div class="modal-backdrop" (click)="showAddFieldModal = false">
+    <div class="modal-dialog" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Add Shared Field</h3>
+          <button class="modal-close" (click)="showAddFieldModal = false">✕</button>
         </div>
-        <div class="form-group">
-          <label>Field Label <span class="required">*</span></label>
-          <input type="text" class="form-control" [(ngModel)]="newField.field_label" placeholder="e.g., Company Name" />
+        
+        <div class="modal-body">
+          <div class="form-field">
+            <label>Field Name</label>
+            <input 
+              type="text" 
+              [(ngModel)]="newField.field_name" 
+              placeholder="e.g., company_name"
+            />
+            <small>Unique identifier used in templates</small>
+          </div>
+          
+          <div class="form-field">
+            <label>Field Label</label>
+            <input 
+              type="text" 
+              [(ngModel)]="newField.field_label" 
+              placeholder="e.g., Company Name"
+            />
+          </div>
+          
+          <div class="form-field">
+            <label>Field Type</label>
+            <select [(ngModel)]="newField.field_type">
+              <option value="text">Text (Short Answer)</option>
+              <option value="textarea">Long Text</option>
+              <option value="date">Date</option>
+              <option value="number">Number</option>
+              <option value="email">Email</option>
+            </select>
+          </div>
+          
+          <div class="form-field checkbox">
+            <label>
+              <input type="checkbox" [(ngModel)]="newField.is_required" />
+              <span>Required field</span>
+            </label>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Field Type</label>
-          <select class="form-control" [(ngModel)]="newField.field_type">
-            <option value="text">Text (Short Answer)</option>
-            <option value="textarea">Long Text (Paragraph)</option>
-            <option value="date">Date</option>
-            <option value="number">Number</option>
-            <option value="email">Email</option>
-          </select>
+        
+        <div class="modal-footer">
+          <button class="btn-cancel" (click)="showAddFieldModal = false">Cancel</button>
+          <button class="btn-submit" (click)="addSharedField()">Add Field</button>
         </div>
-        <div class="form-group checkbox">
-          <label>
-            <input type="checkbox" [(ngModel)]="newField.is_required" />
-            <span>Required field (must be filled)</span>
-          </label>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" (click)="showAddFieldModal = false">Cancel</button>
-        <button class="btn btn-primary" (click)="addSharedField()">Add Field</button>
       </div>
     </div>
   </div>

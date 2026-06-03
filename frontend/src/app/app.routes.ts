@@ -5,7 +5,7 @@ import { GeneratePage } from './pages/generate-page/generate-page';
 import { TemplateDetail } from './components/templates/template-detail/template-detail';
 import { HomeComponent } from './pages/home/home';
 import { TemplateSets } from './pages/template-sets/template-sets';
-import { TemplateSetDetail } from './pages/template-set-detail/template-set-detail';
+import { TemplateSetDetailComponent } from './pages/template-set-detail/template-set-detail';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -14,7 +14,7 @@ export const routes: Routes = [
   { path: 'templates/:id', component: TemplateDetail },
   { path: 'generate', component: GeneratePage },
   { path: 'rag', component: HomeComponent },
-    { path: 'template-sets', component: TemplateSets },
-  { path: 'template-sets/:id', component: TemplateSetDetail },
+  { path: 'template-sets', component: TemplateSets },
+  { path: 'template-sets/:id', component: TemplateSetDetailComponent },
   { path: '**', redirectTo: 'dashboard' },
 ];

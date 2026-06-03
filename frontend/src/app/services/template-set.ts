@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
   TemplateSet,
-  TemplateSetDetails,
+  TemplateSetDetail,
   SharedField,
   CreateTemplateSetRequest,
   UpdateTemplateSetRequest,
@@ -20,7 +20,7 @@ export class TemplateSetService {
     return this.api.get('/template-sets/');
   }
 
-  getTemplateSet(id: string): Observable<TemplateSetDetails> {
+  getTemplateSet(id: string): Observable<TemplateSetDetail> {
     return this.api.get(`/template-sets/${id}`);
   }
 
