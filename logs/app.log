@@ -13382,3 +13382,643 @@ WHERE template_sets.is_deleted = false ORDER BY template_sets.created_at DESC
 2026-06-03 12:11:03,870 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/ - Status: 200 - Time: 0.004s
 2026-06-03 12:11:03,871 - sqlalchemy.engine.Engine - INFO - COMMIT
 2026-06-03 12:11:18 | INFO     | app.main | Shutting down application...
+2026-06-04 01:09:04 | INFO     | app.database | ✅ PostgreSQL engine created
+2026-06-04 01:09:04 | INFO     | app.database | 📊 Database: localhost:5432
+2026-06-04 01:09:35 | INFO     | app.main | Starting Doc Automation API in development mode
+2026-06-04 01:09:35 | INFO     | app.main | Initializing Document Automation services...
+2026-06-04 01:09:35 | INFO     | app.main | Document Automation directories created
+2026-06-04 01:09:35,626 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2026-06-04 01:09:35,626 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2026-06-04 01:09:35,627 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2026-06-04 01:09:35,627 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2026-06-04 01:09:35,627 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2026-06-04 01:09:35,627 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2026-06-04 01:09:35,628 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:09:35,630 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-06-04 01:09:35,630 - sqlalchemy.engine.Engine - INFO - [generated in 0.00017s] {'table_name': 'templates', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2026-06-04 01:09:35,634 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-06-04 01:09:35,634 - sqlalchemy.engine.Engine - INFO - [cached since 0.003914s ago] {'table_name': 'template_sets', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2026-06-04 01:09:35,634 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-06-04 01:09:35,634 - sqlalchemy.engine.Engine - INFO - [cached since 0.004656s ago] {'table_name': 'template_set_members', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2026-06-04 01:09:35,635 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2026-06-04 01:09:35,635 - sqlalchemy.engine.Engine - INFO - [cached since 0.005312s ago] {'table_name': 'shared_fields', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2026-06-04 01:09:35,636 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:09:35 | INFO     | app.database | ✅ Database tables created successfully
+2026-06-04 01:09:35,637 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:09:35,637 - sqlalchemy.engine.Engine - INFO - SELECT version()
+2026-06-04 01:09:35,637 - sqlalchemy.engine.Engine - INFO - [generated in 0.00012s] {}
+2026-06-04 01:09:35 | INFO     | app.database | 🐘 PostgreSQL version: PostgreSQL 14.20 (Homebrew) on aarch64-apple-darwin24.6.0
+2026-06-04 01:09:35,637 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-04 01:09:35 | INFO     | app.main | Database initialized successfully
+2026-06-04 01:09:35 | INFO     | app.main | ==================================================
+2026-06-04 01:09:35 | INFO     | app.main | Starting PDF QA System with LangGraph
+2026-06-04 01:09:35 | INFO     | app.main | ==================================================
+2026-06-04 01:09:35,638 - sentence_transformers.base.model - INFO - No device provided, using mps
+2026-06-04 01:09:36,027 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-04 01:09:36,089 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-06-04 01:09:36,372 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-04 01:09:36,432 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-06-04 01:09:36,434 - sentence_transformers.base.model - INFO - Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-06-04 01:09:37,085 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-04 01:09:37,170 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-06-04 01:09:37,552 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-06-04 01:09:37,626 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/README.md "HTTP/1.1 200 OK"
+2026-06-04 01:09:37,927 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-04 01:09:37,992 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-06-04 01:09:38,293 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-04 01:09:38,355 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/sentence_bert_config.json "HTTP/1.1 200 OK"
+2026-06-04 01:09:38,635 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+2026-06-04 01:09:38,922 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-04 01:09:38,986 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-04 01:09:39,611 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-06-04 01:09:39,918 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-04 01:09:40,226 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-04 01:09:40,635 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-04 01:09:40,942 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-04 01:09:41,017 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-06-04 01:09:41,298 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-04 01:09:41,366 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-04 01:09:41,650 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-04 01:09:41,714 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-04 01:09:41,993 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-04 01:09:42,067 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-06-04 01:09:42,361 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-06-04 01:09:42,682 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-06-04 01:09:43,092 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-04 01:09:43,161 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+2026-06-04 01:09:43,468 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2 "HTTP/1.1 200 OK"
+2026-06-04 01:09:45 | INFO     | app.main | Loaded existing vector store
+2026-06-04 01:09:45 | INFO     | app.main | 📖 API docs: http://localhost:8000/docs
+2026-06-04 01:09:45 | INFO     | app.main | 📁 Document Automation API: /api/v1
+2026-06-04 01:09:45 | INFO     | app.main | ==================================================
+2026-06-04 01:11:56,566 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/ from 127.0.0.1
+2026-06-04 01:11:56,570 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:11:56,571 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.is_deleted = false ORDER BY template_sets.created_at DESC 
+ LIMIT %(param_1)s OFFSET %(param_2)s
+2026-06-04 01:11:56,571 - sqlalchemy.engine.Engine - INFO - [generated in 0.00020s] {'param_1': 100, 'param_2': 0}
+2026-06-04 01:11:56,576 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/ - Status: 200 - Time: 0.010s
+2026-06-04 01:11:56,576 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:12:00,225 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551 from 127.0.0.1
+2026-06-04 01:12:00,228 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:12:00,229 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.id = %(id_1)s AND template_sets.is_deleted = false 
+ LIMIT %(param_1)s
+2026-06-04 01:12:00,229 - sqlalchemy.engine.Engine - INFO - [generated in 0.00025s] {'id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551', 'param_1': 1}
+2026-06-04 01:12:00,233 - sqlalchemy.engine.Engine - INFO - SELECT template_set_members.template_set_id AS template_set_members_template_set_id, template_set_members.template_id AS template_set_members_template_id, template_set_members.order_index AS template_set_members_order_index 
+FROM template_set_members 
+WHERE template_set_members.template_set_id = %(template_set_id_1)s ORDER BY template_set_members.order_index
+2026-06-04 01:12:00,233 - sqlalchemy.engine.Engine - INFO - [generated in 0.00063s] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551'}
+2026-06-04 01:12:00,236 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.id IN (%(id_1_1)s) AND templates.is_deleted = false
+2026-06-04 01:12:00,236 - sqlalchemy.engine.Engine - INFO - [generated in 0.00016s] {'id_1_1': 'e54f548a-5fbc-48b3-84d0-c5ad13c7cf6c'}
+2026-06-04 01:12:00,238 - sqlalchemy.engine.Engine - INFO - SELECT shared_fields.id AS shared_fields_id, shared_fields.template_set_id AS shared_fields_template_set_id, shared_fields.field_name AS shared_fields_field_name, shared_fields.field_label AS shared_fields_field_label, shared_fields.field_type AS shared_fields_field_type, shared_fields.field_order AS shared_fields_field_order, shared_fields.is_required AS shared_fields_is_required, shared_fields.default_value AS shared_fields_default_value, shared_fields.created_at AS shared_fields_created_at 
+FROM shared_fields 
+WHERE shared_fields.template_set_id = %(template_set_id_1)s ORDER BY shared_fields.field_order
+2026-06-04 01:12:00,238 - sqlalchemy.engine.Engine - INFO - [generated in 0.00021s] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551'}
+2026-06-04 01:12:00,240 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551 - Status: 200 - Time: 0.015s
+2026-06-04 01:12:00,241 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:12:07,214 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/ from 127.0.0.1
+2026-06-04 01:12:07,216 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:12:07,217 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.is_deleted = false ORDER BY template_sets.created_at DESC 
+ LIMIT %(param_1)s OFFSET %(param_2)s
+2026-06-04 01:12:07,217 - sqlalchemy.engine.Engine - INFO - [cached since 10.65s ago] {'param_1': 100, 'param_2': 0}
+2026-06-04 01:12:07,221 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/ - Status: 200 - Time: 0.007s
+2026-06-04 01:12:07,222 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:12:10,264 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551 from 127.0.0.1
+2026-06-04 01:12:10,266 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:12:10,266 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.id = %(id_1)s AND template_sets.is_deleted = false 
+ LIMIT %(param_1)s
+2026-06-04 01:12:10,266 - sqlalchemy.engine.Engine - INFO - [cached since 10.04s ago] {'id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551', 'param_1': 1}
+2026-06-04 01:12:10,267 - sqlalchemy.engine.Engine - INFO - SELECT template_set_members.template_set_id AS template_set_members_template_set_id, template_set_members.template_id AS template_set_members_template_id, template_set_members.order_index AS template_set_members_order_index 
+FROM template_set_members 
+WHERE template_set_members.template_set_id = %(template_set_id_1)s ORDER BY template_set_members.order_index
+2026-06-04 01:12:10,267 - sqlalchemy.engine.Engine - INFO - [cached since 10.03s ago] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551'}
+2026-06-04 01:12:10,268 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.id IN (%(id_1_1)s) AND templates.is_deleted = false
+2026-06-04 01:12:10,269 - sqlalchemy.engine.Engine - INFO - [cached since 10.03s ago] {'id_1_1': 'e54f548a-5fbc-48b3-84d0-c5ad13c7cf6c'}
+2026-06-04 01:12:10,270 - sqlalchemy.engine.Engine - INFO - SELECT shared_fields.id AS shared_fields_id, shared_fields.template_set_id AS shared_fields_template_set_id, shared_fields.field_name AS shared_fields_field_name, shared_fields.field_label AS shared_fields_field_label, shared_fields.field_type AS shared_fields_field_type, shared_fields.field_order AS shared_fields_field_order, shared_fields.is_required AS shared_fields_is_required, shared_fields.default_value AS shared_fields_default_value, shared_fields.created_at AS shared_fields_created_at 
+FROM shared_fields 
+WHERE shared_fields.template_set_id = %(template_set_id_1)s ORDER BY shared_fields.field_order
+2026-06-04 01:12:10,271 - sqlalchemy.engine.Engine - INFO - [cached since 10.03s ago] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551'}
+2026-06-04 01:12:10,272 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551 - Status: 200 - Time: 0.009s
+2026-06-04 01:12:10,273 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:12:11,518 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/ from 127.0.0.1
+2026-06-04 01:12:11,520 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:12:11,520 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.is_deleted = false ORDER BY template_sets.created_at DESC 
+ LIMIT %(param_1)s OFFSET %(param_2)s
+2026-06-04 01:12:11,520 - sqlalchemy.engine.Engine - INFO - [cached since 14.95s ago] {'param_1': 100, 'param_2': 0}
+2026-06-04 01:12:11,522 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/ - Status: 200 - Time: 0.004s
+2026-06-04 01:12:11,523 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:12:13,689 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-04 01:12:13,692 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:12:13,694 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.is_deleted = false ORDER BY templates.created_at DESC 
+ LIMIT %(param_1)s OFFSET %(param_2)s
+2026-06-04 01:12:13,694 - sqlalchemy.engine.Engine - INFO - [generated in 0.00024s] {'param_1': 100, 'param_2': 0}
+2026-06-04 01:12:13 | INFO     | app.services.template_manager | 📊 Retrieved 11 templates from DATABASE
+2026-06-04 01:12:13,697 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.008s
+2026-06-04 01:12:13,698 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:12:14,446 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/ from 127.0.0.1
+2026-06-04 01:12:14,449 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:12:14,449 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.is_deleted = false ORDER BY template_sets.created_at DESC 
+ LIMIT %(param_1)s OFFSET %(param_2)s
+2026-06-04 01:12:14,449 - sqlalchemy.engine.Engine - INFO - [cached since 17.88s ago] {'param_1': 100, 'param_2': 0}
+2026-06-04 01:12:14,451 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/ - Status: 200 - Time: 0.005s
+2026-06-04 01:12:14,452 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:12:16,622 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/6db659a3-84e9-4663-96f6-8ffd80715bc8 from 127.0.0.1
+2026-06-04 01:12:16,624 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:12:16,625 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.id = %(id_1)s AND template_sets.is_deleted = false 
+ LIMIT %(param_1)s
+2026-06-04 01:12:16,625 - sqlalchemy.engine.Engine - INFO - [cached since 16.4s ago] {'id_1': '6db659a3-84e9-4663-96f6-8ffd80715bc8', 'param_1': 1}
+2026-06-04 01:12:16,626 - sqlalchemy.engine.Engine - INFO - SELECT template_set_members.template_set_id AS template_set_members_template_set_id, template_set_members.template_id AS template_set_members_template_id, template_set_members.order_index AS template_set_members_order_index 
+FROM template_set_members 
+WHERE template_set_members.template_set_id = %(template_set_id_1)s ORDER BY template_set_members.order_index
+2026-06-04 01:12:16,626 - sqlalchemy.engine.Engine - INFO - [cached since 16.39s ago] {'template_set_id_1': '6db659a3-84e9-4663-96f6-8ffd80715bc8'}
+2026-06-04 01:12:16,627 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.id IN (NULL) AND (1 != 1) AND templates.is_deleted = false
+2026-06-04 01:12:16,628 - sqlalchemy.engine.Engine - INFO - [cached since 16.39s ago] {}
+2026-06-04 01:12:16,629 - sqlalchemy.engine.Engine - INFO - SELECT shared_fields.id AS shared_fields_id, shared_fields.template_set_id AS shared_fields_template_set_id, shared_fields.field_name AS shared_fields_field_name, shared_fields.field_label AS shared_fields_field_label, shared_fields.field_type AS shared_fields_field_type, shared_fields.field_order AS shared_fields_field_order, shared_fields.is_required AS shared_fields_is_required, shared_fields.default_value AS shared_fields_default_value, shared_fields.created_at AS shared_fields_created_at 
+FROM shared_fields 
+WHERE shared_fields.template_set_id = %(template_set_id_1)s ORDER BY shared_fields.field_order
+2026-06-04 01:12:16,629 - sqlalchemy.engine.Engine - INFO - [cached since 16.39s ago] {'template_set_id_1': '6db659a3-84e9-4663-96f6-8ffd80715bc8'}
+2026-06-04 01:12:16,630 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/6db659a3-84e9-4663-96f6-8ffd80715bc8 - Status: 200 - Time: 0.008s
+2026-06-04 01:12:16,631 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:12:20,848 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/ from 127.0.0.1
+2026-06-04 01:12:20,851 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:12:20,852 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.is_deleted = false ORDER BY template_sets.created_at DESC 
+ LIMIT %(param_1)s OFFSET %(param_2)s
+2026-06-04 01:12:20,852 - sqlalchemy.engine.Engine - INFO - [cached since 24.28s ago] {'param_1': 100, 'param_2': 0}
+2026-06-04 01:12:20,855 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/ - Status: 200 - Time: 0.007s
+2026-06-04 01:12:20,855 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:12:22,822 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551 from 127.0.0.1
+2026-06-04 01:12:22,825 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:12:22,825 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.id = %(id_1)s AND template_sets.is_deleted = false 
+ LIMIT %(param_1)s
+2026-06-04 01:12:22,825 - sqlalchemy.engine.Engine - INFO - [cached since 22.6s ago] {'id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551', 'param_1': 1}
+2026-06-04 01:12:22,826 - sqlalchemy.engine.Engine - INFO - SELECT template_set_members.template_set_id AS template_set_members_template_set_id, template_set_members.template_id AS template_set_members_template_id, template_set_members.order_index AS template_set_members_order_index 
+FROM template_set_members 
+WHERE template_set_members.template_set_id = %(template_set_id_1)s ORDER BY template_set_members.order_index
+2026-06-04 01:12:22,827 - sqlalchemy.engine.Engine - INFO - [cached since 22.59s ago] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551'}
+2026-06-04 01:12:22,828 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.id IN (%(id_1_1)s) AND templates.is_deleted = false
+2026-06-04 01:12:22,828 - sqlalchemy.engine.Engine - INFO - [cached since 22.59s ago] {'id_1_1': 'e54f548a-5fbc-48b3-84d0-c5ad13c7cf6c'}
+2026-06-04 01:12:22,830 - sqlalchemy.engine.Engine - INFO - SELECT shared_fields.id AS shared_fields_id, shared_fields.template_set_id AS shared_fields_template_set_id, shared_fields.field_name AS shared_fields_field_name, shared_fields.field_label AS shared_fields_field_label, shared_fields.field_type AS shared_fields_field_type, shared_fields.field_order AS shared_fields_field_order, shared_fields.is_required AS shared_fields_is_required, shared_fields.default_value AS shared_fields_default_value, shared_fields.created_at AS shared_fields_created_at 
+FROM shared_fields 
+WHERE shared_fields.template_set_id = %(template_set_id_1)s ORDER BY shared_fields.field_order
+2026-06-04 01:12:22,830 - sqlalchemy.engine.Engine - INFO - [cached since 22.59s ago] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551'}
+2026-06-04 01:12:22,831 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551 - Status: 200 - Time: 0.009s
+2026-06-04 01:12:22,832 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:12:54,070 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/ from 127.0.0.1
+2026-06-04 01:12:54,072 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:12:54,073 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.is_deleted = false ORDER BY template_sets.created_at DESC 
+ LIMIT %(param_1)s OFFSET %(param_2)s
+2026-06-04 01:12:54,073 - sqlalchemy.engine.Engine - INFO - [cached since 57.5s ago] {'param_1': 100, 'param_2': 0}
+2026-06-04 01:12:54,074 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/ - Status: 200 - Time: 0.004s
+2026-06-04 01:12:54,075 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:12:56,097 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/6db659a3-84e9-4663-96f6-8ffd80715bc8 from 127.0.0.1
+2026-06-04 01:12:56,099 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:12:56,100 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.id = %(id_1)s AND template_sets.is_deleted = false 
+ LIMIT %(param_1)s
+2026-06-04 01:12:56,100 - sqlalchemy.engine.Engine - INFO - [cached since 55.87s ago] {'id_1': '6db659a3-84e9-4663-96f6-8ffd80715bc8', 'param_1': 1}
+2026-06-04 01:12:56,101 - sqlalchemy.engine.Engine - INFO - SELECT template_set_members.template_set_id AS template_set_members_template_set_id, template_set_members.template_id AS template_set_members_template_id, template_set_members.order_index AS template_set_members_order_index 
+FROM template_set_members 
+WHERE template_set_members.template_set_id = %(template_set_id_1)s ORDER BY template_set_members.order_index
+2026-06-04 01:12:56,101 - sqlalchemy.engine.Engine - INFO - [cached since 55.87s ago] {'template_set_id_1': '6db659a3-84e9-4663-96f6-8ffd80715bc8'}
+2026-06-04 01:12:56,102 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.id IN (NULL) AND (1 != 1) AND templates.is_deleted = false
+2026-06-04 01:12:56,102 - sqlalchemy.engine.Engine - INFO - [cached since 55.87s ago] {}
+2026-06-04 01:12:56,104 - sqlalchemy.engine.Engine - INFO - SELECT shared_fields.id AS shared_fields_id, shared_fields.template_set_id AS shared_fields_template_set_id, shared_fields.field_name AS shared_fields_field_name, shared_fields.field_label AS shared_fields_field_label, shared_fields.field_type AS shared_fields_field_type, shared_fields.field_order AS shared_fields_field_order, shared_fields.is_required AS shared_fields_is_required, shared_fields.default_value AS shared_fields_default_value, shared_fields.created_at AS shared_fields_created_at 
+FROM shared_fields 
+WHERE shared_fields.template_set_id = %(template_set_id_1)s ORDER BY shared_fields.field_order
+2026-06-04 01:12:56,104 - sqlalchemy.engine.Engine - INFO - [cached since 55.87s ago] {'template_set_id_1': '6db659a3-84e9-4663-96f6-8ffd80715bc8'}
+2026-06-04 01:12:56,106 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/6db659a3-84e9-4663-96f6-8ffd80715bc8 - Status: 200 - Time: 0.008s
+2026-06-04 01:12:56,106 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:13:00,089 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/ from 127.0.0.1
+2026-06-04 01:13:00,091 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:13:00,091 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.is_deleted = false ORDER BY template_sets.created_at DESC 
+ LIMIT %(param_1)s OFFSET %(param_2)s
+2026-06-04 01:13:00,091 - sqlalchemy.engine.Engine - INFO - [cached since 63.52s ago] {'param_1': 100, 'param_2': 0}
+2026-06-04 01:13:00,092 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/ - Status: 200 - Time: 0.003s
+2026-06-04 01:13:00,093 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:13:01,839 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551 from 127.0.0.1
+2026-06-04 01:13:01,841 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:13:01,841 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.id = %(id_1)s AND template_sets.is_deleted = false 
+ LIMIT %(param_1)s
+2026-06-04 01:13:01,841 - sqlalchemy.engine.Engine - INFO - [cached since 61.61s ago] {'id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551', 'param_1': 1}
+2026-06-04 01:13:01,843 - sqlalchemy.engine.Engine - INFO - SELECT template_set_members.template_set_id AS template_set_members_template_set_id, template_set_members.template_id AS template_set_members_template_id, template_set_members.order_index AS template_set_members_order_index 
+FROM template_set_members 
+WHERE template_set_members.template_set_id = %(template_set_id_1)s ORDER BY template_set_members.order_index
+2026-06-04 01:13:01,843 - sqlalchemy.engine.Engine - INFO - [cached since 61.61s ago] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551'}
+2026-06-04 01:13:01,844 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.id IN (%(id_1_1)s) AND templates.is_deleted = false
+2026-06-04 01:13:01,844 - sqlalchemy.engine.Engine - INFO - [cached since 61.61s ago] {'id_1_1': 'e54f548a-5fbc-48b3-84d0-c5ad13c7cf6c'}
+2026-06-04 01:13:01,845 - sqlalchemy.engine.Engine - INFO - SELECT shared_fields.id AS shared_fields_id, shared_fields.template_set_id AS shared_fields_template_set_id, shared_fields.field_name AS shared_fields_field_name, shared_fields.field_label AS shared_fields_field_label, shared_fields.field_type AS shared_fields_field_type, shared_fields.field_order AS shared_fields_field_order, shared_fields.is_required AS shared_fields_is_required, shared_fields.default_value AS shared_fields_default_value, shared_fields.created_at AS shared_fields_created_at 
+FROM shared_fields 
+WHERE shared_fields.template_set_id = %(template_set_id_1)s ORDER BY shared_fields.field_order
+2026-06-04 01:13:01,845 - sqlalchemy.engine.Engine - INFO - [cached since 61.61s ago] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551'}
+2026-06-04 01:13:01,846 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551 - Status: 200 - Time: 0.008s
+2026-06-04 01:13:01,847 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:21:26,410 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551 from 127.0.0.1
+2026-06-04 01:21:26,412 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:21:26,413 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.id = %(id_1)s AND template_sets.is_deleted = false 
+ LIMIT %(param_1)s
+2026-06-04 01:21:26,413 - sqlalchemy.engine.Engine - INFO - [cached since 566.1s ago] {'id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551', 'param_1': 1}
+2026-06-04 01:21:26,415 - sqlalchemy.engine.Engine - INFO - SELECT template_set_members.template_set_id AS template_set_members_template_set_id, template_set_members.template_id AS template_set_members_template_id, template_set_members.order_index AS template_set_members_order_index 
+FROM template_set_members 
+WHERE template_set_members.template_set_id = %(template_set_id_1)s ORDER BY template_set_members.order_index
+2026-06-04 01:21:26,415 - sqlalchemy.engine.Engine - INFO - [cached since 566.1s ago] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551'}
+2026-06-04 01:21:26,416 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.id IN (%(id_1_1)s) AND templates.is_deleted = false
+2026-06-04 01:21:26,416 - sqlalchemy.engine.Engine - INFO - [cached since 566.1s ago] {'id_1_1': 'e54f548a-5fbc-48b3-84d0-c5ad13c7cf6c'}
+2026-06-04 01:21:26,417 - sqlalchemy.engine.Engine - INFO - SELECT shared_fields.id AS shared_fields_id, shared_fields.template_set_id AS shared_fields_template_set_id, shared_fields.field_name AS shared_fields_field_name, shared_fields.field_label AS shared_fields_field_label, shared_fields.field_type AS shared_fields_field_type, shared_fields.field_order AS shared_fields_field_order, shared_fields.is_required AS shared_fields_is_required, shared_fields.default_value AS shared_fields_default_value, shared_fields.created_at AS shared_fields_created_at 
+FROM shared_fields 
+WHERE shared_fields.template_set_id = %(template_set_id_1)s ORDER BY shared_fields.field_order
+2026-06-04 01:21:26,417 - sqlalchemy.engine.Engine - INFO - [cached since 566.1s ago] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551'}
+2026-06-04 01:21:26,418 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551 - Status: 200 - Time: 0.008s
+2026-06-04 01:21:26,419 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:30:05,352 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551 from 127.0.0.1
+2026-06-04 01:30:05,359 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:30:05,360 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.id = %(id_1)s AND template_sets.is_deleted = false 
+ LIMIT %(param_1)s
+2026-06-04 01:30:05,360 - sqlalchemy.engine.Engine - INFO - [cached since 1085s ago] {'id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551', 'param_1': 1}
+2026-06-04 01:30:05,361 - sqlalchemy.engine.Engine - INFO - SELECT template_set_members.template_set_id AS template_set_members_template_set_id, template_set_members.template_id AS template_set_members_template_id, template_set_members.order_index AS template_set_members_order_index 
+FROM template_set_members 
+WHERE template_set_members.template_set_id = %(template_set_id_1)s ORDER BY template_set_members.order_index
+2026-06-04 01:30:05,362 - sqlalchemy.engine.Engine - INFO - [cached since 1085s ago] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551'}
+2026-06-04 01:30:05,363 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.id IN (%(id_1_1)s) AND templates.is_deleted = false
+2026-06-04 01:30:05,363 - sqlalchemy.engine.Engine - INFO - [cached since 1085s ago] {'id_1_1': 'e54f548a-5fbc-48b3-84d0-c5ad13c7cf6c'}
+2026-06-04 01:30:05,363 - sqlalchemy.engine.Engine - INFO - SELECT shared_fields.id AS shared_fields_id, shared_fields.template_set_id AS shared_fields_template_set_id, shared_fields.field_name AS shared_fields_field_name, shared_fields.field_label AS shared_fields_field_label, shared_fields.field_type AS shared_fields_field_type, shared_fields.field_order AS shared_fields_field_order, shared_fields.is_required AS shared_fields_is_required, shared_fields.default_value AS shared_fields_default_value, shared_fields.created_at AS shared_fields_created_at 
+FROM shared_fields 
+WHERE shared_fields.template_set_id = %(template_set_id_1)s ORDER BY shared_fields.field_order
+2026-06-04 01:30:05,363 - sqlalchemy.engine.Engine - INFO - [cached since 1085s ago] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551'}
+2026-06-04 01:30:05,364 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551 - Status: 200 - Time: 0.012s
+2026-06-04 01:30:05,365 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:30:06,811 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/ from 127.0.0.1
+2026-06-04 01:30:06,813 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:30:06,814 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.is_deleted = false ORDER BY template_sets.created_at DESC 
+ LIMIT %(param_1)s OFFSET %(param_2)s
+2026-06-04 01:30:06,814 - sqlalchemy.engine.Engine - INFO - [cached since 1090s ago] {'param_1': 100, 'param_2': 0}
+2026-06-04 01:30:06,815 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/ - Status: 200 - Time: 0.005s
+2026-06-04 01:30:06,817 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:30:08,723 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/6db659a3-84e9-4663-96f6-8ffd80715bc8 from 127.0.0.1
+2026-06-04 01:30:08,725 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:30:08,725 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.id = %(id_1)s AND template_sets.is_deleted = false 
+ LIMIT %(param_1)s
+2026-06-04 01:30:08,725 - sqlalchemy.engine.Engine - INFO - [cached since 1088s ago] {'id_1': '6db659a3-84e9-4663-96f6-8ffd80715bc8', 'param_1': 1}
+2026-06-04 01:30:08,727 - sqlalchemy.engine.Engine - INFO - SELECT template_set_members.template_set_id AS template_set_members_template_set_id, template_set_members.template_id AS template_set_members_template_id, template_set_members.order_index AS template_set_members_order_index 
+FROM template_set_members 
+WHERE template_set_members.template_set_id = %(template_set_id_1)s ORDER BY template_set_members.order_index
+2026-06-04 01:30:08,727 - sqlalchemy.engine.Engine - INFO - [cached since 1088s ago] {'template_set_id_1': '6db659a3-84e9-4663-96f6-8ffd80715bc8'}
+2026-06-04 01:30:08,728 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.id IN (NULL) AND (1 != 1) AND templates.is_deleted = false
+2026-06-04 01:30:08,728 - sqlalchemy.engine.Engine - INFO - [cached since 1088s ago] {}
+2026-06-04 01:30:08,730 - sqlalchemy.engine.Engine - INFO - SELECT shared_fields.id AS shared_fields_id, shared_fields.template_set_id AS shared_fields_template_set_id, shared_fields.field_name AS shared_fields_field_name, shared_fields.field_label AS shared_fields_field_label, shared_fields.field_type AS shared_fields_field_type, shared_fields.field_order AS shared_fields_field_order, shared_fields.is_required AS shared_fields_is_required, shared_fields.default_value AS shared_fields_default_value, shared_fields.created_at AS shared_fields_created_at 
+FROM shared_fields 
+WHERE shared_fields.template_set_id = %(template_set_id_1)s ORDER BY shared_fields.field_order
+2026-06-04 01:30:08,730 - sqlalchemy.engine.Engine - INFO - [cached since 1088s ago] {'template_set_id_1': '6db659a3-84e9-4663-96f6-8ffd80715bc8'}
+2026-06-04 01:30:08,731 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/6db659a3-84e9-4663-96f6-8ffd80715bc8 - Status: 200 - Time: 0.008s
+2026-06-04 01:30:08,732 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:30:09,953 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/ from 127.0.0.1
+2026-06-04 01:30:09,956 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:30:09,957 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.is_deleted = false ORDER BY template_sets.created_at DESC 
+ LIMIT %(param_1)s OFFSET %(param_2)s
+2026-06-04 01:30:09,957 - sqlalchemy.engine.Engine - INFO - [cached since 1093s ago] {'param_1': 100, 'param_2': 0}
+2026-06-04 01:30:09,958 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/ - Status: 200 - Time: 0.005s
+2026-06-04 01:30:09,961 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:30:12,169 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551 from 127.0.0.1
+2026-06-04 01:30:12,171 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:30:12,171 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.id = %(id_1)s AND template_sets.is_deleted = false 
+ LIMIT %(param_1)s
+2026-06-04 01:30:12,171 - sqlalchemy.engine.Engine - INFO - [cached since 1092s ago] {'id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551', 'param_1': 1}
+2026-06-04 01:30:12,172 - sqlalchemy.engine.Engine - INFO - SELECT template_set_members.template_set_id AS template_set_members_template_set_id, template_set_members.template_id AS template_set_members_template_id, template_set_members.order_index AS template_set_members_order_index 
+FROM template_set_members 
+WHERE template_set_members.template_set_id = %(template_set_id_1)s ORDER BY template_set_members.order_index
+2026-06-04 01:30:12,173 - sqlalchemy.engine.Engine - INFO - [cached since 1092s ago] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551'}
+2026-06-04 01:30:12,174 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.id IN (%(id_1_1)s) AND templates.is_deleted = false
+2026-06-04 01:30:12,174 - sqlalchemy.engine.Engine - INFO - [cached since 1092s ago] {'id_1_1': 'e54f548a-5fbc-48b3-84d0-c5ad13c7cf6c'}
+2026-06-04 01:30:12,176 - sqlalchemy.engine.Engine - INFO - SELECT shared_fields.id AS shared_fields_id, shared_fields.template_set_id AS shared_fields_template_set_id, shared_fields.field_name AS shared_fields_field_name, shared_fields.field_label AS shared_fields_field_label, shared_fields.field_type AS shared_fields_field_type, shared_fields.field_order AS shared_fields_field_order, shared_fields.is_required AS shared_fields_is_required, shared_fields.default_value AS shared_fields_default_value, shared_fields.created_at AS shared_fields_created_at 
+FROM shared_fields 
+WHERE shared_fields.template_set_id = %(template_set_id_1)s ORDER BY shared_fields.field_order
+2026-06-04 01:30:12,177 - sqlalchemy.engine.Engine - INFO - [cached since 1092s ago] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551'}
+2026-06-04 01:30:12,178 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551 - Status: 200 - Time: 0.010s
+2026-06-04 01:30:12,181 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:30:44,357 - app.middleware.logging - INFO - Request: POST /api/v1/templates/upload from 127.0.0.1
+2026-06-04 01:30:44 | INFO     | app.utils.file_utils | Template saved: templates/204d80d4-2f5d-4494-b625-162cb2dd806b/original.docx
+2026-06-04 01:30:44 | INFO     | app.services.placeholder_extractor | Extracted 5 placeholders: {'passport_no', 'company_name', 'company_no', 'director_name_1', 'director_name'}
+2026-06-04 01:30:44 | INFO     | app.services.template_manager | 📝 Extracted 5 placeholders: {'passport_no', 'company_name', 'company_no', 'director_name_1', 'director_name'}
+2026-06-04 01:30:44,371 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:30:44,374 - sqlalchemy.engine.Engine - INFO - INSERT INTO templates (id, filename, original_filename, file_path, placeholders, placeholder_count, updated_at, is_deleted) VALUES (%(id)s, %(filename)s, %(original_filename)s, %(file_path)s, %(placeholders)s::JSONB, %(placeholder_count)s, %(updated_at)s, %(is_deleted)s) RETURNING templates.created_at
+2026-06-04 01:30:44,374 - sqlalchemy.engine.Engine - INFO - [generated in 0.00017s] {'id': '204d80d4-2f5d-4494-b625-162cb2dd806b', 'filename': 'opening.docx', 'original_filename': 'opening.docx', 'file_path': 'templates/204d80d4-2f5d-4494-b625-162cb2dd806b/original.docx', 'placeholders': '["passport_no", "company_name", "company_no", "director_name_1", "director_name"]', 'placeholder_count': 5, 'updated_at': None, 'is_deleted': False}
+2026-06-04 01:30:44,378 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:30:44,380 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:30:44,381 - sqlalchemy.engine.Engine - INFO - SELECT templates.id, templates.filename, templates.original_filename, templates.file_path, templates.placeholders, templates.placeholder_count, templates.created_at, templates.updated_at, templates.is_deleted 
+FROM templates 
+WHERE templates.id = %(pk_1)s
+2026-06-04 01:30:44,381 - sqlalchemy.engine.Engine - INFO - [generated in 0.00009s] {'pk_1': '204d80d4-2f5d-4494-b625-162cb2dd806b'}
+2026-06-04 01:30:44 | INFO     | app.services.template_manager | ✅✅✅ Template saved to DATABASE: 204d80d4-2f5d-4494-b625-162cb2dd806b
+2026-06-04 01:30:44 | INFO     | app.api.v1.endpoints.templates | ✅ Template upload complete: 204d80d4-2f5d-4494-b625-162cb2dd806b
+2026-06-04 01:30:44,382 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.id = %(id_1)s 
+ LIMIT %(param_1)s
+2026-06-04 01:30:44,383 - sqlalchemy.engine.Engine - INFO - [generated in 0.00013s] {'id_1': '204d80d4-2f5d-4494-b625-162cb2dd806b', 'param_1': 1}
+2026-06-04 01:30:44 | INFO     | app.api.v1.endpoints.templates | ✅✅ VERIFIED: Template in DATABASE: 204d80d4-2f5d-4494-b625-162cb2dd806b
+2026-06-04 01:30:44,383 - app.middleware.logging - INFO - Response: POST /api/v1/templates/upload - Status: 201 - Time: 0.026s
+2026-06-04 01:30:44,384 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:30:44,386 - app.middleware.logging - INFO - Request: OPTIONS /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551/templates from 127.0.0.1
+2026-06-04 01:30:44,386 - app.middleware.logging - INFO - Response: OPTIONS /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551/templates - Status: 200 - Time: 0.000s
+2026-06-04 01:30:44,387 - app.middleware.logging - INFO - Request: POST /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551/templates from 127.0.0.1
+2026-06-04 01:30:44,389 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:30:44,389 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.id = %(id_1)s AND templates.is_deleted = false 
+ LIMIT %(param_1)s
+2026-06-04 01:30:44,389 - sqlalchemy.engine.Engine - INFO - [generated in 0.00007s] {'id_1': '204d80d4-2f5d-4494-b625-162cb2dd806b', 'param_1': 1}
+2026-06-04 01:30:44,390 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.id = %(id_1)s 
+ LIMIT %(param_1)s
+2026-06-04 01:30:44,390 - sqlalchemy.engine.Engine - INFO - [cached since 0.007657s ago] {'id_1': '204d80d4-2f5d-4494-b625-162cb2dd806b', 'param_1': 1}
+2026-06-04 01:30:44,391 - sqlalchemy.engine.Engine - INFO - SELECT template_set_members.template_set_id AS template_set_members_template_set_id, template_set_members.template_id AS template_set_members_template_id, template_set_members.order_index AS template_set_members_order_index 
+FROM template_set_members 
+WHERE template_set_members.template_set_id = %(template_set_id_1)s AND template_set_members.template_id = %(template_id_1)s 
+ LIMIT %(param_1)s
+2026-06-04 01:30:44,391 - sqlalchemy.engine.Engine - INFO - [generated in 0.00013s] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551', 'template_id_1': '204d80d4-2f5d-4494-b625-162cb2dd806b', 'param_1': 1}
+2026-06-04 01:30:44,392 - sqlalchemy.engine.Engine - INFO - INSERT INTO template_set_members (template_set_id, template_id, order_index) VALUES (%(template_set_id)s, %(template_id)s, %(order_index)s)
+2026-06-04 01:30:44,392 - sqlalchemy.engine.Engine - INFO - [generated in 0.00015s] {'template_set_id': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551', 'template_id': '204d80d4-2f5d-4494-b625-162cb2dd806b', 'order_index': 0}
+2026-06-04 01:30:44,395 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:30:44 | INFO     | app.services.template_set_service | Template 204d80d4-2f5d-4494-b625-162cb2dd806b added to set 1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551
+2026-06-04 01:30:44,396 - app.middleware.logging - INFO - Response: POST /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551/templates - Status: 200 - Time: 0.009s
+2026-06-04 01:30:44,903 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551 from 127.0.0.1
+2026-06-04 01:30:44,906 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:30:44,906 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.id = %(id_1)s AND template_sets.is_deleted = false 
+ LIMIT %(param_1)s
+2026-06-04 01:30:44,906 - sqlalchemy.engine.Engine - INFO - [cached since 1125s ago] {'id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551', 'param_1': 1}
+2026-06-04 01:30:44,908 - sqlalchemy.engine.Engine - INFO - SELECT template_set_members.template_set_id AS template_set_members_template_set_id, template_set_members.template_id AS template_set_members_template_id, template_set_members.order_index AS template_set_members_order_index 
+FROM template_set_members 
+WHERE template_set_members.template_set_id = %(template_set_id_1)s ORDER BY template_set_members.order_index
+2026-06-04 01:30:44,908 - sqlalchemy.engine.Engine - INFO - [cached since 1125s ago] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551'}
+2026-06-04 01:30:44,909 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.id IN (%(id_1_1)s, %(id_1_2)s) AND templates.is_deleted = false
+2026-06-04 01:30:44,911 - sqlalchemy.engine.Engine - INFO - [cached since 1125s ago] {'id_1_1': '204d80d4-2f5d-4494-b625-162cb2dd806b', 'id_1_2': 'e54f548a-5fbc-48b3-84d0-c5ad13c7cf6c'}
+2026-06-04 01:30:44,913 - sqlalchemy.engine.Engine - INFO - SELECT shared_fields.id AS shared_fields_id, shared_fields.template_set_id AS shared_fields_template_set_id, shared_fields.field_name AS shared_fields_field_name, shared_fields.field_label AS shared_fields_field_label, shared_fields.field_type AS shared_fields_field_type, shared_fields.field_order AS shared_fields_field_order, shared_fields.is_required AS shared_fields_is_required, shared_fields.default_value AS shared_fields_default_value, shared_fields.created_at AS shared_fields_created_at 
+FROM shared_fields 
+WHERE shared_fields.template_set_id = %(template_set_id_1)s ORDER BY shared_fields.field_order
+2026-06-04 01:30:44,914 - sqlalchemy.engine.Engine - INFO - [cached since 1125s ago] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551'}
+2026-06-04 01:30:44,916 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551 - Status: 200 - Time: 0.013s
+2026-06-04 01:30:44,919 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:30:53,425 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-04 01:30:53,428 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:30:53,429 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.is_deleted = false ORDER BY templates.created_at DESC 
+ LIMIT %(param_1)s OFFSET %(param_2)s
+2026-06-04 01:30:53,429 - sqlalchemy.engine.Engine - INFO - [cached since 1120s ago] {'param_1': 100, 'param_2': 0}
+2026-06-04 01:30:53 | INFO     | app.services.template_manager | 📊 Retrieved 12 templates from DATABASE
+2026-06-04 01:30:53,431 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.006s
+2026-06-04 01:30:53,433 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:30:54,298 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/ from 127.0.0.1
+2026-06-04 01:30:54,303 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:30:54,303 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.is_deleted = false ORDER BY template_sets.created_at DESC 
+ LIMIT %(param_1)s OFFSET %(param_2)s
+2026-06-04 01:30:54,303 - sqlalchemy.engine.Engine - INFO - [cached since 1138s ago] {'param_1': 100, 'param_2': 0}
+2026-06-04 01:30:54,304 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/ - Status: 200 - Time: 0.006s
+2026-06-04 01:30:54,305 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:30:56,520 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551 from 127.0.0.1
+2026-06-04 01:30:56,523 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:30:56,524 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.id = %(id_1)s AND template_sets.is_deleted = false 
+ LIMIT %(param_1)s
+2026-06-04 01:30:56,525 - sqlalchemy.engine.Engine - INFO - [cached since 1136s ago] {'id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551', 'param_1': 1}
+2026-06-04 01:30:56,527 - sqlalchemy.engine.Engine - INFO - SELECT template_set_members.template_set_id AS template_set_members_template_set_id, template_set_members.template_id AS template_set_members_template_id, template_set_members.order_index AS template_set_members_order_index 
+FROM template_set_members 
+WHERE template_set_members.template_set_id = %(template_set_id_1)s ORDER BY template_set_members.order_index
+2026-06-04 01:30:56,527 - sqlalchemy.engine.Engine - INFO - [cached since 1136s ago] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551'}
+2026-06-04 01:30:56,529 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.id IN (%(id_1_1)s, %(id_1_2)s) AND templates.is_deleted = false
+2026-06-04 01:30:56,529 - sqlalchemy.engine.Engine - INFO - [cached since 1136s ago] {'id_1_1': '204d80d4-2f5d-4494-b625-162cb2dd806b', 'id_1_2': 'e54f548a-5fbc-48b3-84d0-c5ad13c7cf6c'}
+2026-06-04 01:30:56,530 - sqlalchemy.engine.Engine - INFO - SELECT shared_fields.id AS shared_fields_id, shared_fields.template_set_id AS shared_fields_template_set_id, shared_fields.field_name AS shared_fields_field_name, shared_fields.field_label AS shared_fields_field_label, shared_fields.field_type AS shared_fields_field_type, shared_fields.field_order AS shared_fields_field_order, shared_fields.is_required AS shared_fields_is_required, shared_fields.default_value AS shared_fields_default_value, shared_fields.created_at AS shared_fields_created_at 
+FROM shared_fields 
+WHERE shared_fields.template_set_id = %(template_set_id_1)s ORDER BY shared_fields.field_order
+2026-06-04 01:30:56,530 - sqlalchemy.engine.Engine - INFO - [cached since 1136s ago] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551'}
+2026-06-04 01:30:56,533 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551 - Status: 200 - Time: 0.013s
+2026-06-04 01:30:56,534 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:31:05,105 - app.middleware.logging - INFO - Request: OPTIONS /api/v1/generate/ from 127.0.0.1
+2026-06-04 01:31:05,106 - app.middleware.logging - INFO - Response: OPTIONS /api/v1/generate/ - Status: 200 - Time: 0.001s
+2026-06-04 01:31:05,107 - app.middleware.logging - INFO - Request: POST /api/v1/generate/ from 127.0.0.1
+2026-06-04 01:31:05 | INFO     | app.api.v1.endpoints.generate | Generating document for template: 204d80d4-2f5d-4494-b625-162cb2dd806b
+2026-06-04 01:31:05,112 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:31:05,112 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.id = %(id_1)s AND templates.is_deleted = false 
+ LIMIT %(param_1)s
+2026-06-04 01:31:05,113 - sqlalchemy.engine.Engine - INFO - [cached since 20.72s ago] {'id_1': '204d80d4-2f5d-4494-b625-162cb2dd806b', 'param_1': 1}
+2026-06-04 01:31:05 | INFO     | app.services.template_manager | ✅ Template found in DATABASE: 204d80d4-2f5d-4494-b625-162cb2dd806b
+2026-06-04 01:31:05,113 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-04 01:31:05,114 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:31:05,114 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.id = %(id_1)s AND templates.is_deleted = false 
+ LIMIT %(param_1)s
+2026-06-04 01:31:05,114 - sqlalchemy.engine.Engine - INFO - [cached since 20.73s ago] {'id_1': '204d80d4-2f5d-4494-b625-162cb2dd806b', 'param_1': 1}
+2026-06-04 01:31:05 | INFO     | app.services.template_manager | ✅ Template found in DATABASE: 204d80d4-2f5d-4494-b625-162cb2dd806b
+2026-06-04 01:31:05,115 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-04 01:31:05 | INFO     | app.api.v1.endpoints.generate | Template found. Placeholders: {'company_no', 'director_name_1', 'passport_no', 'company_name', 'director_name'}
+2026-06-04 01:31:05,857 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-04 01:31:05 | INFO     | app.core.openai_client | Groq API success: 1 of 5 placeholders filled
+2026-06-04 01:31:05 | INFO     | app.utils.validation | Validation passed. Mapped 1 of 5 placeholders
+2026-06-04 01:31:05 | INFO     | app.services.ai_mapper | AI mapping completed. Filled 5 of 5 placeholders
+2026-06-04 01:31:05 | INFO     | app.api.v1.endpoints.generate | AI mapped 5 values
+2026-06-04 01:31:05,871 - app.middleware.logging - INFO - Response: POST /api/v1/generate/ - Status: 200 - Time: 0.764s
+2026-06-04 01:31:18,029 - app.middleware.logging - INFO - Request: POST /api/v1/generate/ from 127.0.0.1
+2026-06-04 01:31:18 | INFO     | app.api.v1.endpoints.generate | Generating document for template: 204d80d4-2f5d-4494-b625-162cb2dd806b
+2026-06-04 01:31:18,033 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:31:18,033 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.id = %(id_1)s AND templates.is_deleted = false 
+ LIMIT %(param_1)s
+2026-06-04 01:31:18,034 - sqlalchemy.engine.Engine - INFO - [cached since 33.64s ago] {'id_1': '204d80d4-2f5d-4494-b625-162cb2dd806b', 'param_1': 1}
+2026-06-04 01:31:18 | INFO     | app.services.template_manager | ✅ Template found in DATABASE: 204d80d4-2f5d-4494-b625-162cb2dd806b
+2026-06-04 01:31:18,036 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-04 01:31:18,037 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:31:18,038 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.id = %(id_1)s AND templates.is_deleted = false 
+ LIMIT %(param_1)s
+2026-06-04 01:31:18,038 - sqlalchemy.engine.Engine - INFO - [cached since 33.65s ago] {'id_1': '204d80d4-2f5d-4494-b625-162cb2dd806b', 'param_1': 1}
+2026-06-04 01:31:18 | INFO     | app.services.template_manager | ✅ Template found in DATABASE: 204d80d4-2f5d-4494-b625-162cb2dd806b
+2026-06-04 01:31:18,040 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-04 01:31:18 | INFO     | app.api.v1.endpoints.generate | Template found. Placeholders: {'company_no', 'director_name_1', 'passport_no', 'company_name', 'director_name'}
+2026-06-04 01:31:18,308 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-04 01:31:18 | INFO     | app.core.openai_client | Groq API success: 1 of 5 placeholders filled
+2026-06-04 01:31:18 | INFO     | app.utils.validation | Validation passed. Mapped 1 of 5 placeholders
+2026-06-04 01:31:18 | INFO     | app.services.ai_mapper | AI mapping completed. Filled 5 of 5 placeholders
+2026-06-04 01:31:18 | INFO     | app.api.v1.endpoints.generate | AI mapped 5 values
+2026-06-04 01:31:18,318 - app.middleware.logging - INFO - Response: POST /api/v1/generate/ - Status: 200 - Time: 0.289s
+2026-06-04 01:33:32,594 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551 from 127.0.0.1
+2026-06-04 01:33:32,595 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:33:32,596 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.id = %(id_1)s AND template_sets.is_deleted = false 
+ LIMIT %(param_1)s
+2026-06-04 01:33:32,596 - sqlalchemy.engine.Engine - INFO - [cached since 1292s ago] {'id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551', 'param_1': 1}
+2026-06-04 01:33:32,597 - sqlalchemy.engine.Engine - INFO - SELECT template_set_members.template_set_id AS template_set_members_template_set_id, template_set_members.template_id AS template_set_members_template_id, template_set_members.order_index AS template_set_members_order_index 
+FROM template_set_members 
+WHERE template_set_members.template_set_id = %(template_set_id_1)s ORDER BY template_set_members.order_index
+2026-06-04 01:33:32,597 - sqlalchemy.engine.Engine - INFO - [cached since 1292s ago] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551'}
+2026-06-04 01:33:32,599 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.id IN (%(id_1_1)s, %(id_1_2)s) AND templates.is_deleted = false
+2026-06-04 01:33:32,599 - sqlalchemy.engine.Engine - INFO - [cached since 1292s ago] {'id_1_1': '204d80d4-2f5d-4494-b625-162cb2dd806b', 'id_1_2': 'e54f548a-5fbc-48b3-84d0-c5ad13c7cf6c'}
+2026-06-04 01:33:32,600 - sqlalchemy.engine.Engine - INFO - SELECT shared_fields.id AS shared_fields_id, shared_fields.template_set_id AS shared_fields_template_set_id, shared_fields.field_name AS shared_fields_field_name, shared_fields.field_label AS shared_fields_field_label, shared_fields.field_type AS shared_fields_field_type, shared_fields.field_order AS shared_fields_field_order, shared_fields.is_required AS shared_fields_is_required, shared_fields.default_value AS shared_fields_default_value, shared_fields.created_at AS shared_fields_created_at 
+FROM shared_fields 
+WHERE shared_fields.template_set_id = %(template_set_id_1)s ORDER BY shared_fields.field_order
+2026-06-04 01:33:32,600 - sqlalchemy.engine.Engine - INFO - [cached since 1292s ago] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551'}
+2026-06-04 01:33:32,601 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551 - Status: 200 - Time: 0.008s
+2026-06-04 01:33:32,602 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:34:10,765 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-04 01:34:10,768 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:34:10,768 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.is_deleted = false ORDER BY templates.created_at DESC 
+ LIMIT %(param_1)s OFFSET %(param_2)s
+2026-06-04 01:34:10,768 - sqlalchemy.engine.Engine - INFO - [cached since 1317s ago] {'param_1': 100, 'param_2': 0}
+2026-06-04 01:34:10 | INFO     | app.services.template_manager | 📊 Retrieved 12 templates from DATABASE
+2026-06-04 01:34:10,770 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.005s
+2026-06-04 01:34:10,772 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:34:12,219 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-04 01:34:12,220 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:34:12,220 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.is_deleted = false ORDER BY templates.created_at DESC 
+ LIMIT %(param_1)s OFFSET %(param_2)s
+2026-06-04 01:34:12,220 - sqlalchemy.engine.Engine - INFO - [cached since 1318s ago] {'param_1': 100, 'param_2': 0}
+2026-06-04 01:34:12 | INFO     | app.services.template_manager | 📊 Retrieved 12 templates from DATABASE
+2026-06-04 01:34:12,222 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.003s
+2026-06-04 01:34:12,222 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:34:15,591 - app.middleware.logging - INFO - Request: GET /api/v1/templates/ from 127.0.0.1
+2026-06-04 01:34:15,594 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:34:15,594 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.is_deleted = false ORDER BY templates.created_at DESC 
+ LIMIT %(param_1)s OFFSET %(param_2)s
+2026-06-04 01:34:15,594 - sqlalchemy.engine.Engine - INFO - [cached since 1322s ago] {'param_1': 100, 'param_2': 0}
+2026-06-04 01:34:15 | INFO     | app.services.template_manager | 📊 Retrieved 12 templates from DATABASE
+2026-06-04 01:34:15,602 - app.middleware.logging - INFO - Response: GET /api/v1/templates/ - Status: 200 - Time: 0.011s
+2026-06-04 01:34:15,602 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:34:16,189 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/ from 127.0.0.1
+2026-06-04 01:34:16,191 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:34:16,191 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.is_deleted = false ORDER BY template_sets.created_at DESC 
+ LIMIT %(param_1)s OFFSET %(param_2)s
+2026-06-04 01:34:16,191 - sqlalchemy.engine.Engine - INFO - [cached since 1340s ago] {'param_1': 100, 'param_2': 0}
+2026-06-04 01:34:16,193 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/ - Status: 200 - Time: 0.004s
+2026-06-04 01:34:16,194 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:35:53,566 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551 from 127.0.0.1
+2026-06-04 01:35:53,568 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:35:53,569 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.id = %(id_1)s AND template_sets.is_deleted = false 
+ LIMIT %(param_1)s
+2026-06-04 01:35:53,569 - sqlalchemy.engine.Engine - INFO - [cached since 1433s ago] {'id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551', 'param_1': 1}
+2026-06-04 01:35:53,570 - sqlalchemy.engine.Engine - INFO - SELECT template_set_members.template_set_id AS template_set_members_template_set_id, template_set_members.template_id AS template_set_members_template_id, template_set_members.order_index AS template_set_members_order_index 
+FROM template_set_members 
+WHERE template_set_members.template_set_id = %(template_set_id_1)s ORDER BY template_set_members.order_index
+2026-06-04 01:35:53,571 - sqlalchemy.engine.Engine - INFO - [cached since 1433s ago] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551'}
+2026-06-04 01:35:53,572 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.id IN (%(id_1_1)s, %(id_1_2)s) AND templates.is_deleted = false
+2026-06-04 01:35:53,572 - sqlalchemy.engine.Engine - INFO - [cached since 1433s ago] {'id_1_1': '204d80d4-2f5d-4494-b625-162cb2dd806b', 'id_1_2': 'e54f548a-5fbc-48b3-84d0-c5ad13c7cf6c'}
+2026-06-04 01:35:53,574 - sqlalchemy.engine.Engine - INFO - SELECT shared_fields.id AS shared_fields_id, shared_fields.template_set_id AS shared_fields_template_set_id, shared_fields.field_name AS shared_fields_field_name, shared_fields.field_label AS shared_fields_field_label, shared_fields.field_type AS shared_fields_field_type, shared_fields.field_order AS shared_fields_field_order, shared_fields.is_required AS shared_fields_is_required, shared_fields.default_value AS shared_fields_default_value, shared_fields.created_at AS shared_fields_created_at 
+FROM shared_fields 
+WHERE shared_fields.template_set_id = %(template_set_id_1)s ORDER BY shared_fields.field_order
+2026-06-04 01:35:53,574 - sqlalchemy.engine.Engine - INFO - [cached since 1433s ago] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551'}
+2026-06-04 01:35:53,576 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551 - Status: 200 - Time: 0.010s
+2026-06-04 01:35:53,577 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-04 01:40:15,753 - app.middleware.logging - INFO - Request: GET /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551 from 127.0.0.1
+2026-06-04 01:40:15,770 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-04 01:40:15,770 - sqlalchemy.engine.Engine - INFO - SELECT template_sets.id AS template_sets_id, template_sets.name AS template_sets_name, template_sets.description AS template_sets_description, template_sets.created_at AS template_sets_created_at, template_sets.updated_at AS template_sets_updated_at, template_sets.is_deleted AS template_sets_is_deleted 
+FROM template_sets 
+WHERE template_sets.id = %(id_1)s AND template_sets.is_deleted = false 
+ LIMIT %(param_1)s
+2026-06-04 01:40:15,771 - sqlalchemy.engine.Engine - INFO - [cached since 1695s ago] {'id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551', 'param_1': 1}
+2026-06-04 01:40:15,772 - sqlalchemy.engine.Engine - INFO - SELECT template_set_members.template_set_id AS template_set_members_template_set_id, template_set_members.template_id AS template_set_members_template_id, template_set_members.order_index AS template_set_members_order_index 
+FROM template_set_members 
+WHERE template_set_members.template_set_id = %(template_set_id_1)s ORDER BY template_set_members.order_index
+2026-06-04 01:40:15,772 - sqlalchemy.engine.Engine - INFO - [cached since 1695s ago] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551'}
+2026-06-04 01:40:15,789 - sqlalchemy.engine.Engine - INFO - SELECT templates.id AS templates_id, templates.filename AS templates_filename, templates.original_filename AS templates_original_filename, templates.file_path AS templates_file_path, templates.placeholders AS templates_placeholders, templates.placeholder_count AS templates_placeholder_count, templates.created_at AS templates_created_at, templates.updated_at AS templates_updated_at, templates.is_deleted AS templates_is_deleted 
+FROM templates 
+WHERE templates.id IN (%(id_1_1)s, %(id_1_2)s) AND templates.is_deleted = false
+2026-06-04 01:40:15,789 - sqlalchemy.engine.Engine - INFO - [cached since 1696s ago] {'id_1_1': '204d80d4-2f5d-4494-b625-162cb2dd806b', 'id_1_2': 'e54f548a-5fbc-48b3-84d0-c5ad13c7cf6c'}
+2026-06-04 01:40:15,790 - sqlalchemy.engine.Engine - INFO - SELECT shared_fields.id AS shared_fields_id, shared_fields.template_set_id AS shared_fields_template_set_id, shared_fields.field_name AS shared_fields_field_name, shared_fields.field_label AS shared_fields_field_label, shared_fields.field_type AS shared_fields_field_type, shared_fields.field_order AS shared_fields_field_order, shared_fields.is_required AS shared_fields_is_required, shared_fields.default_value AS shared_fields_default_value, shared_fields.created_at AS shared_fields_created_at 
+FROM shared_fields 
+WHERE shared_fields.template_set_id = %(template_set_id_1)s ORDER BY shared_fields.field_order
+2026-06-04 01:40:15,790 - sqlalchemy.engine.Engine - INFO - [cached since 1696s ago] {'template_set_id_1': '1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551'}
+2026-06-04 01:40:15,791 - app.middleware.logging - INFO - Response: GET /api/v1/template-sets/1e7c73d8-2ea1-4076-9b91-7dd2c2b2a551 - Status: 200 - Time: 0.038s
+2026-06-04 01:40:15,791 - sqlalchemy.engine.Engine - INFO - COMMIT
