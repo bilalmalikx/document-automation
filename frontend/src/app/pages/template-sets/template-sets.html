@@ -1,6 +1,5 @@
 <div class="template-sets-dashboard">
 
-  
   <!-- Header -->
   <div class="dashboard-header">
     <div>
@@ -16,7 +15,7 @@
     </button>
   </div>
 
-  <!-- Stats -->
+  <!-- Stats - 3 cards: Template Sets, Total Templates, Total Placeholders -->
   <div class="stats-grid">
     <div class="stat-card">
       <div class="stat-icon">📁</div>
@@ -30,13 +29,8 @@
     </div>
     <div class="stat-card">
       <div class="stat-icon">🔖</div>
-      <div class="stat-value">{{ totalSharedFields }}</div>
-      <div class="stat-label">Shared Fields</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon">📊</div>
-      <div class="stat-value">{{ totalGeneratedCases }}</div>
-      <div class="stat-label">Generated Cases</div>
+      <div class="stat-value">{{ totalPlaceholders }}</div>
+      <div class="stat-label">Total Placeholders</div>
     </div>
   </div>
 
@@ -92,16 +86,12 @@
           </div>
           <div class="card-stats">
             <div class="stat-item">
-              <span class="stat-number">8</span>
+              <span class="stat-number">{{ getTemplateCountForSet(set.id) }}</span>
               <span class="stat-label-sm">templates</span>
             </div>
             <div class="stat-item">
-              <span class="stat-number">35</span>
-              <span class="stat-label-sm">shared fields</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-number">234</span>
-              <span class="stat-label-sm">generated</span>
+              <span class="stat-number">{{ getPlaceholderCountForSet(set.id) }}</span>
+              <span class="stat-label-sm">placeholders</span>
             </div>
           </div>
           <div class="card-footer">

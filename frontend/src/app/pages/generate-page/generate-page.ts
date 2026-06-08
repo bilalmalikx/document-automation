@@ -1,23 +1,32 @@
-import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
-import { TemplateService } from '../../services/template';
+import { TemplateService, Template } from '../../services/template';
 import { GenerateService } from '../../services/generate';
-import { Template } from '../../models/template.model';
 import { renderAsync } from 'docx-preview';
+import { TemplateSetGenerationService, TemplateSetGroup } from '../../services/TemplateSetGenerationService';
 
 @Component({
   selector: 'app-generate-page',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterModule],
   templateUrl: './generate-page.html',
   styleUrls: ['./generate-page.css']
 })
 export class GeneratePage implements OnInit {
   @ViewChild('docxPreviewContainer') docxPreviewContainer!: ElementRef;
   
+  // Template Set Groups
+  templateSetGroups: TemplateSetGroup[] = [];
+  isLoadingGroups = true;
+  
+  // Selection state
+  selectedSetId: string | null = null;
+  selectedTemplates: Template[] = [];
+  
+  // Generation state
   step = 1;
   instruction = '';
   previewData: Record<string, string> = {};
@@ -32,15 +41,8 @@ export class GeneratePage implements OnInit {
   previewError = '';
   currentPreviewBlob: Blob | null = null;
   
-  multiplePreviewData: Array<{ templateId: string, templateName: string, placeholders: Record<string, string> }> = [];
-  isPreviewingMultiple = false;
-  
   manualValues: Record<string, string> = {};
   showManualForm = false;
-  multiManualValues: Record<string, Record<string, string>> = {};
-  
-  // Combined placeholders for all templates (one section)
-  allPlaceholders: Record<string, string> = {};
   
   private previewTimeout: any = null;
 
@@ -57,12 +59,8 @@ export class GeneratePage implements OnInit {
     return Object.entries(this.previewData).map(([key, value]) => ({ key, value }));
   }
 
-  getManualValuesCount(): number {
-    return Object.keys(this.manualValues).length;
-  }
-
   getFilledManualValuesCount(): number {
-    return Object.keys(this.manualValues).filter(k => this.manualValues[k]).length;
+    return Object.keys(this.manualValues).filter(k => this.manualValues[k] && this.manualValues[k].trim()).length;
   }
 
   getManualValuesEntries(): Array<{key: string, value: string}> {
@@ -73,8 +71,15 @@ export class GeneratePage implements OnInit {
     return Object.keys(this.manualValues).length > 0;
   }
 
-  getPlaceholderCount(placeholders: Record<string, string>): number {
-    return Object.keys(placeholders).length;
+  // Get all unique placeholders from selected templates
+  getAllPlaceholdersFromSelected(): string[] {
+    const placeholdersSet = new Set<string>();
+    for (const template of this.selectedTemplates) {
+      for (const ph of template.placeholders) {
+        placeholdersSet.add(ph);
+      }
+    }
+    return Array.from(placeholdersSet);
   }
 
   getPlaceholderLabel(placeholder: string): string {
@@ -85,211 +90,136 @@ export class GeneratePage implements OnInit {
       .join(' ');
   }
 
-  // Get ALL placeholders combined from ALL selected templates
-  getAllCombinedPlaceholders(): string[] {
-    const templates = this.templateService.selectedTemplates();
-    if (templates.length === 0) return [];
-    
-    const combined = new Set<string>();
-    for (const template of templates) {
-      for (const ph of template.placeholders) {
-        combined.add(ph);
-      }
-    }
-    return Array.from(combined);
-  }
-
-  // Get value for a placeholder (from any template)
-  getCombinedValue(placeholder: string): string {
-    const templates = this.templateService.selectedTemplates();
-    for (const template of templates) {
-      const val = this.multiManualValues[template.id]?.[placeholder];
-      if (val) return val;
-    }
-    return this.manualValues[placeholder] || '';
-  }
-
-  // Update value for ALL templates (applies to all)
-  updateCombinedValue(placeholder: string, event: any): void {
-    const value = event.target.value;
-    const templates = this.templateService.selectedTemplates();
-    
-    // Update for all templates
-    for (const template of templates) {
-      if (!this.multiManualValues[template.id]) {
-        this.multiManualValues[template.id] = {};
-      }
-      this.multiManualValues[template.id][placeholder] = value;
-    }
-    
-    // Also update single mode values
-    this.manualValues[placeholder] = value;
-    this.previewData[placeholder] = value;
-    
-    this.cdr.detectChanges();
-    
-    // Debounced preview update
-    if (this.previewTimeout) clearTimeout(this.previewTimeout);
-    this.previewTimeout = setTimeout(() => {
-      this.renderAllDocumentPreviews();
-    }, 500);
-  }
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private sanitizer: DomSanitizer,
     private cdr: ChangeDetectorRef,
-    public templateService: TemplateService,
-    private generateService: GenerateService
+    private templateSetGenService: TemplateSetGenerationService,
+    private generateService: GenerateService,
+    private templateService: TemplateService
   ) {}
 
-  ngOnInit() {
-    this.templateService.loadTemplates();
-    const templateId = this.route.snapshot.queryParamMap.get('templateId');
-    const savedInstruction = this.route.snapshot.queryParamMap.get('instruction');
-    if (templateId) {
-      const template = this.templateService.getTemplate(templateId);
-      if (template) {
-        this.templateService.toggleSelection(template);
-        this.step = 2;
+  async ngOnInit() {
+    await this.loadTemplateSets();
+  }
+
+  async loadTemplateSets() {
+    this.isLoadingGroups = true;
+    this.templateSetGroups = await this.templateSetGenService.loadAllTemplateSetsWithTemplates();
+    this.isLoadingGroups = false;
+    this.cdr.detectChanges();
+  }
+
+  toggleSetExpansion(setId: string): void {
+    const group = this.templateSetGroups.find(g => g.id === setId);
+    if (group) {
+      group.isExpanded = !group.isExpanded;
+    }
+    this.cdr.detectChanges();
+  }
+
+  toggleTemplateSelection(template: Template, setId: string): void {
+    const group = this.templateSetGroups.find(g => g.id === setId);
+    if (!group) return;
+    
+    const index = group.selectedTemplateIds.indexOf(template.id);
+    if (index === -1) {
+      group.selectedTemplateIds.push(template.id);
+    } else {
+      group.selectedTemplateIds.splice(index, 1);
+    }
+    
+    // Update overall selected templates
+    this.updateSelectedTemplates();
+    
+    // Auto-expand the set if templates are selected
+    if (group.selectedTemplateIds.length > 0) {
+      group.isExpanded = true;
+    }
+    
+    this.cdr.detectChanges();
+  }
+
+  isTemplateSelected(templateId: string, setId: string): boolean {
+    const group = this.templateSetGroups.find(g => g.id === setId);
+    return group?.selectedTemplateIds.includes(templateId) || false;
+  }
+
+  getSetSelectedCount(setId: string): number {
+    const group = this.templateSetGroups.find(g => g.id === setId);
+    return group?.selectedTemplateIds.length || 0;
+  }
+
+  updateSelectedTemplates(): void {
+    const allSelected: Template[] = [];
+    for (const group of this.templateSetGroups) {
+      for (const templateId of group.selectedTemplateIds) {
+        const template = group.templates.find(t => t.id === templateId);
+        if (template) {
+          allSelected.push(template);
+        }
       }
     }
-    if (savedInstruction) {
-      this.instruction = savedInstruction;
-    }
-  }
-
-  toggleTemplateSelection(template: Template): void {
-    this.templateService.toggleSelection(template);
-    this.resetState();
+    this.selectedTemplates = allSelected;
+    this.resetGenerationState();
     this.cdr.detectChanges();
   }
 
-  clearTemplateSelection(): void {
-    this.templateService.clearSelection();
-    this.resetState();
-    this.cdr.detectChanges();
+  getTotalSelectedCount(): number {
+    return this.selectedTemplates.length;
+  }
+
+  isMultipleSelected(): boolean {
+    return this.selectedTemplates.length > 1;
+  }
+
+  hasSelection(): boolean {
+    return this.selectedTemplates.length > 0;
+  }
+
+  getFirstSelected(): Template | null {
+    return this.selectedTemplates.length > 0 ? this.selectedTemplates[0] : null;
   }
 
   goToStep2() {
-    if (this.templateService.hasSelection()) {
+    if (this.hasSelection()) {
       this.step = 2;
-      this.resetState();
+      this.resetGenerationState();
       this.cdr.detectChanges();
     }
   }
 
   goToStep1() {
     this.step = 1;
-    this.resetState();
+    this.resetGenerationState();
     this.cdr.detectChanges();
   }
 
-  resetState() {
+  resetGenerationState() {
     this.showDocumentPreview = false;
     this.previewData = {};
-    this.multiplePreviewData = [];
     this.generatedBlob = null;
     this.currentPreviewBlob = null;
     this.previewError = '';
     this.manualValues = {};
-    this.multiManualValues = {};
     this.showManualForm = false;
-    this.allPlaceholders = {};
+    this.instruction = '';
     if (this.docxPreviewContainer) {
       this.docxPreviewContainer.nativeElement.innerHTML = '';
     }
     this.cdr.detectChanges();
   }
 
-  async renderAllDocumentPreviews(): Promise<void> {
-    const templates = this.templateService.selectedTemplates();
-    if (templates.length === 0) return;
-    
-    const allPreviewsContainer = document.getElementById('all-previews-container');
-    if (!allPreviewsContainer) return;
-    
-    allPreviewsContainer.innerHTML = '';
-    
-    // Use a Set to track rendered templates (prevent duplicates)
-    const renderedIds = new Set<string>();
-    
-    for (const template of templates) {
-      if (renderedIds.has(template.id)) continue;
-      renderedIds.add(template.id);
-      
-      // Build instruction from ALL values
-      const allValues: Record<string, string> = {};
-      const combinedPlaceholders = this.getAllCombinedPlaceholders();
-      
-      for (const ph of combinedPlaceholders) {
-        const val = this.getCombinedValue(ph);
-        if (val) allValues[ph] = val;
-      }
-      
-      const parts = [];
-      for (const [key, value] of Object.entries(allValues)) {
-        if (value) {
-          parts.push(`${key.replace(/_/g, ' ')} is ${value}`);
-        }
-      }
-      
-      let finalInstruction = parts.length > 0 ? parts.join(', ') : this.instruction;
-      if (!finalInstruction.trim()) continue;
-      
-      try {
-        const blob = await this.generateService.generate(finalInstruction, template.id);
-        const previewCard = document.createElement('div');
-        previewCard.className = 'multi-preview-card-item';
-        previewCard.innerHTML = `
-          <div class="preview-card-header">
-            <div class="preview-card-title">
-              <span>📄</span>
-              <span>${this.escapeHtml(template.filename)}</span>
-            </div>
-            <span class="preview-card-badge">${template.placeholder_count} placeholders</span>
-          </div>
-          <div class="preview-card-body">
-            <div class="docx-preview-inline" data-id="${template.id}"></div>
-          </div>
-        `;
-        allPreviewsContainer.appendChild(previewCard);
-        
-        const inlineContainer = previewCard.querySelector(`.docx-preview-inline[data-id="${template.id}"]`) as HTMLElement;
-        if (inlineContainer) {
-          await renderAsync(blob, inlineContainer, undefined, {
-            className: 'docx-preview-wrapper',
-            inWrapper: true,
-            breakPages: true,
-            renderHeaders: true,
-            renderFooters: true
-          });
-        }
-      } catch (err) {
-        console.error(`Error rendering preview:`, err);
-      }
-    }
-  }
-
-  escapeHtml(str: string): string {
-    return str.replace(/[&<>]/g, function(m) {
-      if (m === '&') return '&amp;';
-      if (m === '<') return '&lt;';
-      if (m === '>') return '&gt;';
-      return m;
-    });
-  }
-
   async updateLiveDocumentPreview(): Promise<void> {
-    const selectedTemplate = this.templateService.getFirstSelected();
+    const selectedTemplate = this.getFirstSelected();
     if (!selectedTemplate) return;
     
     let finalInstruction = '';
     if (this.hasManualValues()) {
       const manualParts = [];
       for (const [key, value] of Object.entries(this.manualValues)) {
-        if (value) {
+        if (value && value.trim()) {
           manualParts.push(`${key.replace(/_/g, ' ')} is ${value}`);
         }
       }
@@ -356,16 +286,14 @@ export class GeneratePage implements OnInit {
     
     if (this.previewTimeout) clearTimeout(this.previewTimeout);
     this.previewTimeout = setTimeout(() => {
-      if (this.templateService.isMultipleSelected()) {
-        this.renderAllDocumentPreviews();
-      } else {
+      if (!this.isMultipleSelected()) {
         this.updateLiveDocumentPreview();
       }
     }, 500);
   }
 
   async extractValuesWithAI() {
-    const selectedTemplate = this.templateService.getFirstSelected();
+    const selectedTemplate = this.getFirstSelected();
     if (!selectedTemplate || !this.instruction.trim()) return;
     
     this.isPreviewing = true;
@@ -377,20 +305,7 @@ export class GeneratePage implements OnInit {
       this.manualValues = { ...this.previewData };
       this.showManualForm = true;
       this.cdr.detectChanges();
-      
-      // Also update multi values
-      const templates = this.templateService.selectedTemplates();
-      for (const template of templates) {
-        if (!this.multiManualValues[template.id]) {
-          this.multiManualValues[template.id] = {};
-        }
-        for (const [key, value] of Object.entries(this.previewData)) {
-          this.multiManualValues[template.id][key] = value;
-        }
-      }
-      
       await this.updateLiveDocumentPreview();
-      
     } catch (err) {
       console.error(err);
     } finally {
@@ -399,55 +314,15 @@ export class GeneratePage implements OnInit {
     }
   }
 
-  async previewMultipleTemplates(): Promise<void> {
-    this.isPreviewingMultiple = true;
-    this.cdr.detectChanges();
-    
-    try {
-      const templates = this.templateService.selectedTemplates();
-      const previewResults = [];
-      
-      for (const template of templates) {
-        const manualVals = this.multiManualValues[template.id] || {};
-        let mappedValues: Record<string, string> = {};
-        
-        if (this.instruction.trim()) {
-          const result = await this.generateService.preview(this.instruction, template.id);
-          mappedValues = result.mapped_values;
-        }
-        
-        if (manualVals) {
-          mappedValues = { ...mappedValues, ...manualVals };
-        }
-        
-        previewResults.push({
-          templateId: template.id,
-          templateName: template.filename,
-          placeholders: mappedValues
-        });
-      }
-      
-      this.multiplePreviewData = previewResults;
-      this.cdr.detectChanges();
-      await this.renderAllDocumentPreviews();
-      
-    } catch (err) {
-      console.error('Preview error:', err);
-    } finally {
-      this.isPreviewingMultiple = false;
-      this.cdr.detectChanges();
-    }
-  }
-
   async downloadDocument() {
-    const selectedTemplate = this.templateService.getFirstSelected();
+    const selectedTemplate = this.getFirstSelected();
     if (!selectedTemplate) return;
     
     let finalInstruction = this.instruction;
     if (this.hasManualValues() && !finalInstruction.trim()) {
       const manualParts = [];
       for (const [key, value] of Object.entries(this.manualValues)) {
-        if (value) {
+        if (value && value.trim()) {
           manualParts.push(`${key.replace(/_/g, ' ')} is ${value}`);
         }
       }
@@ -472,7 +347,6 @@ export class GeneratePage implements OnInit {
       a.download = `generated_${selectedTemplate.filename}`;
       a.click();
       URL.revokeObjectURL(url);
-      
     } catch (err) {
       alert('Failed to download document.');
     } finally {
@@ -482,7 +356,7 @@ export class GeneratePage implements OnInit {
   }
 
   async bulkGenerateAndPreview() {
-    if (!this.instruction.trim() && !Object.keys(this.multiManualValues).length) {
+    if (!this.instruction.trim() && !this.hasManualValues()) {
       alert('Select templates and enter instruction or fill manual values');
       return;
     }
@@ -490,22 +364,18 @@ export class GeneratePage implements OnInit {
     this.isGeneratingBulk = true;
     
     try {
-      const templateIds = this.templateService.getSelectedIds();
+      const templateIds = this.selectedTemplates.map(t => t.id);
       let finalInstruction = this.instruction;
       
-      if (!finalInstruction.trim() && Object.keys(this.multiManualValues).length > 0) {
-        const firstTemplateId = templateIds[0];
-        const manualVals = this.multiManualValues[firstTemplateId];
-        if (manualVals) {
-          const manualParts = [];
-          for (const [key, value] of Object.entries(manualVals)) {
-            if (value) {
-              manualParts.push(`${key.replace(/_/g, ' ')} is ${value}`);
-            }
+      if (!finalInstruction.trim() && this.hasManualValues()) {
+        const manualParts = [];
+        for (const [key, value] of Object.entries(this.manualValues)) {
+          if (value && value.trim()) {
+            manualParts.push(`${key.replace(/_/g, ' ')} is ${value}`);
           }
-          if (manualParts.length > 0) {
-            finalInstruction = manualParts.join(', ');
-          }
+        }
+        if (manualParts.length > 0) {
+          finalInstruction = manualParts.join(', ');
         }
       }
       
@@ -526,11 +396,11 @@ export class GeneratePage implements OnInit {
   }
 
   downloadFromPreview() {
-    if (this.currentPreviewBlob && this.templateService.getFirstSelected()) {
+    if (this.currentPreviewBlob && this.getFirstSelected()) {
       const url = URL.createObjectURL(this.currentPreviewBlob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `generated_${this.templateService.getFirstSelected()!.filename}`;
+      a.download = `generated_${this.getFirstSelected()!.filename}`;
       a.click();
       URL.revokeObjectURL(url);
     }

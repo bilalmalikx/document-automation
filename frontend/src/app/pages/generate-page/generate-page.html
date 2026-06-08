@@ -1,69 +1,123 @@
 <div class="page-header">
   <div>
     <h1 class="page-title">Generate Document</h1>
-    <p class="page-subtitle">Select template, fill values - document preview updates automatically</p>
+    <p class="page-subtitle">Select a Template Set, then choose templates to generate documents</p>
   </div>
 </div>
 
 <div class="wizard-steps">
   <div class="wizard-step" [class.active]="step === 1" [class.done]="step > 1" (click)="goToStep1()">
     <div class="wizard-step-num">{{ step > 1 ? '✓' : '1' }}</div>
-    <span>Select Template</span>
+    <span>Select Template Set & Templates</span>
   </div>
-  <div class="wizard-step" [class.active]="step === 2" (click)="templateService.hasSelection() && goToStep2()">
+  <div class="wizard-step" [class.active]="step === 2" (click)="hasSelection() && goToStep2()">
     <div class="wizard-step-num">2</div>
     <span>Generate Document</span>
   </div>
 </div>
 
-<!-- Step 1: Select Template -->
+<!-- Step 1: Select Template Set and Templates -->
 @if (step === 1) {
   <div class="card">
     <div class="section-title">
-      Choose Template(s)
-      @if (templateService.getSelectedCount() > 0) {
-        <span class="selection-badge">{{ templateService.getSelectedCount() }} selected</span>
-      }
-    </div>
-    <div class="template-select-grid">
-      @for (t of templateService.templates(); track t.id) {
-        <div class="tsg-item" [class.selected]="templateService.isSelected(t.id)" (click)="toggleTemplateSelection(t)">
-          <div class="tsg-icon">📄</div>
-          <div class="tsg-name">{{ t.filename }}</div>
-          <div class="tsg-info">{{ t.placeholder_count }} placeholders</div>
-          @if (templateService.isSelected(t.id)) {
-            <div class="check-mark">✓</div>
-          }
-        </div>
-      }
-      @if (templateService.templates().length === 0) {
-        <div class="empty-state">
-          <div class="empty-icon">📄</div>
-          <div class="empty-title">No templates found</div>
-          <button class="btn btn-primary" routerLink="/templates">Upload Template</button>
-        </div>
+      Choose Template Set & Templates
+      @if (getTotalSelectedCount() > 0) {
+        <span class="selection-badge">{{ getTotalSelectedCount() }} template(s) selected</span>
       }
     </div>
     
-    @if (templateService.getSelectedCount() > 0) {
+    @if (isLoadingGroups) {
+      <div class="loading-placeholder">
+        <div class="spinner"></div>
+        <p>Loading template sets...</p>
+      </div>
+    } @else if (templateSetGroups.length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">📁</div>
+        <div class="empty-title">No Template Sets found</div>
+        <p class="empty-desc">Create a Template Set first and upload templates to it</p>
+        <button class="btn btn-primary" [routerLink]="['/template-sets']">Create Template Set</button>
+      </div>
+    } @else {
+      <!-- Template Sets Accordion -->
+      <div class="template-sets-accordion">
+        @for (group of templateSetGroups; track group.id) {
+          <div class="template-set-group" [class.expanded]="group.isExpanded">
+            <div class="set-header" (click)="toggleSetExpansion(group.id)">
+              <div class="set-header-left">
+                <div class="expand-icon">{{ group.isExpanded ? '▼' : '▶' }}</div>
+                <div class="set-icon">📁</div>
+                <div class="set-info">
+                  <div class="set-name">{{ group.name }}</div>
+                  <div class="set-meta">
+                    <span class="set-templates-count">{{ group.templates.length }} templates</span>
+                    @if (getSetSelectedCount(group.id) > 0) {
+                      <span class="set-selected-badge">{{ getSetSelectedCount(group.id) }} selected</span>
+                    }
+                  </div>
+                </div>
+              </div>
+              <div class="set-header-right">
+                @if (group.description) {
+                  <span class="set-description-preview">{{ group.description | slice:0:50 }}...</span>
+                }
+              </div>
+            </div>
+            
+            @if (group.isExpanded) {
+              <div class="set-templates">
+                <div class="templates-grid">
+                  @for (template of group.templates; track template.id) {
+                    <div class="tsg-item" 
+                         [class.selected]="isTemplateSelected(template.id, group.id)"
+                         (click)="toggleTemplateSelection(template, group.id)">
+                      <div class="tsg-icon">📄</div>
+                      <div class="tsg-name">{{ template.filename }}</div>
+                      <div class="tsg-info">{{ template.placeholder_count }} placeholders</div>
+                      @if (isTemplateSelected(template.id, group.id)) {
+                        <div class="check-mark">✓</div>
+                      }
+                    </div>
+                  }
+                </div>
+                @if (group.templates.length === 0) {
+                  <div class="empty-templates-in-set">
+                    <p>No templates in this set yet</p>
+                    <button class="btn-sm btn-outline" [routerLink]="['/template-sets', group.id]">Upload Template</button>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+    
+    @if (hasSelection()) {
       <div class="selected-info">
-        <span class="selected-count">📋 {{ templateService.getSelectedCount() }} template(s) selected</span>
-        <button class="btn btn-sm btn-outline" (click)="clearTemplateSelection()">Clear All</button>
+        <span class="selected-count">📋 {{ getTotalSelectedCount() }} template(s) selected</span>
+        <div class="selected-templates-list">
+          @for (template of selectedTemplates; track template.id) {
+            <span class="selected-badge">{{ template.filename }}</span>
+          }
+        </div>
       </div>
     }
     
     <div class="step-actions">
-      <button class="btn btn-primary" [disabled]="!templateService.hasSelection()" (click)="goToStep2()">Next →</button>
+      <button class="btn btn-primary" [disabled]="!hasSelection()" (click)="goToStep2()">
+        Next → Generate Documents
+      </button>
     </div>
   </div>
 }
 
-<!-- Step 2: Generate -->
-@if (step === 2 && templateService.hasSelection()) {
+<!-- Step 2: Generate Document -->
+@if (step === 2 && hasSelection()) {
   
   <!-- SINGLE TEMPLATE SELECTED -->
-  @if (!templateService.isMultipleSelected()) {
-    @let selectedTemplate = templateService.getFirstSelected();
+  @if (!isMultipleSelected()) {
+    @let selectedTemplate = getFirstSelected();
     
     <div class="single-template-layout">
       <div class="left-column">
@@ -92,7 +146,7 @@
           
           @if (hasManualValues()) {
             <div class="form-footer">
-              <span class="status-badge">✅ {{ getFilledManualValuesCount() }} of {{ getManualValuesCount() }} values filled</span>
+              <span class="status-badge">✅ {{ getFilledManualValuesCount() }} of {{ getAllPlaceholdersFromSelected().length }} values filled</span>
             </div>
           }
         </div>
@@ -141,7 +195,7 @@
                       <tr [class.empty-value]="!item.value">
                         <td class="key-cell">{{ getPlaceholderLabel(item.key) }}</td>
                         <td class="value-cell">{{ item.value || '—' }}</td>
-                      </tr>
+                       </tr>
                     }
                   }
                 </tbody>
@@ -191,14 +245,14 @@
     </div>
   }
   
-  <!-- MULTIPLE TEMPLATES SELECTED - ONE COMBINED SECTION -->
-  @if (templateService.isMultipleSelected()) {
+  <!-- MULTIPLE TEMPLATES SELECTED -->
+  @if (isMultipleSelected()) {
     <div class="bulk-mode-container">
       <div class="bulk-header">
         <div class="bulk-icon">📦</div>
         <div class="bulk-info">
           <h3>Bulk Generation Mode</h3>
-          <p>You have selected <strong>{{ templateService.getSelectedCount() }}</strong> templates.</p>
+          <p>You have selected <strong>{{ getTotalSelectedCount() }}</strong> templates from your Template Sets</p>
         </div>
         <button class="btn btn-sm btn-outline" (click)="goToStep1()">← Change Selection</button>
       </div>
@@ -209,31 +263,27 @@
           placeholder="Example: 'Company is Acme Corp, director is John Smith, date is 2025-01-15'"></textarea>
         <div class="instruction-footer">
           <span class="token-counter">~{{ tokenCount }} tokens</span>
-          <button class="btn btn-primary" (click)="previewMultipleTemplates()" [disabled]="isPreviewingMultiple">
-            @if (isPreviewingMultiple) { <span class="spinner"></span> Previewing... } 
-            @else { 🔍 Preview All Templates }
-          </button>
         </div>
       </div>
       
       <!-- ONE COMBINED SECTION - ALL PLACEHOLDERS TOGETHER -->
       <div class="card combined-section">
         <div class="section-title">
-          ✏️ Edit Placeholder Values (Applies to all templates)
-          <span class="combined-badge">{{ getAllCombinedPlaceholders().length }} total placeholders</span>
+          ✏️ Edit Placeholder Values (Applies to all selected templates)
+          <span class="combined-badge">{{ getAllPlaceholdersFromSelected().length }} total placeholders</span>
         </div>
         <p class="form-hint">Values entered here apply to ALL selected templates</p>
         
         <div class="combined-fields-grid">
-          @for (p of getAllCombinedPlaceholders(); track p) {
+          @for (p of getAllPlaceholdersFromSelected(); track p) {
             <div class="combined-field">
               <label class="combined-field-label">{{ getPlaceholderLabel(p) }}</label>
               <input 
                 type="text" 
                 class="combined-field-input" 
                 [placeholder]="'Enter ' + getPlaceholderLabel(p)"
-                [value]="getCombinedValue(p)"
-                (input)="updateCombinedValue(p, $event)"
+                [value]="manualValues[p] || ''"
+                (input)="updateManualValue(p, $event)"
               />
             </div>
           }
@@ -244,35 +294,16 @@
       <div class="selected-templates-summary">
         <div class="summary-header">
           <span>📋 Selected Templates</span>
-          <span class="summary-count">{{ templateService.getSelectedCount() }} templates</span>
+          <span class="summary-count">{{ getTotalSelectedCount() }} templates</span>
         </div>
         <div class="summary-list">
-          @for (template of templateService.selectedTemplates(); track template.id) {
+          @for (template of selectedTemplates; track template.id) {
             <div class="summary-item">
               <span>📄</span>
               <span>{{ template.filename }}</span>
               <span class="summary-badge">{{ template.placeholder_count }} placeholders</span>
             </div>
           }
-        </div>
-      </div>
-      
-      <!-- ALL DOCUMENTS PREVIEWS -->
-      <div class="all-previews-section">
-        <div class="preview-header">
-          <div class="preview-title">
-            <span class="preview-icon">📄</span>
-            Live Document Previews
-          </div>
-          <div class="preview-buttons">
-            <button class="btn btn-sm btn-success" (click)="bulkGenerateAndPreview()" [disabled]="isGeneratingBulk">
-              @if (isGeneratingBulk) { <span class="spinner"></span> Generating ZIP... } 
-              @else { ⬇️ Download All (ZIP) }
-            </button>
-          </div>
-        </div>
-        <div class="all-previews-scroll">
-          <div id="all-previews-container" class="all-previews-horizontal"></div>
         </div>
       </div>
       

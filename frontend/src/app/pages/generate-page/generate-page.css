@@ -2641,3 +2641,153 @@
         display: none !important;
     }
 }
+
+/* Template Sets Accordion Styles */
+.template-sets-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.template-set-group {
+  background: var(--bg-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.template-set-group:hover {
+  border-color: var(--border-strong);
+}
+
+.set-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  cursor: pointer;
+  background: var(--bg-float);
+  transition: background 0.2s;
+}
+
+.set-header:hover {
+  background: var(--bg-overlay);
+}
+
+.set-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.expand-icon {
+  font-size: 12px;
+  color: var(--tx-muted);
+  width: 20px;
+}
+
+.set-icon {
+  font-size: 24px;
+}
+
+.set-info {
+  flex: 1;
+}
+
+.set-name {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+.set-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 0.7rem;
+  color: var(--tx-muted);
+}
+
+.set-templates-count {
+  background: var(--brand-dim);
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.set-selected-badge {
+  background: var(--green);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.set-header-right {
+  color: var(--tx-secondary);
+  font-size: 0.8rem;
+  max-width: 200px;
+}
+
+.set-description-preview {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.set-templates {
+  padding: 16px;
+  border-top: 1px solid var(--border-subtle);
+  background: var(--bg-raised);
+}
+
+.templates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.empty-templates-in-set {
+  text-align: center;
+  padding: 30px;
+  color: var(--tx-muted);
+}
+
+.empty-templates-in-set p {
+  margin-bottom: 12px;
+}
+
+.loading-placeholder {
+  text-align: center;
+  padding: 40px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border-dim);
+  border-top-color: var(--brand);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Selection badges */
+.selected-templates-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.selected-badge {
+  background: var(--brand-dim);
+  color: var(--brand-light);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}

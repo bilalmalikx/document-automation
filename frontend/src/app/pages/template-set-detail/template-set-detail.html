@@ -21,123 +21,66 @@
     <!-- Header -->
     <div class="detail-header">
       <div class="header-top">
-        <button class="back-button" (click)="goBack()">← Back</button>
-        <button class="generate-button" (click)="generateAll()" [disabled]="!templateSet.templates.length">
-          📦 Generate All Docs (ZIP)
-        </button>
+        <button class="back-button" (click)="goBack()">← Back to Template Sets</button>
       </div>
       <div class="header-info">
         <h1>{{ templateSet.name }}</h1>
-        <p>{{ templateSet.description || 'Multiple templates sharing same field dictionary' }}</p>
+        <p class="description">{{ templateSet.description || 'No description' }}</p>
         <div class="stats-row">
           <div class="stat-card">
             <div class="stat-number">{{ templateSet.templates.length }}</div>
             <div class="stat-label">Templates</div>
           </div>
-          <div class="stat-card">
-            <div class="stat-number">{{ templateSet.shared_fields.length }}</div>
-            <div class="stat-label">Shared Fields</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number">{{ mappedPercentage }}%</div>
-            <div class="stat-label">Mapping Health</div>
-          </div>
         </div>
       </div>
     </div>
 
-    <!-- Two Column Layout (No Preview) -->
-    <div class="content-grid two-col">
-      
-      <!-- COLUMN 1: Templates List -->
-      <div class="content-card">
-        <div class="card-header">
-          <h3>📋 Templates</h3>
-          <button class="upload-trigger" (click)="fileInput.click()">+</button>
-        </div>
-
-        <div class="upload-area" (click)="fileInput.click()">
-          <input type="file" #fileInput accept=".docx" style="display:none" (change)="onFileSelected($event)" />
-          <div class="upload-content">📄 Upload DOCX</div>
-        </div>
-
-        @if (selectedFile) {
-          <div class="upload-panel">
-            <input type="text" [(ngModel)]="templateName" placeholder="Template name" />
-            <button (click)="uploadTemplateToSet()" [disabled]="isUploading">
-              {{ isUploading ? uploadProgress + '%' : 'Upload' }}
-            </button>
-          </div>
-        }
-
-        <div class="templates-list">
-          @for (template of templateSet.templates; track template.id) {
-            <div class="template-item" [class.active]="selectedTemplate?.id === template.id" (click)="selectTemplate(template)">
-              <span>📄</span>
-              <div class="template-info">
-                <div class="template-name">{{ template.filename }}</div>
-                <div class="template-placeholders">{{ template.placeholder_count }} placeholders</div>
-              </div>
-              <button class="delete-btn" (click)="removeTemplate(template.id); $event.stopPropagation()">🗑️</button>
-            </div>
-          }
-        </div>
+    <!-- Templates Management Section -->
+    <div class="content-card">
+      <div class="card-header">
+        <h3>📋 Templates in this Set</h3>
       </div>
 
-      <!-- COLUMN 2: Placeholder Values & Generation -->
-      <div class="content-card">
-        <div class="card-header">
-          <h3>📝 Placeholder Values</h3>
-          @if (selectedTemplate) {
-            <span class="filled-badge">{{ getFilledCount() }}/{{ placeholderEntries.length }} filled</span>
-          }
+      <!-- Upload Area - Direct upload on file select -->
+      <div class="upload-area" (click)="triggerFileInput()">
+        <input type="file" #fileInput id="template-file-input" accept=".docx" style="display:none" (change)="onFileSelectedAndUpload($event)" />
+        <div class="upload-content">📄 Click to upload DOCX template</div>
+        <div class="upload-hint">Supports DOCX files with placeholder syntax using double curly braces</div>
+      </div>
+
+      <!-- Upload Progress (shown when uploading) -->
+      @if (isUploading) {
+        <div class="upload-progress-container">
+          <div class="upload-progress-bar">
+            <div class="upload-progress-fill" [style.width.%]="uploadProgress"></div>
+          </div>
+          <div class="upload-progress-text">{{ uploadProgress }}% Uploading...</div>
         </div>
+      }
 
-        @if (!selectedTemplate) {
-          <div class="empty-state">
-            <div class="empty-icon">📌</div>
-            <p>Select a template from the left</p>
-          </div>
-        } @else {
-          <div class="selected-info">
-            <strong>{{ selectedTemplate.filename }}</strong>
-            <span class="badge">{{ selectedTemplate.placeholder_count }} placeholders</span>
-          </div>
-
-          <!-- AI Instruction Input -->
-          <div class="instruction-section">
-            <textarea 
-              [(ngModel)]="instruction" 
-              placeholder="Describe what to generate...&#10;&#10;Example:&#10;Company name is Acme Corp, CEO is John Doe, Date is 2024-01-15"
-              rows="3">
-            </textarea>
-            <button class="extract-btn" (click)="extractValuesWithAI()" [disabled]="isExtracting || !instruction.trim()">
-              @if (isExtracting) { ⏳ Extracting... } @else { ✨ Extract Values with AI }
-            </button>
-          </div>
-
-          <!-- Manual Values Form -->
-          <div class="manual-form">
-            <div class="form-header">
-              <span>✏️ Edit Values</span>
-              <span class="hint">Values will be used for generation</span>
-            </div>
-            
-            @for (item of placeholderEntries; track item.key) {
-              <div class="placeholder-row">
-                <label>{{ getPlaceholderLabel(item.key) }}</label>
-                <input 
-                  type="text" 
-                  [placeholder]="'Enter ' + getPlaceholderLabel(item.key)"
-                  [value]="item.value"
-                  (input)="updateManualValue(item.key, $event)"
-                />
+      <div class="templates-list">
+        @for (template of templateSet.templates; track template.id) {
+          <div class="template-item" (click)="viewPlaceholders(template)">
+            <div class="template-info">
+              <span class="template-icon">📄</span>
+              <div class="template-details">
+                <div class="template-name">{{ template.filename }}</div>
+                <div class="template-placeholders-count">{{ template.placeholder_count }} placeholders</div>
+                <div class="template-click-hint">🔍 Click to view placeholders</div>
               </div>
-            }
-
-            <button class="generate-btn" (click)="generateAndDownload()" [disabled]="isGenerating || getFilledCount() === 0">
-              @if (isGenerating) { ⏳ Generating... } @else { ⬇️ Generate & Download }
-            </button>
+            </div>
+            <div class="template-actions">
+              <button class="delete-template" (click)="$event.stopPropagation(); removeTemplate(template.id)" title="Remove template">
+                🗑️
+              </button>
+            </div>
+          </div>
+        }
+        @if (templateSet.templates.length === 0 && !isUploading) {
+          <div class="empty-templates">
+            <div class="empty-icon">📂</div>
+            <p>No templates uploaded yet</p>
+            <div class="upload-hint-text">Click the area above to upload your first template</div>
           </div>
         }
       </div>
@@ -145,30 +88,67 @@
   }
 </div>
 
-<!-- Add Field Modal -->
-@if (showAddFieldModal) {
-  <div class="modal-backdrop" (click)="showAddFieldModal = false">
-    <div class="modal" (click)="$event.stopPropagation()">
+<!-- Placeholder Modal - Smooth Animation -->
+@if (showPlaceholderModal && selectedTemplateForPlaceholders) {
+  <div class="modal-backdrop" (click)="closePlaceholderModal()">
+    <div class="modal modal-large modal-animate" (click)="$event.stopPropagation()">
       <div class="modal-header">
-        <h3>Add Shared Field</h3>
-        <button class="close" (click)="showAddFieldModal = false">✕</button>
+        <h3>
+          <span class="modal-icon">📄</span>
+          Placeholders in: {{ selectedTemplateForPlaceholders.filename }}
+        </h3>
+        <button class="modal-close" (click)="closePlaceholderModal()">✕</button>
       </div>
       <div class="modal-body">
-        <input [(ngModel)]="newField.field_name" placeholder="Field name (e.g., company_name)" />
-        <input [(ngModel)]="newField.field_label" placeholder="Field label (e.g., Company Name)" />
-        <select [(ngModel)]="newField.field_type">
-          <option value="text">Text</option>
-          <option value="textarea">Long Text</option>
-          <option value="date">Date</option>
-          <option value="number">Number</option>
-        </select>
-        <label>
-          <input type="checkbox" [(ngModel)]="newField.is_required" /> Required
-        </label>
+        @if (isExtractingPlaceholders) {
+          <div class="loading-placeholders">
+            <div class="spinner-small"></div>
+            <p>Extracting placeholders from document...</p>
+          </div>
+        } @else {
+          @if (extractedPlaceholders.length === 0) {
+            <div class="no-placeholders">
+              <div class="empty-icon">🔍</div>
+              <p>No placeholders found in this template.</p>
+              <p class="hint">Use double curly brace syntax in your DOCX file.</p>
+            </div>
+          } @else {
+            <div class="placeholders-table-container">
+              <table class="placeholders-modal-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Placeholder</th>
+                    <th>Description / Label</th>
+                    <th>Example Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (ph of extractedPlaceholders; track ph; let i = $index) {
+                    <tr class="placeholder-row-animate" [style.animation-delay]="(i * 50) + 'ms'">
+                      <td class="index-cell">{{ i + 1 }}</td>
+                      <td class="placeholder-cell-modal">
+                        <span class="ph-bracket">&#123;&#123;</span>
+                        <span class="ph-key-modal">{{ ph }}</span>
+                        <span class="ph-bracket">&#125;&#125;</span>
+                      </td>
+                      <td class="label-cell-modal">{{ getPlaceholderLabel(ph) }}</td>
+                      <td class="example-cell">
+                        <span class="example-value">{{ getPlaceholderLabel(ph) }} value here</span>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+            <div class="placeholders-summary">
+              <span class="summary-badge">📊 Total: {{ extractedPlaceholders.length }} placeholders</span>
+            </div>
+          }
+        }
       </div>
       <div class="modal-footer">
-        <button (click)="showAddFieldModal = false">Cancel</button>
-        <button (click)="addSharedField()">Add</button>
+        <button class="btn-secondary" (click)="closePlaceholderModal()">Close</button>
       </div>
     </div>
   </div>

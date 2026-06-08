@@ -1,20 +1,16 @@
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TemplateSetService } from '../../services/template-set';
 import { TemplateService } from '../../services/template';
 import { ToastService } from '../../services/toast';
 import { TemplateSetDetail, SharedField, TemplateSetTemplate } from '../../models/template-set.model';
-import { DomSanitizer } from '@angular/platform-browser';
-import { GenerateService } from '../../services/generate';
-import { Template } from '../../models/template.model';
-import { renderAsync } from 'docx-preview';
 
 @Component({
   selector: 'app-template-set-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './template-set-detail.html',
   styleUrl: './template-set-detail.css',
 })
@@ -23,9 +19,10 @@ export class TemplateSetDetailComponent implements OnInit {
   private router = inject(Router);
   private templateSetService = inject(TemplateSetService);
   private templateService = inject(TemplateService);
-  private generateService = inject(GenerateService);
   private toast = inject(ToastService);
   private cdr = inject(ChangeDetectorRef);
+
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   templateSet: TemplateSetDetail | null = null;
   isLoading = true;
@@ -34,7 +31,6 @@ export class TemplateSetDetailComponent implements OnInit {
   isUploading = false;
   uploadProgress = 0;
   selectedFile: File | null = null;
-  templateName = '';
   
   showAddFieldModal = false;
   newField: Partial<SharedField> = { 
@@ -43,34 +39,12 @@ export class TemplateSetDetailComponent implements OnInit {
     field_type: 'text', 
     is_required: false 
   };
-  
-  // Selected Template & Placeholder Management
-  selectedTemplate: TemplateSetTemplate | null = null;
-  selectedTemplatePlaceholders: Record<string, string> = {};
-  instruction = '';
-  isExtracting = false;
-  isGenerating = false;
-  showManualForm = false;
 
-  get mappedPercentage(): number {
-    if (!this.templateSet || !this.templateSet.templates?.length) return 0;
-    const totalPlaceholders = this.templateSet.templates.reduce((sum, t) => sum + (t.placeholder_count || 0), 0);
-    const mappedPlaceholders = this.templateSet.shared_fields?.length || 0;
-    if (totalPlaceholders === 0) return 0;
-    return Math.round((mappedPlaceholders / totalPlaceholders) * 100);
-  }
-
-  get placeholderEntries(): Array<{key: string, value: string}> {
-    return Object.entries(this.selectedTemplatePlaceholders).map(([key, value]) => ({ key, value }));
-  }
-
-  get hasManualValues(): boolean {
-    return Object.keys(this.selectedTemplatePlaceholders).length > 0;
-  }
-
-  getFilledCount(): number {
-    return Object.values(this.selectedTemplatePlaceholders).filter(v => v && v.trim()).length;
-  }
+  // For placeholder modal
+  showPlaceholderModal = false;
+  selectedTemplateForPlaceholders: TemplateSetTemplate | null = null;
+  extractedPlaceholders: string[] = [];
+  isExtractingPlaceholders = false;
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -112,103 +86,54 @@ export class TemplateSetDetailComponent implements OnInit {
     });
   }
 
-  selectTemplate(template: TemplateSetTemplate): void {
-    this.selectedTemplate = template;
-    this.selectedTemplatePlaceholders = {};
-    this.instruction = '';
-    this.showManualForm = false;
-    
-    const placeholders = template.placeholders || [];
-    for (const ph of placeholders) {
-      this.selectedTemplatePlaceholders[ph] = '';
-    }
-    
-    this.cdr.detectChanges();
-    this.toast.show('info', 'Template Selected', `${template.filename} - ${placeholders.length} placeholders found`);
+  // Trigger file input click
+  triggerFileInput(): void {
+    this.fileInput?.nativeElement.click();
   }
 
-  async extractValuesWithAI(): Promise<void> {
-    if (!this.selectedTemplate) {
-      this.toast.show('error', 'Error', 'Please select a template first');
-      return;
-    }
-    
-    if (!this.instruction.trim()) {
-      this.toast.show('error', 'Error', 'Please enter an instruction first');
-      return;
-    }
-    
-    this.isExtracting = true;
-    this.cdr.detectChanges();
-    
-    try {
-      const templateId = this.selectedTemplate.id;
-      const result = await this.generateService.preview(this.instruction, templateId);
-      this.selectedTemplatePlaceholders = result.mapped_values;
-      this.showManualForm = true;
-      this.toast.show('success', 'Extracted', `Values extracted for ${Object.keys(result.mapped_values).length} placeholders`);
-      this.cdr.detectChanges();
-    } catch (err) {
-      console.error(err);
-      this.toast.show('error', 'Error', 'Failed to extract values from instruction');
-    } finally {
-      this.isExtracting = false;
-      this.cdr.detectChanges();
-    }
-  }
-
-  updateManualValue(placeholder: string, event: any): void {
-    this.selectedTemplatePlaceholders[placeholder] = event.target.value;
-    this.cdr.detectChanges();
-  }
-
-  async generateAndDownload(): Promise<void> {
-    if (!this.selectedTemplate) {
-      this.toast.show('error', 'Error', 'Please select a template first');
-      return;
-    }
-    
-    const filledValues = Object.entries(this.selectedTemplatePlaceholders)
-      .filter(([, value]) => value && value.trim());
-    
-    if (filledValues.length === 0) {
-      this.toast.show('error', 'Error', 'Please fill at least one placeholder value');
-      return;
-    }
-    
-    const instruction = filledValues
-      .map(([key, value]) => `${key.replace(/_/g, ' ')} is ${value}`)
-      .join(', ');
-    
-    this.isGenerating = true;
-    this.cdr.detectChanges();
-    
-    try {
-      const templateId = this.selectedTemplate.id;
-      const blob = await this.generateService.generate(instruction, templateId);
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = this.selectedTemplate.filename;
-      a.click();
-      URL.revokeObjectURL(url);
-      this.toast.show('success', 'Downloaded', `${this.selectedTemplate.filename} downloaded successfully`);
-    } catch (err) {
-      console.error(err);
-      this.toast.show('error', 'Error', 'Failed to generate document');
-    } finally {
-      this.isGenerating = false;
-      this.cdr.detectChanges();
-    }
-  }
-
-  onFileSelected(event: Event): void {
+  // On file select - immediately upload
+  async onFileSelectedAndUpload(event: Event): Promise<void> {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];
-      this.templateName = this.selectedFile.name.replace('.docx', '');
+      this.cdr.detectChanges();
+      await this.uploadTemplateToSet();
+    }
+  }
+
+  // View placeholders for a template
+  async viewPlaceholders(template: TemplateSetTemplate): Promise<void> {
+    this.selectedTemplateForPlaceholders = template;
+    this.showPlaceholderModal = true;
+    this.isExtractingPlaceholders = true;
+    this.cdr.detectChanges();
+    
+    try {
+      const placeholders = await this.templateService.getPlaceholders(template.id);
+      this.extractedPlaceholders = placeholders;
+      this.toast.show('info', 'Placeholders', `${placeholders.length} placeholders found`);
+    } catch (err) {
+      console.error(err);
+      this.toast.show('error', 'Error', 'Failed to extract placeholders');
+      this.extractedPlaceholders = [];
+    } finally {
+      this.isExtractingPlaceholders = false;
       this.cdr.detectChanges();
     }
+  }
+
+  closePlaceholderModal(): void {
+    this.showPlaceholderModal = false;
+    this.selectedTemplateForPlaceholders = null;
+    this.extractedPlaceholders = [];
+  }
+
+  getPlaceholderLabel(placeholder: string): string {
+    return placeholder
+      .replace(/_/g, ' ')
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
   }
 
   async uploadTemplateToSet(): Promise<void> {
@@ -224,11 +149,9 @@ export class TemplateSetDetailComponent implements OnInit {
       this.toast.show('error', 'Error', 'Please select a file');
       return;
     }
-    if (!this.templateName.trim()) {
-      this.toast.show('error', 'Error', 'Please enter template name');
-      return;
-    }
 
+    const templateName = this.selectedFile.name.replace('.docx', '').replace('.doc', '');
+    
     this.isUploading = true;
     this.uploadProgress = 0;
     this.cdr.detectChanges();
@@ -241,7 +164,7 @@ export class TemplateSetDetailComponent implements OnInit {
     }, 200);
 
     try {
-      const uploadedTemplate = await this.templateService.uploadTemplate(this.templateName, this.selectedFile);
+      const uploadedTemplate = await this.templateService.uploadTemplate(templateName, this.selectedFile);
       if (!uploadedTemplate || !uploadedTemplate.id) {
         throw new Error('Template upload failed');
       }
@@ -257,16 +180,17 @@ export class TemplateSetDetailComponent implements OnInit {
       
       await new Promise(resolve => setTimeout(resolve, 500));
       
-      this.toast.show('success', 'Uploaded!', `${this.templateName} uploaded successfully`);
+      this.toast.show('success', 'Uploaded!', `${templateName} uploaded successfully`);
       
       this.selectedFile = null;
-      this.templateName = '';
       this.uploadProgress = 0;
       
       await this.loadTemplateSet(setId);
       
-      const fileInput = document.getElementById('template-file-input') as HTMLInputElement;
-      if (fileInput) fileInput.value = '';
+      // Clear the file input
+      if (this.fileInput) {
+        this.fileInput.nativeElement.value = '';
+      }
       
     } catch (err: any) {
       clearInterval(interval);
@@ -288,11 +212,6 @@ export class TemplateSetDetailComponent implements OnInit {
         next: () => {
           this.toast.show('success', 'Removed', 'Template removed');
           this.loadTemplateSet(this.templateSet!.id);
-          if (this.selectedTemplate?.id === templateId) {
-            this.selectedTemplate = null;
-            this.selectedTemplatePlaceholders = {};
-            this.showManualForm = false;
-          }
           this.cdr.detectChanges();
         },
         error: (err) => {
@@ -345,39 +264,6 @@ export class TemplateSetDetailComponent implements OnInit {
         }
       });
     }
-  }
-
-  generateAll(): void {
-    if (!this.templateSet) return;
-    const instruction = prompt('Enter instruction for all templates:', `Generate documents for ${this.templateSet.name}`);
-    if (instruction) {
-      this.templateSetService.generateTemplateSet(this.templateSet.id, instruction).subscribe({
-        next: (blob) => {
-          if (blob) {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${this.templateSet!.name}_documents.zip`;
-            a.click();
-            window.URL.revokeObjectURL(url);
-            this.toast.show('success', 'Generated', 'All documents generated');
-          }
-          this.cdr.detectChanges();
-        },
-        error: (err) => {
-          console.error(err);
-          this.toast.show('error', 'Error', err.message || 'Failed to generate documents');
-        }
-      });
-    }
-  }
-
-  getPlaceholderLabel(placeholder: string): string {
-    return placeholder
-      .replace(/_/g, ' ')
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
   }
 
   goBack(): void {
