@@ -5,7 +5,18 @@ import { FormsModule } from '@angular/forms';
 import { TemplateSetService } from '../../services/template-set';
 import { TemplateService } from '../../services/template';
 import { ToastService } from '../../services/toast';
-import { TemplateSetDetail, SharedField, TemplateSetTemplate } from '../../models/template-set.model';
+import { TemplateSetDetail, TemplateSetTemplate } from '../../models/template-set.model';
+
+interface PlaceholderItem {
+  originalName: string;
+  displayName: string;
+  newName: string;
+  templateIds: string[];
+  templateNames: string[];
+  groupId?: string;
+  isEditing?: boolean;
+  isUpdating?: boolean;
+}
 
 @Component({
   selector: 'app-template-set-detail',
@@ -32,19 +43,17 @@ export class TemplateSetDetailComponent implements OnInit {
   uploadProgress = 0;
   selectedFile: File | null = null;
   
-  showAddFieldModal = false;
-  newField: Partial<SharedField> = { 
-    field_name: '', 
-    field_label: '', 
-    field_type: 'text', 
-    is_required: false 
-  };
-
-  // For placeholder modal
   showPlaceholderModal = false;
   selectedTemplateForPlaceholders: TemplateSetTemplate | null = null;
   extractedPlaceholders: string[] = [];
   isExtractingPlaceholders = false;
+
+  allPlaceholders: PlaceholderItem[] = [];
+  isLoadingPlaceholders = false;
+  isSavingPlaceholders = false;
+  showPlaceholderManagement = true;
+  searchPlaceholderQuery = '';
+  filterType: 'all' | 'similar' | 'unique' = 'all';
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -59,7 +68,7 @@ export class TemplateSetDetailComponent implements OnInit {
   loadTemplateSet(id: string): void {
     this.isLoading = true;
     this.templateSetService.getTemplateSet(id).subscribe({
-      next: (res: any) => {
+      next: async (res: any) => {
         const normalizedSet = {
           id: res.id || res.set_id || id,
           name: res.name || '',
@@ -75,6 +84,8 @@ export class TemplateSetDetailComponent implements OnInit {
         this.templateSet = normalizedSet as TemplateSetDetail;
         this.isLoading = false;
         this.cdr.detectChanges();
+        
+        await this.extractAllPlaceholders();
       },
       error: (err) => {
         console.error(err);
@@ -86,12 +97,269 @@ export class TemplateSetDetailComponent implements OnInit {
     });
   }
 
-  // Trigger file input click
+  async extractAllPlaceholders(): Promise<void> {
+    if (!this.templateSet || this.templateSet.templates.length === 0) {
+      this.allPlaceholders = [];
+      return;
+    }
+
+    this.isLoadingPlaceholders = true;
+    this.cdr.detectChanges();
+
+    try {
+      const placeholderMap = new Map<string, PlaceholderItem>();
+      
+      for (let i = 0; i < this.templateSet.templates.length; i++) {
+        const currentTemplate: any = this.templateSet.templates[i];
+        let placeholdersList: string[] = [];
+        
+        if (currentTemplate.placeholders && currentTemplate.placeholders.length > 0) {
+          placeholdersList = currentTemplate.placeholders;
+        } else {
+          try {
+            placeholdersList = await this.templateService.getPlaceholders(currentTemplate.id);
+            currentTemplate.placeholders = placeholdersList;
+          } catch (err) {
+            console.error(`Failed to get placeholders for ${currentTemplate.filename}`, err);
+            continue;
+          }
+        }
+        
+        for (const ph of placeholdersList) {
+          if (placeholderMap.has(ph)) {
+            const existing = placeholderMap.get(ph)!;
+            if (!existing.templateIds.includes(currentTemplate.id)) {
+              existing.templateIds.push(currentTemplate.id);
+              existing.templateNames.push(currentTemplate.filename);
+            }
+          } else {
+            placeholderMap.set(ph, {
+              originalName: ph,
+              displayName: this.getPlaceholderLabel(ph),
+              newName: ph,
+              templateIds: [currentTemplate.id],
+              templateNames: [currentTemplate.filename],
+              isEditing: false,
+              isUpdating: false
+            });
+          }
+        }
+      }
+      
+      this.allPlaceholders = Array.from(placeholderMap.values());
+      this.identifySimilarPlaceholders();
+      
+      this.toast.show('success', 'Placeholders Extracted', `${this.allPlaceholders.length} unique placeholders found`);
+      
+    } catch (err) {
+      console.error('Failed to extract placeholders:', err);
+      this.toast.show('error', 'Error', 'Failed to extract placeholders');
+    } finally {
+      this.isLoadingPlaceholders = false;
+      this.cdr.detectChanges();
+    }
+  }
+
+  identifySimilarPlaceholders(): void {
+    const groups: Map<string, string[]> = new Map();
+    
+    for (const ph of this.allPlaceholders) {
+      let baseName = ph.originalName
+        .replace(/_name$|_no$|_number$|_email$|_id$|_code$|_date$|_at$|_by$/gi, '')
+        .toLowerCase();
+      
+      if (baseName.length < 3) {
+        baseName = ph.originalName.split('_')[0].toLowerCase();
+      }
+      
+      if (!groups.has(baseName)) {
+        groups.set(baseName, []);
+      }
+      groups.get(baseName)!.push(ph.originalName);
+    }
+    
+    for (const [groupKey, similarPlaceholders] of groups) {
+      if (similarPlaceholders.length > 1) {
+        for (const phName of similarPlaceholders) {
+          const placeholder = this.allPlaceholders.find(p => p.originalName === phName);
+          if (placeholder) {
+            placeholder.groupId = `group_${groupKey}`;
+          }
+        }
+      }
+    }
+  }
+
+  getFilteredPlaceholders(): PlaceholderItem[] {
+    let filtered = [...this.allPlaceholders];
+    
+    if (this.searchPlaceholderQuery.trim()) {
+      const query = this.searchPlaceholderQuery.toLowerCase();
+      filtered = filtered.filter(p => 
+        p.originalName.toLowerCase().includes(query) ||
+        p.displayName.toLowerCase().includes(query) ||
+        p.newName.toLowerCase().includes(query)
+      );
+    }
+    
+    if (this.filterType === 'similar') {
+      filtered = filtered.filter(p => p.groupId !== undefined);
+    } else if (this.filterType === 'unique') {
+      filtered = filtered.filter(p => p.groupId === undefined);
+    }
+    
+    return filtered;
+  }
+
+  getGroupedPlaceholders(): Map<string, PlaceholderItem[]> {
+    const groups = new Map<string, PlaceholderItem[]>();
+    
+    for (const ph of this.allPlaceholders) {
+      if (ph.groupId) {
+        if (!groups.has(ph.groupId)) {
+          groups.set(ph.groupId, []);
+        }
+        groups.get(ph.groupId)!.push(ph);
+      }
+    }
+    
+    return groups;
+  }
+
+  getUniquePlaceholders(): PlaceholderItem[] {
+    return this.allPlaceholders.filter(p => !p.groupId);
+  }
+
+  startEditing(placeholder: PlaceholderItem): void {
+    placeholder.isEditing = true;
+    placeholder.newName = placeholder.originalName;
+    this.cdr.detectChanges();
+  }
+
+  cancelEditing(placeholder: PlaceholderItem): void {
+    placeholder.isEditing = false;
+    placeholder.newName = placeholder.originalName;
+    this.cdr.detectChanges();
+  }
+
+  async savePlaceholderChange(placeholder: PlaceholderItem): Promise<void> {
+    if (placeholder.newName === placeholder.originalName) {
+      placeholder.isEditing = false;
+      return;
+    }
+    
+    placeholder.isUpdating = true;
+    this.isSavingPlaceholders = true;
+    this.cdr.detectChanges();
+    
+    try {
+      let successCount = 0;
+      
+      // Update in each template that uses this placeholder
+      for (const templateId of placeholder.templateIds) {
+        try {
+          await this.templateService.updatePlaceholderInTemplate(templateId, placeholder.originalName, placeholder.newName);
+          successCount++;
+        } catch (err) {
+          console.error(`Failed to update in template ${templateId}`, err);
+        }
+      }
+      
+      // Update local data
+      if (this.templateSet) {
+        for (let i = 0; i < this.templateSet.templates.length; i++) {
+          const currentTemplate: any = this.templateSet.templates[i];
+          if (placeholder.templateIds.includes(currentTemplate.id) && currentTemplate.placeholders) {
+            const index = currentTemplate.placeholders.indexOf(placeholder.originalName);
+            if (index !== -1) {
+              currentTemplate.placeholders[index] = placeholder.newName;
+            }
+          }
+        }
+      }
+      
+      placeholder.originalName = placeholder.newName;
+      placeholder.displayName = this.getPlaceholderLabel(placeholder.newName);
+      placeholder.isEditing = false;
+      
+      this.identifySimilarPlaceholders();
+      
+      if (successCount > 0) {
+        this.toast.show('success', 'Updated', `Placeholder renamed in ${successCount} template(s)`);
+      } else {
+        this.toast.show('info', 'Saved', 'Placeholder name updated locally');
+      }
+      
+    } catch (err) {
+      console.error('Failed to update placeholder:', err);
+      this.toast.show('error', 'Error', 'Failed to update placeholder');
+    } finally {
+      placeholder.isUpdating = false;
+      this.isSavingPlaceholders = false;
+      this.cdr.detectChanges();
+    }
+  }
+
+  async saveAllPlaceholderChanges(): Promise<void> {
+    const changedPlaceholders = this.allPlaceholders.filter(p => p.newName !== p.originalName);
+    
+    if (changedPlaceholders.length === 0) {
+      this.toast.show('info', 'No Changes', 'No placeholder changes to save');
+      return;
+    }
+    
+    this.isSavingPlaceholders = true;
+    this.cdr.detectChanges();
+    
+    try {
+      for (const ph of changedPlaceholders) {
+        ph.isUpdating = true;
+        this.cdr.detectChanges();
+        
+        for (const templateId of ph.templateIds) {
+          try {
+            await this.templateService.updatePlaceholderInTemplate(templateId, ph.originalName, ph.newName);
+          } catch (err) {
+            console.error(`Failed to update in template ${templateId}`, err);
+          }
+        }
+        
+        ph.originalName = ph.newName;
+        ph.displayName = this.getPlaceholderLabel(ph.newName);
+        ph.isEditing = false;
+        ph.isUpdating = false;
+      }
+      
+      if (this.templateSet) {
+        for (const ph of changedPlaceholders) {
+          for (let i = 0; i < this.templateSet.templates.length; i++) {
+            const currentTemplate: any = this.templateSet.templates[i];
+            if (ph.templateIds.includes(currentTemplate.id) && currentTemplate.placeholders) {
+              const index = currentTemplate.placeholders.indexOf(ph.originalName);
+              if (index !== -1) {
+                currentTemplate.placeholders[index] = ph.newName;
+              }
+            }
+          }
+        }
+      }
+      
+      this.identifySimilarPlaceholders();
+      this.toast.show('success', 'All Saved', `${changedPlaceholders.length} placeholder(s) updated`);
+      
+    } catch (err) {
+      console.error('Failed to save placeholders:', err);
+      this.toast.show('error', 'Error', 'Failed to save placeholder changes');
+    } finally {
+      this.isSavingPlaceholders = false;
+      this.cdr.detectChanges();
+    }
+  }
+
   triggerFileInput(): void {
     this.fileInput?.nativeElement.click();
   }
 
-  // On file select - immediately upload
   async onFileSelectedAndUpload(event: Event): Promise<void> {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -101,7 +369,6 @@ export class TemplateSetDetailComponent implements OnInit {
     }
   }
 
-  // View placeholders for a template
   async viewPlaceholders(template: TemplateSetTemplate): Promise<void> {
     this.selectedTemplateForPlaceholders = template;
     this.showPlaceholderModal = true;
@@ -187,7 +454,6 @@ export class TemplateSetDetailComponent implements OnInit {
       
       await this.loadTemplateSet(setId);
       
-      // Clear the file input
       if (this.fileInput) {
         this.fileInput.nativeElement.value = '';
       }
@@ -217,50 +483,6 @@ export class TemplateSetDetailComponent implements OnInit {
         error: (err) => {
           console.error(err);
           this.toast.show('error', 'Error', 'Failed to remove template');
-        }
-      });
-    }
-  }
-
-  addSharedField(): void {
-    if (!this.templateSet) return;
-    if (!this.newField.field_name?.trim() || !this.newField.field_label?.trim()) {
-      this.toast.show('error', 'Validation', 'Field name and label are required');
-      return;
-    }
-
-    this.templateSetService.addSharedField(this.templateSet.id, {
-      field_name: this.newField.field_name,
-      field_label: this.newField.field_label,
-      field_type: this.newField.field_type || 'text',
-      is_required: this.newField.is_required || false
-    }).subscribe({
-      next: () => {
-        this.toast.show('success', 'Added', 'Shared field added');
-        this.showAddFieldModal = false;
-        this.newField = { field_name: '', field_label: '', field_type: 'text', is_required: false };
-        this.loadTemplateSet(this.templateSet!.id);
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        console.error(err);
-        this.toast.show('error', 'Error', 'Failed to add shared field');
-      }
-    });
-  }
-
-  deleteSharedField(fieldId: string): void {
-    if (!this.templateSet) return;
-    if (confirm('Delete this shared field?')) {
-      this.templateSetService.deleteSharedField(fieldId).subscribe({
-        next: () => {
-          this.toast.show('success', 'Deleted', 'Shared field deleted');
-          this.loadTemplateSet(this.templateSet!.id);
-          this.cdr.detectChanges();
-        },
-        error: (err) => {
-          console.error(err);
-          this.toast.show('error', 'Error', 'Failed to delete shared field');
         }
       });
     }

@@ -106,6 +106,65 @@ export class TemplateService {
     });
   }
 
+  // Update placeholder name in a single template
+  updatePlaceholderInTemplate(templateId: string, oldName: string, newName: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.api.post(`/templates/${templateId}/placeholders/rename`, {
+        old_name: oldName,
+        new_name: newName
+      }).subscribe({
+        next: (res) => {
+          console.log(`Placeholder updated in template ${templateId}`);
+          // Update local templates list
+          const currentTemplates = this.templates();
+          const updatedTemplates = currentTemplates.map(t => {
+            if (t.id === templateId) {
+              const updatedPlaceholders = t.placeholders.map(p => p === oldName ? newName : p);
+              return { ...t, placeholders: updatedPlaceholders };
+            }
+            return t;
+          });
+          this.templates.set(updatedTemplates);
+          resolve(res);
+        },
+        error: (err) => {
+          console.error('Failed to update placeholder:', err);
+          reject(err);
+        }
+      });
+    });
+  }
+
+  // Bulk update placeholder across multiple templates
+  bulkUpdatePlaceholderInTemplates(templateIds: string[], oldName: string, newName: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.api.post(`/templates/placeholders/bulk-rename`, {
+        old_name: oldName,
+        new_name: newName,
+        template_ids: templateIds
+      }).subscribe({
+        next: (res) => {
+          console.log(`Bulk placeholder update complete`);
+          // Update local templates list
+          const currentTemplates = this.templates();
+          const updatedTemplates = currentTemplates.map(t => {
+            if (templateIds.includes(t.id)) {
+              const updatedPlaceholders = t.placeholders.map(p => p === oldName ? newName : p);
+              return { ...t, placeholders: updatedPlaceholders };
+            }
+            return t;
+          });
+          this.templates.set(updatedTemplates);
+          resolve(res);
+        },
+        error: (err) => {
+          console.error('Failed to bulk update placeholders:', err);
+          reject(err);
+        }
+      });
+    });
+  }
+
   getTemplate(id: string): Template | undefined {
     return this.templates().find(t => t.id === id);
   }

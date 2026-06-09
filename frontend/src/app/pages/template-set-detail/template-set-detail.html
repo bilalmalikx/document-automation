@@ -31,6 +31,10 @@
             <div class="stat-number">{{ templateSet.templates.length }}</div>
             <div class="stat-label">Templates</div>
           </div>
+          <div class="stat-card">
+            <div class="stat-number">{{ allPlaceholders.length }}</div>
+            <div class="stat-label">Unique Placeholders</div>
+          </div>
         </div>
       </div>
     </div>
@@ -41,14 +45,12 @@
         <h3>📋 Templates in this Set</h3>
       </div>
 
-      <!-- Upload Area - Direct upload on file select -->
       <div class="upload-area" (click)="triggerFileInput()">
         <input type="file" #fileInput id="template-file-input" accept=".docx" style="display:none" (change)="onFileSelectedAndUpload($event)" />
         <div class="upload-content">📄 Click to upload DOCX template</div>
         <div class="upload-hint">Supports DOCX files with placeholder syntax using double curly braces</div>
       </div>
 
-      <!-- Upload Progress (shown when uploading) -->
       @if (isUploading) {
         <div class="upload-progress-container">
           <div class="upload-progress-bar">
@@ -85,10 +87,182 @@
         }
       </div>
     </div>
+
+    <!-- Placeholder Management Section -->
+    @if (showPlaceholderManagement) {
+      <div class="content-card placeholder-management-card">
+        <div class="card-header">
+          <h3>🔧 Placeholder Management</h3>
+          <div class="card-header-actions">
+            <button class="btn-save-all" (click)="saveAllPlaceholderChanges()" [disabled]="isSavingPlaceholders">
+              @if (isSavingPlaceholders) {
+                <span>💾 Saving...</span>
+              } @else {
+                <span>💾 Save All Changes</span>
+              }
+            </button>
+          </div>
+        </div>
+
+        <!-- Placeholder Filters -->
+        <div class="placeholder-filters">
+          <div class="search-wrapper">
+            <input 
+              type="text" 
+              class="search-input-small" 
+              placeholder="🔍 Search placeholders..." 
+              [(ngModel)]="searchPlaceholderQuery"
+              (input)="getFilteredPlaceholders()"
+            />
+          </div>
+          <div class="filter-buttons">
+            <button class="filter-btn" [class.active]="filterType === 'all'" (click)="filterType = 'all'">All ({{ allPlaceholders.length }})</button>
+            <button class="filter-btn" [class.active]="filterType === 'similar'" (click)="filterType = 'similar'">Similar ({{ getGroupedPlaceholders().size }})</button>
+            <button class="filter-btn" [class.active]="filterType === 'unique'" (click)="filterType = 'unique'">Unique ({{ getUniquePlaceholders().length }})</button>
+          </div>
+        </div>
+
+        @if (isLoadingPlaceholders) {
+          <div class="loading-placeholders-small">
+            <div class="spinner-small"></div>
+            <p>Extracting placeholders from all templates...</p>
+          </div>
+        } @else if (allPlaceholders.length === 0) {
+          <div class="empty-placeholders">
+            <div class="empty-icon">🔍</div>
+            <p>No placeholders found in any template</p>
+<div class="upload-hint-text">Upload templates with double curly brace syntax like field_name</div>          </div>
+        } @else {
+          <!-- Similar Placeholders Groups -->
+          @if (filterType === 'similar' || filterType === 'all') {
+            @for (group of getGroupedPlaceholders() | keyvalue; track group.key) {
+              <div class="placeholder-group">
+                <div class="group-header">
+                  <span class="group-icon">🔗</span>
+                  <span class="group-title">Similar Placeholders Group</span>
+                  <span class="group-count">{{ group.value.length }} placeholders</span>
+                </div>
+                <div class="placeholders-table-wrapper">
+                  <table class="placeholders-management-table">
+                    <thead>
+                      <tr>
+                        <th>Placeholder</th>
+                        <th>Display Name</th>
+                        <th>Used In Templates</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (ph of group.value; track ph.originalName) {
+                        <tr>
+                          <td class="placeholder-cell">
+                            <span class="ph-bracket">&#123;&#123;</span>
+                            @if (ph.isEditing) {
+                              <input 
+                                type="text" 
+                                class="edit-placeholder-input" 
+                                [(ngModel)]="ph.newName"
+                                (keyup.enter)="savePlaceholderChange(ph)"
+                                autofocus
+                              />
+                            } @else {
+                              <span class="ph-name">{{ ph.originalName }}</span>
+                            }
+                            <span class="ph-bracket">&#125;&#125;</span>
+                          </td>
+                          <td class="display-cell">{{ ph.displayName }}</td>
+                          <td class="templates-cell">
+                            <div class="template-badges">
+                              @for (tname of ph.templateNames; track tname) {
+                                <span class="template-badge">{{ tname }}</span>
+                              }
+                            </div>
+                          </td>
+                          <td class="action-cell">
+                            @if (ph.isEditing) {
+                              <button class="save-edit-btn" (click)="savePlaceholderChange(ph)" title="Save">💾</button>
+                              <button class="cancel-edit-btn" (click)="cancelEditing(ph)" title="Cancel">✕</button>
+                            } @else {
+                              <button class="edit-btn" (click)="startEditing(ph)" title="Edit placeholder">✏️</button>
+                            }
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            }
+          }
+
+          <!-- Unique Placeholders -->
+          @if (filterType === 'unique' || filterType === 'all') {
+            <div class="placeholder-group">
+              <div class="group-header">
+                <span class="group-icon">📌</span>
+                <span class="group-title">Unique Placeholders</span>
+                <span class="group-count">{{ getUniquePlaceholders().length }} placeholders</span>
+              </div>
+              <div class="placeholders-table-wrapper">
+                <table class="placeholders-management-table">
+                  <thead>
+                    <tr>
+                      <th>Placeholder</th>
+                      <th>Display Name</th>
+                      <th>Used In Templates</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (ph of getFilteredPlaceholders(); track ph.originalName) {
+                      @if (!ph.groupId) {
+                        <tr>
+                          <td class="placeholder-cell">
+                            <span class="ph-bracket">&#123;&#123;</span>
+                            @if (ph.isEditing) {
+                              <input 
+                                type="text" 
+                                class="edit-placeholder-input" 
+                                [(ngModel)]="ph.newName"
+                                (keyup.enter)="savePlaceholderChange(ph)"
+                                autofocus
+                              />
+                            } @else {
+                              <span class="ph-name">{{ ph.originalName }}</span>
+                            }
+                            <span class="ph-bracket">&#125;&#125;</span>
+                          </td>
+                          <td class="display-cell">{{ ph.displayName }}</td>
+                          <td class="templates-cell">
+                            <div class="template-badges">
+                              @for (tname of ph.templateNames; track tname) {
+                                <span class="template-badge">{{ tname }}</span>
+                              }
+                            </div>
+                          </td>
+                          <td class="action-cell">
+                            @if (ph.isEditing) {
+                              <button class="save-edit-btn" (click)="savePlaceholderChange(ph)" title="Save">💾</button>
+                              <button class="cancel-edit-btn" (click)="cancelEditing(ph)" title="Cancel">✕</button>
+                            } @else {
+                              <button class="edit-btn" (click)="startEditing(ph)" title="Edit placeholder">✏️</button>
+                            }
+                          </td>
+                        </tr>
+                      }
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          }
+        }
+      </div>
+    }
   }
 </div>
 
-<!-- Placeholder Modal - Smooth Animation -->
+<!-- Placeholder Modal for Single Template -->
 @if (showPlaceholderModal && selectedTemplateForPlaceholders) {
   <div class="modal-backdrop" (click)="closePlaceholderModal()">
     <div class="modal modal-large modal-animate" (click)="$event.stopPropagation()">

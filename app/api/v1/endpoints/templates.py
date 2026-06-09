@@ -1,6 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException, status, Depends
 from typing import List, Optional
 from sqlalchemy.orm import Session
+from pydantic import BaseModel
 from app.services.template_manager import template_manager
 from app.api.v1.schemas.template import (
     TemplateUploadResponse, 
@@ -15,18 +16,27 @@ from app.models.template import TemplateModel
 
 router = APIRouter(prefix="/templates", tags=["Templates"])
 
+# ============================================
+# Request Schema for Rename Placeholder
+# ============================================
+class RenamePlaceholderRequest(BaseModel):
+    old_name: str
+    new_name: str
+
+# ============================================
+# Existing Endpoints
+# ============================================
+
 @router.post("/upload", response_model=TemplateUploadResponse, status_code=status.HTTP_201_CREATED)
 async def upload_template(
     file: UploadFile = File(..., description="DOCX template file with placeholders"),
-    db: Session = Depends(get_db)  # ✅ MUST HAVE THIS
+    db: Session = Depends(get_db)
 ):
     """Upload template - saves to database if configured"""
     try:
-        # ✅ PASS THE DATABASE SESSION
         result = await template_manager.create_template(file, file.filename, db=db)
         app_logger.info(f"✅ Template upload complete: {result['id']}")
         
-        # ✅ Verify it was saved to database
         if settings.use_database:
             db_template = db.query(TemplateModel).filter(TemplateModel.id == result['id']).first()
             if db_template:
@@ -80,3 +90,129 @@ async def delete_template(
     if template_manager.delete_template(template_id, db=db):
         return {"success": True, "message": f"Template {template_id} deleted"}
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Template not found")
+
+# ============================================
+# NEW ENDPOINT: Rename Placeholder in Template
+# ============================================
+@router.post("/{template_id}/placeholders/rename")
+async def rename_placeholder_in_template(
+    template_id: str,
+    request: RenamePlaceholderRequest,
+    db: Session = Depends(get_db)
+):
+    """
+    Rename a placeholder in a specific template.
+    Updates both database and the actual template record.
+    """
+    try:
+        app_logger.info(f"🔄 Renaming placeholder in template {template_id}: '{request.old_name}' → '{request.new_name}'")
+        
+        # Get template from database
+        template = db.query(TemplateModel).filter(
+            TemplateModel.id == template_id,
+            TemplateModel.is_deleted == False
+        ).first()
+        
+        if not template:
+            raise HTTPException(status_code=404, detail="Template not found")
+        
+        # Update placeholder in database
+        current_placeholders = template.placeholders or []
+        updated_placeholders = []
+        found = False
+        
+        for ph in current_placeholders:
+            if ph == request.old_name:
+                updated_placeholders.append(request.new_name)
+                found = True
+            else:
+                updated_placeholders.append(ph)
+        
+        if not found:
+            raise HTTPException(status_code=404, detail=f"Placeholder '{request.old_name}' not found in template")
+        
+        template.placeholders = updated_placeholders
+        template.placeholder_count = len(updated_placeholders)
+        db.commit()
+        
+        app_logger.info(f"✅ Successfully renamed placeholder in template {template_id}")
+        
+        return {
+            "success": True,
+            "message": f"Placeholder '{request.old_name}' renamed to '{request.new_name}'",
+            "template_id": template_id,
+            "updated_placeholders": updated_placeholders
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        app_logger.error(f"Failed to rename placeholder: {str(e)}")
+        db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+
+# ============================================
+# NEW ENDPOINT: Bulk rename placeholder across multiple templates
+# ============================================
+class BulkRenamePlaceholderRequest(BaseModel):
+    old_name: str
+    new_name: str
+    template_ids: List[str]
+
+@router.post("/placeholders/bulk-rename")
+async def bulk_rename_placeholder(
+    request: BulkRenamePlaceholderRequest,
+    db: Session = Depends(get_db)
+):
+    """
+    Rename a placeholder across multiple templates at once.
+    Useful when a placeholder appears in several templates.
+    """
+    try:
+        app_logger.info(f"🔄 Bulk renaming placeholder: '{request.old_name}' → '{request.new_name}' in {len(request.template_ids)} templates")
+        
+        success_count = 0
+        failed_templates = []
+        
+        for template_id in request.template_ids:
+            try:
+                template = db.query(TemplateModel).filter(
+                    TemplateModel.id == template_id,
+                    TemplateModel.is_deleted == False
+                ).first()
+                
+                if template:
+                    current_placeholders = template.placeholders or []
+                    updated_placeholders = []
+                    
+                    for ph in current_placeholders:
+                        if ph == request.old_name:
+                            updated_placeholders.append(request.new_name)
+                        else:
+                            updated_placeholders.append(ph)
+                    
+                    template.placeholders = updated_placeholders
+                    template.placeholder_count = len(updated_placeholders)
+                    success_count += 1
+                else:
+                    failed_templates.append(template_id)
+                    
+            except Exception as e:
+                app_logger.error(f"Failed to update template {template_id}: {str(e)}")
+                failed_templates.append(template_id)
+        
+        db.commit()
+        
+        app_logger.info(f"✅ Bulk rename complete: {success_count} succeeded, {len(failed_templates)} failed")
+        
+        return {
+            "success": True,
+            "message": f"Placeholder renamed in {success_count} templates",
+            "success_count": success_count,
+            "failed_templates": failed_templates
+        }
+        
+    except Exception as e:
+        app_logger.error(f"Failed to bulk rename placeholder: {str(e)}")
+        db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))

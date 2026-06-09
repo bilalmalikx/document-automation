@@ -1201,3 +1201,255 @@
   margin-top: 8px;
   text-align: center;
 }
+/* Placeholder Management Section */
+.placeholder-management-card {
+  margin-top: 20px;
+}
+
+.card-header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-save-all {
+  background: linear-gradient(135deg, var(--green), #059669);
+  color: white;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+}
+
+.btn-save-all:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.btn-save-all:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Placeholder Filters */
+.placeholder-filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: var(--bg-float);
+  border-bottom: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.search-wrapper {
+  flex: 1;
+  max-width: 300px;
+}
+
+.search-input-small {
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-dim);
+  border-radius: 8px;
+  color: var(--tx-primary);
+  font-size: 0.85rem;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.filter-btn {
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-dim);
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all 0.2s;
+}
+
+.filter-btn.active {
+  background: var(--brand);
+  color: white;
+  border-color: var(--brand);
+}
+
+/* Placeholder Groups */
+.placeholder-group {
+  margin: 16px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--bg-float);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.group-icon {
+  font-size: 18px;
+}
+
+.group-title {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.group-count {
+  background: var(--brand-dim);
+  color: var(--brand-light);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+}
+
+/* Placeholders Management Table */
+.placeholders-table-wrapper {
+  overflow-x: auto;
+}
+
+.placeholders-management-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.placeholders-management-table th {
+  text-align: left;
+  padding: 10px 12px;
+  background: var(--bg-overlay);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--tx-muted);
+}
+
+.placeholders-management-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  vertical-align: middle;
+}
+
+.placeholder-cell {
+  font-family: monospace;
+}
+
+.ph-bracket {
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.ph-name {
+  background: var(--brand-dim);
+  color: var(--brand-light);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  margin: 0 2px;
+}
+
+.display-cell {
+  font-size: 0.8rem;
+  color: var(--tx-primary);
+}
+
+.templates-cell {
+  max-width: 250px;
+}
+
+.template-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.template-badge {
+  background: var(--bg-overlay);
+  color: var(--tx-secondary);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.65rem;
+}
+
+.action-cell {
+  white-space: nowrap;
+}
+
+.edit-btn, .save-edit-btn, .cancel-edit-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.edit-btn:hover {
+  background: var(--bg-overlay);
+  transform: scale(1.05);
+}
+
+.save-edit-btn {
+  color: var(--green);
+}
+
+.save-edit-btn:hover {
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.cancel-edit-btn {
+  color: var(--red);
+}
+
+.cancel-edit-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.edit-placeholder-input {
+  background: var(--bg-input);
+  border: 1px solid var(--brand);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: var(--tx-primary);
+  width: 180px;
+}
+
+.edit-placeholder-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--brand-dim);
+}
+
+/* Loading Small */
+.loading-placeholders-small {
+  text-align: center;
+  padding: 40px;
+}
+
+.spinner-small {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border-dim);
+  border-top-color: var(--brand);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin: 0 auto 16px;
+}
+
+.empty-placeholders {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--tx-muted);
+}
