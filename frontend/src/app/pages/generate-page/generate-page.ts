@@ -7,6 +7,7 @@ import { TemplateService, Template } from '../../services/template';
 import { GenerateService } from '../../services/generate';
 import { renderAsync } from 'docx-preview';
 import { TemplateSetGenerationService, TemplateSetGroup } from '../../services/TemplateSetGenerationService';
+import { ToastService } from '../../services/toast';
 
 @Component({
   selector: 'app-generate-page',
@@ -18,15 +19,12 @@ import { TemplateSetGenerationService, TemplateSetGroup } from '../../services/T
 export class GeneratePage implements OnInit {
   @ViewChild('docxPreviewContainer') docxPreviewContainer!: ElementRef;
   
-  // Template Set Groups
   templateSetGroups: TemplateSetGroup[] = [];
   isLoadingGroups = true;
   
-  // Selection state
   selectedSetId: string | null = null;
   selectedTemplates: Template[] = [];
   
-  // Generation state
   step = 1;
   instruction = '';
   previewData: Record<string, string> = {};
@@ -71,7 +69,6 @@ export class GeneratePage implements OnInit {
     return Object.keys(this.manualValues).length > 0;
   }
 
-  // Get all unique placeholders from selected templates
   getAllPlaceholdersFromSelected(): string[] {
     const placeholdersSet = new Set<string>();
     for (const template of this.selectedTemplates) {
@@ -92,6 +89,7 @@ export class GeneratePage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private toast: ToastService,
     private router: Router,
     private sanitizer: DomSanitizer,
     private cdr: ChangeDetectorRef,
@@ -130,10 +128,8 @@ export class GeneratePage implements OnInit {
       group.selectedTemplateIds.splice(index, 1);
     }
     
-    // Update overall selected templates
     this.updateSelectedTemplates();
     
-    // Auto-expand the set if templates are selected
     if (group.selectedTemplateIds.length > 0) {
       group.isExpanded = true;
     }
@@ -211,10 +207,33 @@ export class GeneratePage implements OnInit {
     this.cdr.detectChanges();
   }
 
-  async updateLiveDocumentPreview(): Promise<void> {
+  async updateLiveDocumentPreview() {
     const selectedTemplate = this.getFirstSelected();
-    if (!selectedTemplate) return;
+    if (!selectedTemplate) {
+      console.log('No template selected');
+      return;
+    }
     
+    // Get latest template data directly from service
+    const latestTemplate = this.templateService.getTemplate(selectedTemplate.id);
+    if (!latestTemplate) {
+      console.log('Template not found in service, reloading...');
+      await this.templateService.loadTemplates();
+      const reloaded = this.templateService.getTemplate(selectedTemplate.id);
+      if (!reloaded) {
+        this.previewError = 'Template not found';
+        this.cdr.detectChanges();
+        return;
+      }
+      this.updateSelectedTemplates();
+      this.cdr.detectChanges();
+      return;
+    }
+    
+    console.log('Using template:', latestTemplate.filename);
+    console.log('Placeholders:', latestTemplate.placeholders);
+    
+    // Build instruction from manual values
     let finalInstruction = '';
     if (this.hasManualValues()) {
       const manualParts = [];
@@ -230,14 +249,19 @@ export class GeneratePage implements OnInit {
       finalInstruction = this.instruction;
     }
     
-    if (!finalInstruction.trim()) return;
+    if (!finalInstruction.trim()) {
+      console.log('No instruction or values provided');
+      return;
+    }
+    
+    console.log('Final instruction:', finalInstruction);
     
     this.isRenderingPreview = true;
     this.previewError = '';
     this.cdr.detectChanges();
     
     try {
-      const blob = await this.generateService.generate(finalInstruction, selectedTemplate.id);
+      const blob = await this.generateService.generate(finalInstruction, latestTemplate.id);
       
       if (blob.size === 0) {
         throw new Error('Generated file is empty');
@@ -263,6 +287,7 @@ export class GeneratePage implements OnInit {
             });
             this.cdr.detectChanges();
           } catch (renderErr) {
+            console.error('Render error:', renderErr);
             this.previewError = 'Could not render document.';
             this.cdr.detectChanges();
           }
@@ -272,13 +297,14 @@ export class GeneratePage implements OnInit {
       }, 100);
       
     } catch (err) {
-      this.previewError = 'Failed to generate preview.';
+      console.error('Generation error:', err);
+      this.previewError = 'Failed to generate preview. Make sure placeholders are correct.';
       this.isRenderingPreview = false;
       this.cdr.detectChanges();
     }
   }
 
-  updateManualValue(placeholder: string, event: any): void {
+  updateManualValue(placeholder: string, event: any) {
     this.manualValues[placeholder] = event.target.value;
     this.previewData[placeholder] = event.target.value;
     this.showManualForm = true;
@@ -308,6 +334,7 @@ export class GeneratePage implements OnInit {
       await this.updateLiveDocumentPreview();
     } catch (err) {
       console.error(err);
+      this.previewError = 'AI extraction failed';
     } finally {
       this.isPreviewing = false;
       this.cdr.detectChanges();
@@ -317,6 +344,12 @@ export class GeneratePage implements OnInit {
   async downloadDocument() {
     const selectedTemplate = this.getFirstSelected();
     if (!selectedTemplate) return;
+    
+    const latestTemplate = this.templateService.getTemplate(selectedTemplate.id);
+    if (!latestTemplate) {
+      this.toast.show('error', 'Error', 'Template not found');
+      return;
+    }
     
     let finalInstruction = this.instruction;
     if (this.hasManualValues() && !finalInstruction.trim()) {
@@ -340,15 +373,17 @@ export class GeneratePage implements OnInit {
     this.cdr.detectChanges();
     
     try {
-      const blob = await this.generateService.generate(finalInstruction, selectedTemplate.id);
+      const blob = await this.generateService.generate(finalInstruction, latestTemplate.id);
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `generated_${selectedTemplate.filename}`;
+      a.download = `generated_${latestTemplate.filename}`;
       a.click();
       URL.revokeObjectURL(url);
+      this.toast.show('success', 'Download Started', 'Your document is being downloaded');
     } catch (err) {
-      alert('Failed to download document.');
+      console.error('Download error:', err);
+      alert('Failed to download document. Check if placeholders are correct.');
     } finally {
       this.isGeneratingForDownload = false;
       this.cdr.detectChanges();
@@ -386,8 +421,10 @@ export class GeneratePage implements OnInit {
       a.download = 'documents.zip';
       a.click();
       URL.revokeObjectURL(url);
+      this.toast.show('success', 'Download Started', 'Your documents ZIP is being downloaded');
       
     } catch (err) {
+      console.error('Bulk generation error:', err);
       alert('Failed to generate documents');
     } finally {
       this.isGeneratingBulk = false;
@@ -403,6 +440,7 @@ export class GeneratePage implements OnInit {
       a.download = `generated_${this.getFirstSelected()!.filename}`;
       a.click();
       URL.revokeObjectURL(url);
+      this.toast.show('success', 'Download Started', 'Preview document is being downloaded');
     }
   }
 

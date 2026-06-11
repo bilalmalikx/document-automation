@@ -86,6 +86,9 @@ export class TemplateSetDetailComponent implements OnInit {
         this.cdr.detectChanges();
         
         await this.extractAllPlaceholders();
+        
+        // Refresh global templates for generate page
+        this.templateService.loadTemplates();
       },
       error: (err) => {
         console.error(err);
@@ -255,7 +258,6 @@ export class TemplateSetDetailComponent implements OnInit {
     try {
       let successCount = 0;
       
-      // Update in each template that uses this placeholder
       for (const templateId of placeholder.templateIds) {
         try {
           await this.templateService.updatePlaceholderInTemplate(templateId, placeholder.originalName, placeholder.newName);
@@ -265,7 +267,6 @@ export class TemplateSetDetailComponent implements OnInit {
         }
       }
       
-      // Update local data
       if (this.templateSet) {
         for (let i = 0; i < this.templateSet.templates.length; i++) {
           const currentTemplate: any = this.templateSet.templates[i];
@@ -283,6 +284,9 @@ export class TemplateSetDetailComponent implements OnInit {
       placeholder.isEditing = false;
       
       this.identifySimilarPlaceholders();
+      
+      // 🔥 CRITICAL: Refresh global templates for generate page
+      this.templateService.loadTemplates();
       
       if (successCount > 0) {
         this.toast.show('success', 'Updated', `Placeholder renamed in ${successCount} template(s)`);
@@ -345,6 +349,10 @@ export class TemplateSetDetailComponent implements OnInit {
       }
       
       this.identifySimilarPlaceholders();
+      
+      // 🔥 CRITICAL: Refresh global templates for generate page
+      this.templateService.loadTemplates();
+      
       this.toast.show('success', 'All Saved', `${changedPlaceholders.length} placeholder(s) updated`);
       
     } catch (err) {
@@ -458,6 +466,9 @@ export class TemplateSetDetailComponent implements OnInit {
         this.fileInput.nativeElement.value = '';
       }
       
+      // Refresh global templates
+      this.templateService.loadTemplates();
+      
     } catch (err: any) {
       clearInterval(interval);
       console.error('Upload error:', err);
@@ -478,6 +489,7 @@ export class TemplateSetDetailComponent implements OnInit {
         next: () => {
           this.toast.show('success', 'Removed', 'Template removed');
           this.loadTemplateSet(this.templateSet!.id);
+          this.templateService.loadTemplates(); // Refresh global templates
           this.cdr.detectChanges();
         },
         error: (err) => {

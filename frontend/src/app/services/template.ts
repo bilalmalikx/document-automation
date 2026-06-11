@@ -114,17 +114,31 @@ export class TemplateService {
         new_name: newName
       }).subscribe({
         next: (res) => {
-          console.log(`Placeholder updated in template ${templateId}`);
-          // Update local templates list
+          console.log(`Placeholder updated in template ${templateId}: ${oldName} -> ${newName}`);
+          
+          // Update local templates list immediately
           const currentTemplates = this.templates();
           const updatedTemplates = currentTemplates.map(t => {
             if (t.id === templateId) {
               const updatedPlaceholders = t.placeholders.map(p => p === oldName ? newName : p);
-              return { ...t, placeholders: updatedPlaceholders };
+              console.log(`Template ${t.id} placeholders updated:`, updatedPlaceholders);
+              return { ...t, placeholders: updatedPlaceholders, placeholder_count: updatedPlaceholders.length };
             }
             return t;
           });
           this.templates.set(updatedTemplates);
+          
+          // Also update selected templates if present
+          const currentSelected = this.selectedTemplates();
+          const updatedSelected = currentSelected.map(t => {
+            if (t.id === templateId) {
+              const updatedPlaceholders = t.placeholders.map(p => p === oldName ? newName : p);
+              return { ...t, placeholders: updatedPlaceholders, placeholder_count: updatedPlaceholders.length };
+            }
+            return t;
+          });
+          this.selectedTemplates.set(updatedSelected);
+          
           resolve(res);
         },
         error: (err) => {
@@ -144,17 +158,30 @@ export class TemplateService {
         template_ids: templateIds
       }).subscribe({
         next: (res) => {
-          console.log(`Bulk placeholder update complete`);
+          console.log(`Bulk placeholder update complete: ${oldName} -> ${newName}`);
+          
           // Update local templates list
           const currentTemplates = this.templates();
           const updatedTemplates = currentTemplates.map(t => {
             if (templateIds.includes(t.id)) {
               const updatedPlaceholders = t.placeholders.map(p => p === oldName ? newName : p);
-              return { ...t, placeholders: updatedPlaceholders };
+              return { ...t, placeholders: updatedPlaceholders, placeholder_count: updatedPlaceholders.length };
             }
             return t;
           });
           this.templates.set(updatedTemplates);
+          
+          // Update selected templates
+          const currentSelected = this.selectedTemplates();
+          const updatedSelected = currentSelected.map(t => {
+            if (templateIds.includes(t.id)) {
+              const updatedPlaceholders = t.placeholders.map(p => p === oldName ? newName : p);
+              return { ...t, placeholders: updatedPlaceholders, placeholder_count: updatedPlaceholders.length };
+            }
+            return t;
+          });
+          this.selectedTemplates.set(updatedSelected);
+          
           resolve(res);
         },
         error: (err) => {
@@ -167,6 +194,25 @@ export class TemplateService {
 
   getTemplate(id: string): Template | undefined {
     return this.templates().find(t => t.id === id);
+  }
+
+  // Force refresh a specific template
+  async refreshTemplate(id: string): Promise<Template | undefined> {
+    try {
+      const placeholders = await this.getPlaceholders(id);
+      const currentTemplates = this.templates();
+      const updatedTemplates = currentTemplates.map(t => {
+        if (t.id === id) {
+          return { ...t, placeholders: placeholders, placeholder_count: placeholders.length };
+        }
+        return t;
+      });
+      this.templates.set(updatedTemplates);
+      return this.getTemplate(id);
+    } catch (err) {
+      console.error('Failed to refresh template:', err);
+      return undefined;
+    }
   }
 
   toggleSelection(template: Template): void {
