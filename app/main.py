@@ -153,8 +153,8 @@ async def global_exception_handler(request, exc):
 app.include_router(v1_router, prefix=settings.api_v1_prefix)
 
 # PDF QA System Routes
-app.include_router(upload.router, prefix="/api", tags=["PDF Upload"])
-app.include_router(ask.router, prefix="/api", tags=["PDF Ask"])
+app.include_router(upload.router, prefix="/api/v1", tags=["PDF Upload"])
+app.include_router(ask.router, prefix="/api/v1", tags=["PDF Ask"])
 
 
 # ============================================

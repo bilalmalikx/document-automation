@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Subject, takeUntil, debounceTime } from 'rxjs';
+import { Subject, takeUntil, debounceTime, firstValueFrom } from 'rxjs';
 
 import { Document } from '../../core/models/document.model';
 import { Answer } from '../../core/models/answer.model';
@@ -31,8 +31,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   @ViewChild('questionInput') questionInput!: ElementRef<HTMLTextAreaElement>;
   
   documents: Document[] = [];
-  selectedDocumentIds: Set<string> = new Set();  // ✅ Track selected PDFs
-  selectedDocument: Document | null = null;  // Keep for backward compatibility
+  selectedDocumentIds: Set<string> = new Set();
+  selectedDocument: Document | null = null;
   currentAnswer: Answer | null = null;
   history: any[] = [];
   isLoading = false;
@@ -54,17 +54,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     questions: 0,
     avgConfidence: 0
   };
-  
-  getSelectedCount(): number {
-    return this.selectedDocumentIds.size;
-  }
-  
-  getSelectedNames(): string {
-    const names = Array.from(this.selectedDocumentIds);
-    if (names.length === 0) return 'No document selected';
-    if (names.length === 1) return names[0];
-    return `${names.length} documents selected`;
-  }
   
   private destroy$ = new Subject<void>();
 
@@ -147,10 +136,27 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   checkHealth(): void {
+    console.log('Checking backend health...');
     this.apiService.checkHealth().subscribe({
-      next: () => console.log('Backend healthy'),
-      error: (err) => console.warn('Backend not responding:', err.message)
+      next: (res) => {
+        console.log('Backend is healthy:', res);
+      },
+      error: (err) => {
+        console.warn('Backend not responding:', err.message);
+        this.showQAError('Backend server is not running. Please start the backend server.');
+      }
     });
+  }
+
+  getSelectedCount(): number {
+    return this.selectedDocumentIds.size;
+  }
+  
+  getSelectedNames(): string {
+    const names = Array.from(this.selectedDocumentIds);
+    if (names.length === 0) return 'No document selected';
+    if (names.length === 1) return names[0];
+    return `${names.length} documents selected`;
   }
 
   onFileSelected(event: Event): void {
@@ -183,6 +189,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     
     this.apiService.uploadPDF(file).subscribe({
       next: (response) => {
+        console.log('Upload successful:', response);
         this.animateProgress(70, 100, 500);
         
         setTimeout(() => {
@@ -198,9 +205,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         }, 500);
       },
       error: (err) => {
+        console.error('Upload error:', err);
         this.isUploading = false;
         this.documentService.resetUploadProgress();
-        this.showUploadError(err.message);
+        this.showUploadError(err.message || 'Failed to upload file');
         this.cdr.detectChanges();
       }
     });
@@ -228,19 +236,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     }, 5000);
   }
 
-  // ✅ DELETE DOCUMENT FUNCTION
   deleteDocument(document: Document, event: Event): void {
     event.stopPropagation();
     
     if (confirm(`Are you sure you want to delete "${document.name}"?`)) {
       this.documentService.removeDocument(document.name);
       
-      // Remove from selected set if present
       if (this.selectedDocumentIds.has(document.name)) {
         this.selectedDocumentIds.delete(document.name);
       }
       
-      // Clear current answer if deleted document was selected
       if (this.selectedDocument?.name === document.name) {
         this.currentAnswer = null;
         this.questionService.setCurrentAnswer(null);
@@ -250,7 +255,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  // ✅ TOGGLE DOCUMENT SELECTION
   toggleDocument(document: Document, event: Event): void {
     event.stopPropagation();
     if (this.selectedDocumentIds.has(document.name)) {
@@ -261,24 +265,29 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.cdr.detectChanges();
   }
 
-  // ✅ SELECT ALL DOCUMENTS
   selectAllDocuments(): void {
     this.documents.forEach(doc => this.selectedDocumentIds.add(doc.name));
     this.cdr.detectChanges();
   }
 
-  // ✅ CLEAR ALL SELECTIONS
   clearSelection(): void {
     this.selectedDocumentIds.clear();
     this.cdr.detectChanges();
   }
 
-  // ✅ ASK QUESTION ON SELECTED DOCUMENTS
   askQuestion(): void {
-    if (!this.questionText.trim()) return;
+    if (!this.questionText.trim()) {
+      this.showQAError('Please enter a question.');
+      return;
+    }
     
-    if (this.selectedDocumentIds.size === 0 && this.documents.length === 0) {
-      this.showQAError('Please upload and select at least one document.');
+    if (this.documents.length === 0) {
+      this.showQAError('Please upload at least one document first.');
+      return;
+    }
+    
+    if (this.selectedDocumentIds.size === 0) {
+      this.showQAError('Please select at least one document.');
       return;
     }
     
@@ -288,13 +297,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     
     const pdf_names = Array.from(this.selectedDocumentIds);
     
+    console.log('Asking question:', this.questionText);
+    console.log('Selected PDFs:', pdf_names);
+    
     const request = {
       question: this.questionText.trim(),
-      pdf_names: pdf_names  // ✅ Send all selected PDF names
+      pdf_names: pdf_names
     };
     
     this.apiService.askQuestionMultiple(request).subscribe({
       next: (response) => {
+        console.log('Answer received:', response);
+        
         const answer = new Answer(
           response.question,
           response.answer,
@@ -311,8 +325,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.cdr.detectChanges();
       },
       error: (err) => {
+        console.error('Question error:', err);
         this.questionService.setLoading(false);
-        this.showQAError(err.message);
+        this.showQAError(err.message || 'Failed to get answer from server');
         this.cdr.detectChanges();
       }
     });

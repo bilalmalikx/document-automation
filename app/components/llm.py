@@ -1,65 +1,54 @@
-import ollama
+from openai import OpenAI
+from app.config import settings
 from typing import List, Dict, Any
-from app.utils.config import config
+import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 class LLMComponent:
     def __init__(self):
-        self.model = config.LLM_MODEL
-        self.base_url = config.OLLAMA_BASE_URL
-        self.temperature = 0.0
-        self.max_tokens = config.LLM_MAX_TOKENS
-        
-        self._check_model_availability()
-    
-    def _check_model_availability(self):
-        """Check if Ollama is running and model is installed"""
-        try:
-            models = ollama.list()
-            model_names = [m['model'] for m in models.get('models', [])]
-            
-            if self.model not in model_names:
-                print(f"⚠️ Warning: Model '{self.model}' not found in Ollama")
-                print(f"Available models: {model_names}")
-                print(f"Run: ollama pull {self.model}")
-        except Exception as e:
-            print(f"⚠️ Could not connect to Ollama: {e}")
-            print("Make sure Ollama is running: ollama serve")
-    
-    def generate_response(self, prompt: str) -> str:
-        """Generate simple response from prompt"""
-        try:
-            response = ollama.chat(
-                model=self.model,
-                messages=[{'role': 'user', 'content': prompt}],
-                options={
-                    'temperature': 0.1,
-                    'num_predict': self.max_tokens
-                }
-            )
-            return response['message']['content']
-        except Exception as e:
-            return f"Error generating response: {str(e)}"
+        self.client = OpenAI(
+            api_key=settings.openai_api_key,
+            base_url=settings.openai_base_url
+        )
+        self.model = settings.openai_model
+        self.temperature = settings.openai_temperature
+        self.max_tokens = 500
+        print(f"✅ LLM Component initialized with model: {self.model}")
     
     def generate_with_context(self, question: str, context: str) -> str:
-        """Generate response using context (RAG) - NO HALLUCINATION"""
+        """Generate response using context (RAG)"""
+        
+        # Debug prints
+        print(f"\n🔍 LLM Debug:")
+        print(f"  - Question: {question}")
+        print(f"  - Context length: {len(context)} characters")
+        
+        # If context is empty or too short
+        if not context or len(context) < 100:
+            print("⚠️ Context is empty or too short!")
+            return "I cannot find enough information in the document to answer this question. Please make sure the document contains relevant information."
+        
+        # Print first 300 chars of context
+        print(f"  - Context preview: {context[:300]}...")
         
         system_prompt = """You are a strict document assistant. Follow these rules:
 
 1. ONLY answer using information from the context below.
 2. If the context does NOT contain the answer, say exactly: "I cannot find this information in the document."
-3. DO NOT add any information, numbers, or facts that are not in the context.
-4. DO NOT say "based on the context" or "according to the document" - just state the answer.
-5. DO NOT make up calculations - if numbers are not in context, don't calculate.
-6. Be concise and direct.
+3. DO NOT add any information not in the context.
+4. Be concise and direct.
+5. If you find the answer, state it clearly.
 
-This is very important: NEVER INVENT INFORMATION."""
+Never invent information."""
         
-        user_prompt = f"""CONTEXT (use only this):
+        user_prompt = f"""CONTEXT (use only this information):
 {context}
 
 QUESTION: {question}
 
-ANSWER (if not in context, say "I cannot find this information in the document"):"""
+Based ONLY on the context above, answer the question:"""
         
         try:
             messages = [
@@ -67,19 +56,19 @@ ANSWER (if not in context, say "I cannot find this information in the document")
                 {'role': 'user', 'content': user_prompt}
             ]
             
-            response = ollama.chat(
+            print(f"🚀 Calling Groq API...")
+            
+            response = self.client.chat.completions.create(
                 model=self.model,
                 messages=messages,
-                options={
-                    'temperature': 0.1,  # ✅ Very low - no creativity
-                    'num_predict': self.max_tokens,
-                    'repeat_penalty': 1.1
-                }
+                temperature=0.1,
+                max_tokens=self.max_tokens
             )
-            return response['message']['content']
+            
+            answer = response.choices[0].message.content
+            print(f"✅ Groq response: {answer[:200]}...")
+            return answer
+            
         except Exception as e:
-            return f"Error: {str(e)}. Make sure Ollama is running with 'ollama serve'"
-    
-    def get_llm_instance(self):
-        """Return self for compatibility"""
-        return self
+            print(f"❌ Groq API Error: {e}")
+            return f"Error generating answer: {str(e)}"

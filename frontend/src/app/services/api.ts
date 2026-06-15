@@ -27,38 +27,68 @@ export interface UploadResponse {
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
-  private baseUrl = 'http://127.0.0.1:8000/api/v1';
-  private apiUrl = environment.apiUrl;
-  private timeoutMs = environment.apiTimeout || 30000;
+  // Default backend URL - change this to your actual backend URL
+  private baseUrl = 'http://localhost:8000/api/v1';
+  private apiUrl = 'http://localhost:8000/api/v1';
+  private timeoutMs = 60000; // 60 seconds timeout
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    console.log('API Service initialized with baseUrl:', this.baseUrl);
+  }
 
   // ============================================
   // Document Automation APIs
   // ============================================
   
   get<T>(path: string): Observable<T> {
-    return this.http.get<T>(`${this.baseUrl}${path}`);
+    const url = `${this.baseUrl}${path}`;
+    console.log('GET request to:', url);
+    return this.http.get<T>(url).pipe(
+      timeout(this.timeoutMs),
+      catchError(this.handleError)
+    );
   }
 
   post<T>(path: string, body: any): Observable<T> {
-    return this.http.post<T>(`${this.baseUrl}${path}`, body);
+    const url = `${this.baseUrl}${path}`;
+    console.log('POST request to:', url, body);
+    return this.http.post<T>(url, body).pipe(
+      timeout(this.timeoutMs),
+      catchError(this.handleError)
+    );
   }
 
   postFormData<T>(path: string, formData: FormData): Observable<T> {
-    return this.http.post<T>(`${this.baseUrl}${path}`, formData);
+    const url = `${this.baseUrl}${path}`;
+    console.log('POST FormData to:', url);
+    return this.http.post<T>(url, formData).pipe(
+      timeout(this.timeoutMs),
+      catchError(this.handleError)
+    );
   }
   
-    put<T>(path: string, body: any): Observable<T> {
-    return this.http.put<T>(`${this.baseUrl}${path}`, body);
+  put<T>(path: string, body: any): Observable<T> {
+    const url = `${this.baseUrl}${path}`;
+    return this.http.put<T>(url, body).pipe(
+      timeout(this.timeoutMs),
+      catchError(this.handleError)
+    );
   }
 
   delete<T>(path: string): Observable<T> {
-    return this.http.delete<T>(`${this.baseUrl}${path}`);
+    const url = `${this.baseUrl}${path}`;
+    return this.http.delete<T>(url).pipe(
+      timeout(this.timeoutMs),
+      catchError(this.handleError)
+    );
   }
 
   postBlob(path: string, body: any): Observable<Blob> {
-    return this.http.post(`${this.baseUrl}${path}`, body, { responseType: 'blob' });
+    const url = `${this.baseUrl}${path}`;
+    return this.http.post(url, body, { responseType: 'blob' }).pipe(
+      timeout(this.timeoutMs),
+      catchError(this.handleError)
+    );
   }
 
   // ============================================
@@ -69,59 +99,73 @@ export class ApiService {
     const formData = new FormData();
     formData.append('file', file);
     
-    return this.http.post<UploadResponse>(`${this.apiUrl}/upload`, formData)
-      .pipe(
-        timeout(this.timeoutMs),
-        retry(1),
-        catchError(this.handleError)
-      );
+    console.log('Uploading PDF:', file.name, 'Size:', file.size);
+    
+    return this.http.post<UploadResponse>(`${this.apiUrl}/upload`, formData).pipe(
+      timeout(120000), // 2 minutes for upload
+      retry(1),
+      catchError(this.handleError)
+    );
   }
 
   askQuestion(request: QuestionRequest): Observable<AnswerResponse> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     
-    return this.http.post<AnswerResponse>(`${this.apiUrl}/ask`, request, { headers })
-      .pipe(
-        timeout(this.timeoutMs),
-        retry(1),
-        catchError(this.handleError)
-      );
+    console.log('Asking question (single):', request);
+    
+    return this.http.post<AnswerResponse>(`${this.apiUrl}/ask`, request, { headers }).pipe(
+      timeout(this.timeoutMs),
+      retry(1),
+      catchError(this.handleError)
+    );
   }
 
   askQuestionMultiple(request: { question: string; pdf_names: string[] }): Observable<AnswerResponse> {
-    return this.http.post<AnswerResponse>(`${this.apiUrl}/ask`, request);
+    console.log('Asking question (multiple):', request);
+    
+    return this.http.post<AnswerResponse>(`${this.apiUrl}/ask`, request).pipe(
+      timeout(this.timeoutMs),
+      retry(1),
+      catchError(this.handleError)
+    );
   }
 
   checkHealth(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/health`)
-      .pipe(
-        timeout(5000),
-        catchError(this.handleError)
-      );
+    console.log('Checking health at:', `${this.apiUrl}/health`);
+    return this.http.get(`${this.apiUrl}/health`).pipe(
+      timeout(10000),
+      catchError((error) => {
+        console.error('Health check failed:', error);
+        return throwError(() => new Error('Backend server is not running'));
+      })
+    );
   }
 
   private handleError(error: HttpErrorResponse | TimeoutError) {
     let errorMessage = 'An unknown error occurred!';
     
+    console.error('API Error Details:', error);
+    
     if (error instanceof TimeoutError) {
-      errorMessage = 'Request timeout. Server might be busy.';
+      errorMessage = 'Request timeout. Server might be busy or not responding.';
     } else if (error.error instanceof ErrorEvent) {
-      errorMessage = error.error.message;
-    } else if (error.error?.error) {
-      errorMessage = error.error.error;
+      // Client-side error
+      errorMessage = `Client Error: ${error.error.message}`;
+    } else if (error.status === 0) {
+      errorMessage = 'Cannot connect to backend server. Please make sure the backend is running at http://localhost:8000';
+    } else if (error.status === 404) {
+      errorMessage = `API endpoint not found. Please check if the backend has the correct routes.`;
+    } else if (error.status === 500) {
+      errorMessage = 'Server error. Please check backend logs.';
     } else if (error.error?.detail) {
       errorMessage = error.error.detail;
-    } else if (error.status === 0) {
-      errorMessage = 'Cannot connect to backend. Is the server running?';
-    } else if (error.status === 413) {
-      errorMessage = 'File too large. Maximum size is 50MB.';
-    } else if (error.status === 400) {
-      errorMessage = 'Invalid request. Check your input.';
-    } else if (error.status === 500) {
-      errorMessage = 'Server error. Please try again later.';
+    } else if (error.error?.error) {
+      errorMessage = error.error.error;
+    } else if (error.message) {
+      errorMessage = error.message;
     }
     
-    console.error('API Error:', error);
+    console.error('Final error message:', errorMessage);
     return throwError(() => new Error(errorMessage));
   }
 }

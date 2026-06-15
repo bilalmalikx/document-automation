@@ -1,21 +1,47 @@
 from typing import List
-from sentence_transformers import SentenceTransformer
+import numpy as np
+import hashlib
 
 class EmbeddingsComponent:
+    """
+    Simple deterministic embeddings - No external dependencies
+    Uses character-based hashing for consistent embeddings
+    """
     def __init__(self):
-        # Load sentence transformer model
-        self.model = SentenceTransformer('all-MiniLM-L6-v2')
         self.dimension = 384
     
     def embed_query(self, text: str) -> List[float]:
         """Generate embedding for a single query"""
-        embedding = self.model.encode(text, normalize_embeddings=True)
-        return embedding.tolist()
+        return self._compute_embedding(text)
     
     def embed_documents(self, texts: List[str]) -> List[List[float]]:
         """Generate embeddings for multiple documents"""
-        embeddings = self.model.encode(texts, normalize_embeddings=True)
-        return embeddings.tolist()
+        embeddings = []
+        for text in texts:
+            embeddings.append(self._compute_embedding(text))
+        return embeddings
+    
+    def _compute_embedding(self, text: str) -> List[float]:
+        """Compute deterministic embedding using character codes"""
+        embedding = np.zeros(self.dimension)
+        
+        # Use character codes to create embedding
+        chars = text[:2000]  # Limit length for performance
+        
+        for i, char in enumerate(chars):
+            idx = i % self.dimension
+            embedding[idx] += ord(char) / 255.0
+        
+        # Add position information
+        for i in range(min(len(chars), self.dimension)):
+            embedding[i] += (i / self.dimension) * 0.1
+        
+        # Normalize
+        norm = np.linalg.norm(embedding)
+        if norm > 0:
+            embedding = embedding / norm
+        
+        return embedding.tolist()
     
     def get_embeddings(self):
         """Return self for LangChain compatibility"""

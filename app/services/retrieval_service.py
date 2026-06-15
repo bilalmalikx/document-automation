@@ -8,18 +8,17 @@ class RetrievalService:
         self.top_k = config.TOP_K_RESULTS
     
     def retrieve_relevant_chunks(self, question: str, pdf_name: str = None, pdf_names: List[str] = None) -> List[Dict[str, Any]]:
-        # Load vector store agar load nahi hai
-        if self.vector_store.vector_store is None:
+        # Load vector store if not loaded
+        if self.vector_store.collection is None:
             self.vector_store.load_vector_store()
         
-        # Get more chunks initially for better filtering
-        if (pdf_names and len(pdf_names) > 0) or pdf_name:
-            search_k = self.top_k * 3  # For filtered search, get more
-        else:
-            search_k = self.top_k  # For all documents search
+        # Increase k for better context
+        search_k = self.top_k * 4  # Get more chunks (16 instead of 4)
         
         # Get chunks
         all_docs = self.vector_store.similarity_search(question, k=search_k)
+        
+        print(f"🔍 Total chunks retrieved from DB: {len(all_docs)}")
         
         # Format results with metadata
         all_formatted = []
@@ -30,10 +29,7 @@ class RetrievalService:
                 "score": None
             })
         
-        # Debug print
-        print(f"🔍 Total chunks retrieved: {len(all_formatted)}")
-        
-        # ✅ FILTER: Sirf selected PDFs ke chunks rakho (if selected)
+        # Filter by selected PDFs if specified
         if pdf_names and len(pdf_names) > 0:
             filtered = []
             selected_clean = [name.strip() for name in pdf_names]
@@ -43,8 +39,9 @@ class RetrievalService:
                 if doc_pdf_name in selected_clean:
                     filtered.append(chunk)
             
-            formatted_results = filtered[:self.top_k]
-            print(f"📄 After filter ({selected_clean}): {len(filtered)} chunks found")
+            # Return more chunks (top 8 instead of top_k)
+            formatted_results = filtered[:self.top_k * 2]
+            print(f"📄 After filter ({selected_clean}): {len(filtered)} chunks found, returning {len(formatted_results)}")
         
         elif pdf_name:
             filtered = []
@@ -53,13 +50,16 @@ class RetrievalService:
                 doc_pdf_name = chunk["metadata"].get("pdf_name", "").strip()
                 if doc_pdf_name == target_name:
                     filtered.append(chunk)
-            formatted_results = filtered[:self.top_k]
+            formatted_results = filtered[:self.top_k * 2]
             print(f"📄 After filter ({target_name}): {len(filtered)} chunks found")
         
         else:
-            # ✅ NO FILTER - return all chunks (search ALL documents)
-            formatted_results = all_formatted[:self.top_k]
+            formatted_results = all_formatted[:self.top_k * 2]
             print(f"📄 No filter - searching ALL documents: {len(formatted_results)} chunks found")
+        
+        # Print first chunk preview for debugging
+        if formatted_results:
+            print(f"📝 First chunk preview: {formatted_results[0]['content'][:200]}...")
         
         return formatted_results
     
@@ -71,7 +71,7 @@ class RetrievalService:
         context_parts = []
         for i, chunk in enumerate(chunks, 1):
             source = chunk["metadata"].get("pdf_name", "unknown")
-            context_parts.append(f"[Source: {source}]\n{chunk['content']}\n")
+            context_parts.append(f"[Source {i}: {source}]\n{chunk['content']}\n")
         
         return "\n---\n".join(context_parts)
     

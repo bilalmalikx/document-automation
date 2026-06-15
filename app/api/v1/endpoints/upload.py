@@ -35,23 +35,29 @@ async def upload_pdf(file: UploadFile = File(...)):
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
         
+        print(f"📁 File saved: {file_path}")
+        
         # Process PDF (ingestion)
         result = ingestion_service.process_pdf(file_path, file.filename)
         
+        print(f"✅ Processing result: {result}")
+        
         if not result["success"]:
-            raise HTTPException(status_code=500, detail=result["error"])
+            raise HTTPException(status_code=500, detail=result.get("error", "Processing failed"))
         
         # Clean up temp file after processing
-        os.remove(file_path)
+        if os.path.exists(file_path):
+            os.remove(file_path)
         
         return PDFUploadResponse(
             message=result["message"],
             filename=file.filename,
-            pages=result.get("pages"),
-            chunks=result.get("chunks")
+            pages=result.get("pages", 0),
+            chunks=result.get("chunks", 0)
         )
         
     except Exception as e:
+        print(f"❌ Upload error: {str(e)}")
         # Clean up on error
         if os.path.exists(file_path):
             os.remove(file_path)
@@ -69,21 +75,31 @@ async def upload_health():
     """Check if upload service is working"""
     return {"status": "upload_service_ok"}
 
-
 @router.get("/documents")
 async def get_documents():
     """Get list of all uploaded PDF names from vector store metadata"""
     try:
         from app.components.vector_store import VectorStoreComponent
         vector_store = VectorStoreComponent()
-        vector_store.load_vector_store()
         
-        if vector_store.vector_store is None:
+        if not vector_store.load_vector_store():
             return {"documents": []}
         
-        # Get all unique PDF names from metadata
-        # Note: This requires accessing Chroma's collection directly
-        # Simplified approach - you can maintain a separate list in storage
-        return {"documents": []}  # Implement based on your tracking method
+        if vector_store.collection is None:
+            return {"documents": []}
+        
+        # Get all unique PDF names from collection
+        # ChromaDB doesn't have a direct way to get all distinct metadata values
+        # So we'll store a separate list in a JSON file
+        documents_file = os.path.join(config.VECTOR_STORE_PATH, "documents.json")
+        
+        if os.path.exists(documents_file):
+            import json
+            with open(documents_file, 'r') as f:
+                return json.load(f)
+        
+        return {"documents": []}
+        
     except Exception as e:
+        print(f"Error getting documents: {e}")
         return {"documents": [], "error": str(e)}
